@@ -1,3 +1,3 @@
 class AppFonts {
-  static const String manRope = 'Manrope';
+  static const String manRope = 'JakertaSans';
 }

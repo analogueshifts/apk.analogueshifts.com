@@ -2,8 +2,11 @@ class AppAsset {
   static const String splash = "assets/images/splash.png";
   static const String backButton = "assets/icons/arrow-left.svg";
   static const String introduction = 'assets/images/introduction.png';
-  static const String logo = 'assets/images/logo.svg';
+  static const String logo = 'assets/images/logo.png';
   static const String facebook = 'assets/images/facebook.svg';
+  static const String onboard1 = 'assets/images/onboard1.png';
+  static const String onboard2 = 'assets/images/onboard2.png';
+  static const String onboard3 = 'assets/images/onboard3.png';
   static const String google = 'assets/images/google.png';
   static const String faceId = 'assets/images/ios-face-recognition.png';
   static const String systemActiveIcon = "assets/images/system.svg";

@@ -9,18 +9,13 @@ class AnalogueApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(360, 690),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      child: MaterialApp.router(
-        routerConfig: goRouter,
-        debugShowCheckedModeBanner: false,
-        theme: lightTheme,
-        // themeMode: ThemeMode.white,
-        // initialRoute: Routes.splash,
-        // onGenerateRoute: generateRoute,
-      ),
+    return MaterialApp.router(
+      routerConfig: goRouter,
+      debugShowCheckedModeBanner: false,
+      theme: lightTheme,
+      // themeMode: ThemeMode.white,
+      // initialRoute: Routes.splash,
+      // onGenerateRoute: generateRoute,
     );
   }
 }

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // Light Colors
-  static const Color primaryColor = Color(0XFF5ABB7B);
-  static const Color white = Color(0XFFFFFFFF);
-  static const Color textPrimaryColor = Color(0xFF333333);
+  static const Color primaryColor = Color(0XFFFFBB0A);
+  static const Color white = Color(0XFF);
+  static const Color textPrimaryColor = Color(0xFFFFFFFF);
   static const Color textPrimaryColor2 = Color(0xFF707070);
   static const Color onboardColor = Color(0XFFFFE4DA);
   static const Color purpleColor = Color(0XFF5842BC);
@@ -17,7 +17,7 @@ class AppColors {
   static Color inputFieldBorder = const Color(0XFFE4E4E4);
   static const Color primaryColorLight = Color(0XFFDED9F2);
   static const Color primaryColorLight2 = Color(0xffABA0DD);
-  static const Color primaryGrey = Color(0XFFD3D0D9);
+  static const Color primaryGrey = Color(0XFF000000);
   static const Color primaryGrey2 = Color(0XFF7D7D7D);
   static const Color primaryColorDark = Color(0XFF2C215E);
   static const Color primaryOrange = Color(0xffFDA758);
@@ -26,6 +26,7 @@ class AppColors {
   static const Color primaryGreen = Color(0xff3EB25B);
   static const Color lightBlue = Color(0xff4895EF);
   static const Color boxColor = Color(0xffF6F6F6);
+  static const Color secondaryYellow = Color(0xffFFBB0A);
 
   // Primary color scratch
   static const Map<int, Color> colorScratch = {

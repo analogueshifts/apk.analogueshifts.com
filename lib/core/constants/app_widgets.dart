@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AppWidgets{
-  final Widget logoIcon = SvgPicture.asset(
+  final Widget logoIcon = Image.asset(
      AppAsset.logo,
-      semanticsLabel: 'App logo'
+      // semanticsLabel: 'App logo'
   );
   final Widget appTextName  = TextSemiBold(
     AppStrings.appNAme,
