@@ -1,13 +1,16 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/constants.dart';
+import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/illustrator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class IntroductionScreen extends StatefulWidget {
   const IntroductionScreen({super.key});
@@ -100,7 +103,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                           Visibility(
                             visible: currentIndex > 1 ? false : true,
                             child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(builder: (context) => Authenticate()),
+                                        (Route<dynamic> route) => true);
+                              },
                               child: Text(
                                 'Skip',
                                 style: TextStyle(
@@ -249,6 +256,9 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   onTap: () {
                     _handleTap();
                     if (currentIndex == 2) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(builder: (context) => Authenticate()),
+                              (Route<dynamic> route) => true);
                     } else {
                       _pageController.nextPage(
                         duration: const Duration(milliseconds: 10),

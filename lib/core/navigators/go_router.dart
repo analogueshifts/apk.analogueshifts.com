@@ -1,4 +1,5 @@
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -15,7 +16,7 @@ final GoRouter goRouter = GoRouter(
         GoRoute(
           path: Routes.authenticate,
           builder: (BuildContext context, GoRouterState state) {
-            return SplashScreen();
+            return Authenticate();
           },
         ),
         GoRoute(
