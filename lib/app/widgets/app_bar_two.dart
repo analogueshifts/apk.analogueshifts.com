@@ -11,12 +11,14 @@ class PaylonyAppBarTwo extends StatelessWidget implements PreferredSizeWidget {
     this.actions = const [],
     this.centerTitle = true,
     this.elevation,
+    this.titleColor,
   }) : super(key: key);
 
   final String title;
   final List<Widget> actions;
   final bool centerTitle;
   final double? elevation;
+  final Color? titleColor;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class PaylonyAppBarTwo extends StatelessWidget implements PreferredSizeWidget {
       title: TextBold(
         title,
         fontSize: 18,
+        color: titleColor ?? AppColors.background,
       ),
       actions: actions,
       elevation: elevation ?? 0,

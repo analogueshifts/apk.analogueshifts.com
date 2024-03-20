@@ -37,9 +37,9 @@ class BusyButton extends StatelessWidget {
           color: disabled ? AppColors.primaryColorLight : color,
         ),
         child: Center(
-          child: isLoading ? const CircularProgressIndicator(color: AppColors.white,) : Text(
+          child: isLoading ? const CircularProgressIndicator(color: Colors.white) : Text(
             title,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.w500, fontFamily: AppFonts.manRope),
+            style: TextStyle(color: textColor, fontWeight: FontWeight.w700, fontFamily: AppFonts.manRope),
           ),
         ),
       ),

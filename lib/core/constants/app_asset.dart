@@ -7,7 +7,7 @@ class AppAsset {
   static const String onboard1 = 'assets/images/onboard1.png';
   static const String onboard2 = 'assets/images/onboard2.png';
   static const String onboard3 = 'assets/images/onboard3.png';
-  static const String google = 'assets/images/google.png';
+  static const String google = 'assets/icons/google.svg';
   static const String faceId = 'assets/images/ios-face-recognition.png';
   static const String systemActiveIcon = "assets/images/system.svg";
   static const String systemIcon = "assets/images/system-active.svg";
