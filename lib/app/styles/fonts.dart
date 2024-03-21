@@ -104,7 +104,7 @@ class TextBold extends HanddietextBase {
     style: TextStyle(
       fontSize: fontSize,
       fontWeight: fontWeight,
-      color: color ?? AppColors.textPrimaryColor,
+      color: color ?? AppColors.background,
     ).merge(style),
     textAlign: textAlign,
   );
@@ -128,7 +128,7 @@ class TextSemiBold extends HanddietextBase {
     maxLines: maxLines,
     style: TextStyle(
       fontSize: fontSize ?? 14,
-      color: color ?? AppColors.textPrimaryColor,
+      color: color ?? AppColors.background,
       fontWeight: fontWeight,
     ).merge(style),
     textAlign: textAlign,

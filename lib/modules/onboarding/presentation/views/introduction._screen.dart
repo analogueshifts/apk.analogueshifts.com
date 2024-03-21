@@ -4,6 +4,7 @@ import 'package:analogue_shifts_mobile/core/constants/constants.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
+import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/illustrator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -257,7 +258,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                     _handleTap();
                     if (currentIndex == 2) {
                       Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => Authenticate()),
+                          MaterialPageRoute(builder: (context) => HomeNavigation()),
                               (Route<dynamic> route) => true);
                     } else {
                       _pageController.nextPage(
