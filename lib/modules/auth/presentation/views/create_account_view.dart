@@ -9,6 +9,7 @@ import 'package:analogue_shifts_mobile/app/widgets/loading_dailog.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/validator.dart';
+import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -52,9 +53,9 @@ class _CreateAccountViewState extends State<CreateAccountView> {
           setState(() {
             _isLoading = false;
           });
-          // Navigator.of(context).pushAndRemoveUntil(
-          //     MaterialPageRoute(builder: (context) => const HomeNavigation()),
-          //         (Route<dynamic> route) => true);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const HomeNavigation()),
+                  (Route<dynamic> route) => true);
         }
 
       });
@@ -66,17 +67,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
     setState(() {
       if (_formKey.currentState == null)return;
       if (_formKey.currentState!.validate()) {
-        if (_isEmail == false) {
-          if (_nameController.text.isNotEmpty) {
-            _isFormValid = false;
-          }else{
-            _isFormValid = true;
-
-          }
-
-        }else{
-          _isFormValid = false;
-        }
+       _isFormValid = false;
       }else{
         _isFormValid = true;
       }
@@ -92,7 +83,10 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PaylonyAppBarTwo(title: "Sign Up", centerTitle: false,),
+      appBar: PaylonyAppBarTwo(title: "Sign Up", centerTitle: false, backTap: (){
+        if(widget.toggleView == null)return;
+        widget.toggleView!(false);
+      },),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: Form(
@@ -117,6 +111,9 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                 controller: _nameController,
                 validator: (value){
                   CustomValidator.isEmptyString(value!, "name");
+                  if(value.isEmpty){
+                    return ("Input your name");
+                  }
 
                   return null;
                 },
@@ -184,8 +181,13 @@ class _CreateAccountViewState extends State<CreateAccountView> {
               Gap(4),
               TextSemiBold(_passwordController.text.length < 8 ? "Must be at least 8 characters" : "", color: AppColors.grey, fontSize: 12,),
               Gap(40),
-              BusyButton(title: "Create Account", isLoading: _isLoading, textColor: Colors.white, height: 58, onTap:(){
-                setLoader();
+              BusyButton(disabled: _isFormValid, title: "Create Account", isLoading: _isLoading, textColor: Colors.white, height: 58,
+                  onTap:(){
+                if(_formKey.currentState == null)return;
+                if(_formKey.currentState!.validate()){
+                  setLoader();
+                }
+
               }),
               Gap(40),
               Row(

@@ -260,7 +260,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                     _handleTap();
                     if (currentIndex == 2) {
                       Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => LoginView()),
+                          MaterialPageRoute(builder: (context) => Authenticate()),
                               (Route<dynamic> route) => true);
                     } else {
                       _pageController.nextPage(

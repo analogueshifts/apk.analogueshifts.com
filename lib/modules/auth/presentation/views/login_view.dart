@@ -6,6 +6,7 @@ import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/validator.dart';
+import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -49,9 +50,9 @@ class _LoginViewState extends State<LoginView> {
           setState(() {
             _isLoading = false;
           });
-          // Navigator.of(context).pushAndRemoveUntil(
-          //     MaterialPageRoute(builder: (context) => const HomeNavigation()),
-          //         (Route<dynamic> route) => true);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const HomeNavigation()),
+                  (Route<dynamic> route) => true);
         }
 
       });
@@ -63,17 +64,7 @@ class _LoginViewState extends State<LoginView> {
     setState(() {
       if (_formKey.currentState == null)return;
       if (_formKey.currentState!.validate()) {
-        if (_isEmail == false) {
-          if (_nameController.text.isNotEmpty) {
-            _isFormValid = false;
-          }else{
-            _isFormValid = true;
-
-          }
-
-        }else{
-          _isFormValid = false;
-        }
+        _isFormValid = false;
       }else{
         _isFormValid = true;
       }
@@ -90,7 +81,10 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar: PaylonyAppBarTwo(title: "Login", centerTitle: false,),
+      appBar: PaylonyAppBarTwo(title: "Login", centerTitle: false,backTap: (){
+        if(widget.toggleView == null)return;
+        widget.toggleView!(true);
+      },),
        body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: Form(
@@ -125,7 +119,7 @@ class _LoginViewState extends State<LoginView> {
                 ],
               ),
               Gap(20),
-             
+
               TextSemiBold("Email", color: AppColors.background,fontWeight: FontWeight.w700,),
               Gap(6),
               TextFormField(
@@ -186,10 +180,14 @@ class _LoginViewState extends State<LoginView> {
                 ],
               ),
               Gap(40),
-              BusyButton(title: "Login", isLoading: _isLoading, textColor: Colors.white, height: 58, onTap:(){
-                setLoader();
+              BusyButton(disabled: _isFormValid, title: "Login", isLoading: _isLoading, textColor: Colors.white, height: 58, onTap:(){
+                // setLoader();
+                if(_formKey.currentState == null)return;
+                if(_formKey.currentState!.validate()){
+                  setLoader();
+                }
               }),
-              
+
 
             ],
           ),
