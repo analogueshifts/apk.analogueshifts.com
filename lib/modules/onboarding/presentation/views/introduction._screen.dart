@@ -1,5 +1,4 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
-import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/constants.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
