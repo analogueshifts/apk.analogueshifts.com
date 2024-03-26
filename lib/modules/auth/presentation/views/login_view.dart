@@ -6,6 +6,7 @@ import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/validator.dart';
+import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/forgot_password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -48,9 +49,9 @@ class _LoginViewState extends State<LoginView> {
           setState(() {
             _isLoading = false;
           });
-          // Navigator.of(context).pushAndRemoveUntil(
-          //     MaterialPageRoute(builder: (context) => const HomeNavigation()),
-          //         (Route<dynamic> route) => true);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const HomeNavigation()),
+                  (Route<dynamic> route) => true);
         }
       });
     });
@@ -61,12 +62,8 @@ class _LoginViewState extends State<LoginView> {
     setState(() {
       if (_formKey.currentState == null) return;
       if (_formKey.currentState!.validate()) {
-        if (_isEmail == false) {
-       
-        } else {
-          _isFormValid = false;
-        }
-      } else {
+        _isFormValid = false;
+      }else{
         _isFormValid = true;
       }
     });
@@ -81,13 +78,12 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PaylonyAppBarTwo(
-        title: "Login",
-        onTap:(){},
-        centerTitle: false,
-      ),
-      body: SingleChildScrollView(
+    return  Scaffold(
+      appBar: PaylonyAppBarTwo(title: "Login", centerTitle: false,backTap: (){
+        if(widget.toggleView == null)return;
+        widget.toggleView!(true);
+      },),
+       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: Form(
           key: _formKey,
@@ -126,11 +122,7 @@ class _LoginViewState extends State<LoginView> {
                 ],
               ),
               Gap(20),
-              TextSemiBold(
-                "Email",
-                color: AppColors.background,
-                fontWeight: FontWeight.w700,
-              ),
+              TextSemiBold("Email", color: AppColors.background,fontWeight: FontWeight.w700,)
               Gap(6),
               TextFormField(
                 controller: _emailController,
@@ -199,14 +191,13 @@ class _LoginViewState extends State<LoginView> {
                 ],
               ),
               Gap(40),
-              BusyButton(
-                  title: "Login",
-                  isLoading: _isLoading,
-                  textColor: Colors.white,
-                  height: 58,
-                  onTap: () {
-                    setLoader();
-                  }),
+              BusyButton(disabled: _isFormValid, title: "Login", isLoading: _isLoading, textColor: Colors.white, height: 58, onTap:(){
+                // setLoader();
+                if(_formKey.currentState == null)return;
+                if(_formKey.currentState!.validate()){
+                  setLoader();
+                }
+              }),
             ],
           ),
         ),

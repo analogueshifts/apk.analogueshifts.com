@@ -12,7 +12,7 @@ class PaylonyAppBarTwo extends StatelessWidget implements PreferredSizeWidget {
     this.centerTitle = true,
     this.elevation,
     this.titleColor,
-    this.onTap,
+    this.backTap
   }) : super(key: key);
 
   final String title;
@@ -20,7 +20,7 @@ class PaylonyAppBarTwo extends StatelessWidget implements PreferredSizeWidget {
   final bool centerTitle;
   final double? elevation;
   final Color? titleColor;
-  final VoidCallback? onTap;
+  final VoidCallback? backTap;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class PaylonyAppBarTwo extends StatelessWidget implements PreferredSizeWidget {
       // backgroundColor: Color(0xffFBFBFB),
       // systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: AppColors.white, statusBarIconBrightness: Brightness.dark),
       leading: TouchableOpacity(
-        onTap: () =>  onTap ?? Navigator.pop(context),
+        onTap: backTap ?? () => Navigator.pop(context),
         child: const AppBackButton(),
       ),
       title: TextBold(
