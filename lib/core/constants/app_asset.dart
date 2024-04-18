@@ -44,5 +44,6 @@ class AppAsset {
      static const String betting = "assets/images/betting.png";
      static const String chatAssistant = "assets/images/chat-assistant.svg";
      static const String appleSvg = "assets/icons/Apple.svg";
+     static const String logout = 'assets/images/logout.svg';
 
 }

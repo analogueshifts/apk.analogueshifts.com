@@ -1,5 +1,9 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_widgets.dart';
+import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
+import 'package:analogue_shifts_mobile/core/services/db_service.dart';
+import 'package:analogue_shifts_mobile/core/utils/logger.dart';
+import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/introduction._screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,12 +21,24 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final _db = getIt<DBService>();
   Future<void> _toOnboard() async {
-    // context.goNamed(Routes.authenticate);
-    // MaterialApp.router
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => IntroductionScreen()),
-            (Route<dynamic> route) => true);
+    final db = _db.getToken();
+    if(_db.get('onboard') == null){
+      context.replace(Routes.introduction);
+    }else{
+      if (_db.getToken() != null){
+        logger.d(_db.getToken());
+        context.replace(Routes.homeNavigation);
+      }else{
+
+
+        // return Routes.startUp;
+        context.replace(Routes.authenticate);
+      }
+    }
+    // logger.d(db);
+
   }
 
   @override

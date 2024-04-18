@@ -62,8 +62,6 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-
       appBar: AppBar(
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark, statusBarColor: Colors.transparent),
@@ -172,7 +170,7 @@ class _HomeViewState extends State<HomeView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image(image:AssetImage(image), height: screenHeight(context) * 0.15,),
+          Image(image:AssetImage(image), height: screenHeight(context) * 0.13,),
           Gap(15),
           TextBold(title, fontSize: 14,),
           Gap(8),

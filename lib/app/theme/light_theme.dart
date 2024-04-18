@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 final lightTheme = ThemeData(
+  useMaterial3: true,
   // scaffoldBackgroundColor: AppColors.,
   primaryColor: AppColors.white,
   // applyElevationOverlayColor: false,
@@ -12,7 +13,7 @@ final lightTheme = ThemeData(
   appBarTheme: const AppBarTheme(
     backgroundColor: AppColors.white,
     elevation: 0,
-    surfaceTintColor: Colors.transparent
+    scrolledUnderElevation: 0
     // systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: AppColors.primaryColor),
     // systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
     // statusBarBrightness: Brightness.light,),

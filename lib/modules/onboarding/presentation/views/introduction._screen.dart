@@ -1,7 +1,9 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/core/constants/constants.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
+import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
+import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/create_account_view.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/login_view.dart';
@@ -44,6 +46,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     });
     // Reset the animation after 5 seconds
     Future.delayed(Duration(seconds: 1), () {
+      if(!mounted)return;
       setState(() {
         _isAnimated = false;
       });
@@ -61,6 +64,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     ]);
     super.dispose();
   }
+
+  final _db = getIt<DBService>();
 
   @override
   Widget build(BuildContext context) {
@@ -106,9 +111,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                             visible: currentIndex > 1 ? false : true,
                             child: InkWell(
                               onTap: () {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(builder: (context) => Authenticate()),
-                                        (Route<dynamic> route) => true);
+                                _db.save('onboard', "1");
+                                context.replace(Routes.authenticate);
                               },
                               child: Text(
                                 'Skip',
@@ -258,9 +262,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   onTap: () {
                     _handleTap();
                     if (currentIndex == 2) {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => Authenticate()),
-                              (Route<dynamic> route) => true);
+                      _db.save('onboard', "1");
+                      context.replace(Routes.authenticate);
                     } else {
                       _pageController.nextPage(
                         duration: const Duration(milliseconds: 10),

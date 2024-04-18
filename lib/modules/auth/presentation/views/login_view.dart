@@ -5,13 +5,18 @@ import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
+import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/validator.dart';
+import 'package:analogue_shifts_mobile/modules/auth/data/models/user_login.model.dart';
+import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/forgot_password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 
 class LoginView extends StatefulWidget {
   final Function toggleView;
@@ -78,6 +83,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    UserViewModel read = context.read<UserViewModel>();
     return  Scaffold(
       appBar: PaylonyAppBarTwo(title: "Login", centerTitle: false,backTap: (){
         if(widget.toggleView == null)return;
@@ -99,14 +105,17 @@ class _LoginViewState extends State<LoginView> {
               Row(
                 children: [
                   Expanded(
-                    child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                                color: AppColors.primaryGrey2, width: 1)),
-                        child:
-                            Center(child: SvgPicture.asset(AppAsset.google))),
+                    child: TouchableOpacity(
+                      onTap: () => read.continueWithGoogle(context),
+                      child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(
+                                  color: AppColors.primaryGrey2, width: 1)),
+                          child:
+                              Center(child: SvgPicture.asset(AppAsset.google))),
+                    ),
                   ),
                   const Gap(10),
                   Expanded(
@@ -122,7 +131,7 @@ class _LoginViewState extends State<LoginView> {
                 ],
               ),
               Gap(20),
-              TextSemiBold("Email", color: AppColors.background,fontWeight: FontWeight.w700,)
+              TextSemiBold("Email", color: AppColors.background,fontWeight: FontWeight.w700,),
               Gap(6),
               TextFormField(
                 controller: _emailController,
@@ -191,11 +200,13 @@ class _LoginViewState extends State<LoginView> {
                 ],
               ),
               Gap(40),
-              BusyButton(disabled: _isFormValid, title: "Login", isLoading: _isLoading, textColor: Colors.white, height: 58, onTap:(){
+              BusyButton(disabled: _isFormValid, title: "Login", isLoading: context.watch<UserViewModel>().authState.isGenerating == false ? false : true, textColor: Colors.white, height: 58, onTap:(){
                 // setLoader();
                 if(_formKey.currentState == null)return;
                 if(_formKey.currentState!.validate()){
-                  setLoader();
+                  final user = LoginUser(email: _emailController.text.trim(), password: _passwordController.text.trim().toString());
+                  context.read<UserViewModel>().loginUser(user, context);
+                  // setLoader();
                 }
               }),
             ],
