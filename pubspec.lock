@@ -882,6 +882,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  styled_container:
+    dependency: "direct main"
+    description:
+      name: styled_container
+      sha256: b5eae9bab2e61f89bdbf0f343f032211bf96989f0def68dc9805490262febfc5
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   synchronized:
     dependency: transitive
     description:

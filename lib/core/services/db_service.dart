@@ -9,6 +9,11 @@ class DBService {
   Future<void> startHive() async {
     await Hive.initFlutter();
     await Hive.openBox(box);
+    if(getTheme() == null){
+      Logger().d('runnedekj nullsjwe');
+      await saveTheme(false);
+    }
+    
     log.d("Hive Service Started");
   }
 
@@ -24,6 +29,18 @@ class DBService {
   Future<void> saveToken(String value) async {
     final box = getBox();
     await box.put("_db-token", value);
+  }
+
+   Future<void> saveTheme(bool value) async {
+    final box = getBox();
+    Logger().d('saved themed ${value}');
+    await box.put("_theme", value);
+  }
+
+  bool? getTheme() {
+    final box = getBox();
+    var value = box.get("_theme");
+    return value;
   }
 
 

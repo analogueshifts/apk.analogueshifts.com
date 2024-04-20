@@ -9,11 +9,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({super.key,});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -62,20 +63,48 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
         elevation: 0,
-        systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark, statusBarColor: Colors.transparent),
-        // backgroundColor: Colors.white,
-        leading: Container(
-            width: 20, height: 20,
-          margin: const EdgeInsets.only(left: 8.0),
-          child: Image.asset("assets/images/Avatar Image.png",),
+        leading: TouchableOpacity(
+          onTap: () {
+             Scaffold.of(context).openDrawer();
+          },
+          child: Container(
+              width: 20, height: 20,
+            margin: EdgeInsets.zero,
+            padding: EdgeInsets.zero,
+            child: Icon(Icons.menu)
+          ),
         ),
-        title: TextBold("Hi, John", fontSize: 20,),
+        title: Text(
+          "Hi, John",
+          style: Theme.of(context).textTheme.titleLarge
+        ),
+        centerTitle: false,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: SvgPicture.asset(AppAsset.notificationIicon),
+            child: Stack(
+              children: [
+                Positioned(
+                  right: 4,
+                  top: 2,
+                  child: Container(
+                    alignment: Alignment.topRight,
+                    height: 7,
+                    width: 7,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(18)
+                    ),
+                  ),
+                ),
+                Icon(Icons.notifications_none_outlined
+              )
+              ]
+              
+              )
           )
         ],
       ),
@@ -97,7 +126,7 @@ class _HomeViewState extends State<HomeView> {
                         controller: _search,
                         decoration: textInputDecoration.copyWith(
                           prefixIcon: _isLoading ? Container(margin: EdgeInsets.only(left:
-                          5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: CircularProgressIndicator(color: AppColors.primaryColor,),)  : Icon(Icons.search)
+                          5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: CircularProgressIndicator(color: AppColors.primaryColor,),)  : Icon(Icons.search, color: Theme.of(context).iconTheme.color,)
                         ),
                       ),
                     ),
@@ -130,8 +159,8 @@ class _HomeViewState extends State<HomeView> {
             ),
             Gap(10),
             SizedBox(
-              height: screenHeight(context) * 0.25,
-
+              height: 160.h,
+              width: double.infinity,
               child: ListView.builder(
                 padding: EdgeInsets.only(left: 15),
                 scrollDirection: Axis.horizontal,
@@ -161,6 +190,8 @@ class _HomeViewState extends State<HomeView> {
   }
   Widget _jobCard(String image, String title, String text){
     return Container(
+      height: 160.h,
+      width: 170.w,
       margin: EdgeInsets.only(right: 15),
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       decoration: BoxDecoration(
@@ -170,9 +201,12 @@ class _HomeViewState extends State<HomeView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image(image:AssetImage(image), height: screenHeight(context) * 0.13,),
+          SizedBox(
+            width: 150.w,
+            height: 80.h,
+            child: Image(image:AssetImage(image), fit: BoxFit.fill,)),
           Gap(15),
-          TextBold(title, fontSize: 14,),
+          TextBold(title, fontSize: 14, style: Theme.of(context).textTheme.bodyMedium,),
           Gap(8),
           TextSemiBold(text, fontSize: 11, color: AppColors.grey,)
         ],
@@ -191,13 +225,13 @@ class _HomeViewState extends State<HomeView> {
       child: Row(
         children: [
           Image(image: AssetImage(image), width: 60, height: 60,),
-          Gap(6),
+          Gap(12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextSemiBold(title, fontSize: 14,fontWeight: FontWeight.w600,),
-              TextSemiBold(description, fontSize: 11,color: AppColors.grey, fontWeight: FontWeight.w400,)
+              TextSemiBold(title, fontSize: 14,fontWeight: FontWeight.w600, style: Theme.of(context).textTheme.bodyLarge,),
+              TextSemiBold(description, style: Theme.of(context).textTheme.bodySmall,)
             ],
           )
         ],

@@ -3,6 +3,7 @@ import 'package:analogue_shifts_mobile/core/constants/app_widgets.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
+import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/introduction._screen.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +32,6 @@ class _SplashScreenState extends State<SplashScreen> {
         logger.d(_db.getToken());
         context.replace(Routes.homeNavigation);
       }else{
-
-
         // return Routes.startUp;
         context.replace(Routes.authenticate);
       }
@@ -49,11 +48,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    screenHeight(context);
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark, statusBarColor: Colors.transparent),
-      ),
       body: Center(child:  SizedBox(
         width: 150,
         height: 150,

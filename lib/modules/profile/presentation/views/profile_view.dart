@@ -5,6 +5,7 @@ import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
+import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
@@ -14,6 +15,7 @@ import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -31,11 +33,7 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
       appBar: AppBar(
-        elevation: 0,
-        // backgroundColor: Colors.red,
-        systemOverlayStyle: const SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark, statusBarColor: AppColors.white,),
         leading: TouchableOpacity(
           onTap:(){
             Navigator.of(context).pushAndRemoveUntil(
@@ -74,7 +72,9 @@ class _ProfileViewState extends State<ProfileView> {
           _navCard(const Image(image: AssetImage("assets/images/write.png"), width: 45,height: 45,), "FAQ", () { }),
           _navCard(const Image(image: AssetImage("assets/images/logout.png"), width: 45,height: 45,), "Logout", () {
             // context.read<UserViewModel>().logoutUser(context);
-           showAlertDialog(context);
+           showDialog(context: context, builder:(context) {
+             return dialog();
+           },);
 
           }),
           Center(child: context.read<UserViewModel>().authState.isGenerating == true ?  const CircularProgressIndicator(color: AppColors.primaryColor,) : Container())
@@ -106,77 +106,151 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  showAlertDialog(BuildContext context) {
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      contentPadding: EdgeInsets.zero,
-      backgroundColor: AppColors.white,
-      content: Container(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-        height: screenHeight(context) * 0.35,
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(8)
+  Widget dialog() {
+    bool _isProcessing = false;
+    return Dialog(
+      insetPadding: const EdgeInsets.all(10),
+      child: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(15),
+            bottomRight: Radius.circular(15),
+          ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: Wrap(
           children: [
-            Column(
-              children: [
-                SvgPicture.asset(AppAsset.logout),
-                const Gap(6),
-                TextBold("Log Out", fontSize: 18,),
-                const Gap(6),
-                TextSemiBold("Oh no you’re leaving, are you sure?", color: const Color(0xff000000).withOpacity(0.6),),
-              ],
-            ),
-
-            Column(
-              children: [
-                BusyButton(title: "No, cancel", onTap: () {
-                  context.pop(context);
-                }),
-                const Gap(10),
-                Consumer<UserViewModel>(
-                  builder: (context, auth, child) {
-                    return InkWell(
-                      onTap: () async{
-                        // context.pop(context);
-                       auth.logoutUser(context);
-
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.primaryColor),
-                            borderRadius: BorderRadius.circular(8)
-
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.background,
+                borderRadius: BorderRadius.circular(8)
+              ),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 40.0, horizontal: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                       SvgPicture.asset(AppAsset.logout),
+                      const Gap(35),
+                      const Text(
+                        'Log Out',
+                        style: TextStyle(
+                          // fontFamily: AppFonts.mulishRegular,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          // color: AppColors.black,
                         ),
-                        child:  Center(
-                            child: auth.authState.isGenerating ? const CircularProgressIndicator() : TextSemiBold("Yes, log me out")),
                       ),
-                    );
-                  },
-                )
-              ],
-            )
-
-            
+                      const Gap(18),
+                      const Text(
+                        'Oh no you’re leaving, are you sure?',
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                        style: TextStyle(
+                          color: Color(0xff6D6D6D),
+                          // fontFamily: AppFonts.mulishRegular,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          // color: AppColors.textColor,
+                        ),
+                      ),
+                      const Gap(16),
+                    ],
+                  ),
+                  
+                  const Gap(24),
+                  Column(
+                    children: [
+                      TouchableOpacity(
+                        onTap: () async {
+                          context.pop();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                          width: double.maxFinite,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: AppColors.primaryColor,
+                          ),
+                          child: SizedBox(
+                            height: 15.h,
+                            child: const Center(
+                              child: Text(
+                                "No, Cancel",
+                                style: TextStyle(
+                                    // fontFamily: AppFonts.mulishRegular,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                       const Gap(16),
+                      Consumer<UserViewModel>(
+                        builder: (context, UserViewModel user, child) {
+                        return TouchableOpacity(
+                          onTap: () async {
+                            setState(() {
+                                _isProcessing = true;
+                              });
+                            await user.logoutUser(context).then((value) {
+                              if (value) {
+                                context.replace(Routes.authenticate);
+                              }
+                              setState(() {
+                                _isProcessing = false;
+                              });
+                            });
+                            setState(() {
+                                _isProcessing = false;
+                              });
+                            // Navigator.pop(context);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+                            width: double.maxFinite,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AppColors.primaryColor
+                                  // width: 1, color: AppColors.secondary,
+                                  ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SizedBox(
+                              height:15.h,
+                              child: Center(
+                                child: _isProcessing ?  SizedBox(
+                                  height: 25.h,
+                                  child: CircularProgressIndicator()) : Text(
+                                  "Yes, log me out",
+                                  style: TextStyle(
+                                    fontFamily: AppFonts.manRope,
+                                    color: AppColors.primaryColor,
+                                      // fontFamily: AppFonts.mulishRegular,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w800,
+                                      // color: AppColors.secondary
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                        }
+                      ),
+                      
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-      )
-
-    );
-
-    // show the dialog
-    showDialog(
-      // barrierDismissible: context.watch<UserViewModel>().authState.isGenerating ?? true,
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
+      ),
     );
   }
 }

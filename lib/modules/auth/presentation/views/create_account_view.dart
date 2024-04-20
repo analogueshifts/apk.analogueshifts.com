@@ -6,6 +6,7 @@ import 'package:analogue_shifts_mobile/app/widgets/app_bar.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/loading_dailog.dart';
+import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/validator.dart';
@@ -195,7 +196,12 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                 children: [
                   TextSemiBold("Already have an account?",color: AppColors.textPrimaryColor2,),
                   Gap(5),
-                  TextSemiBold("Login Now", fontWeight: FontWeight.w800, color: AppColors.background,)
+                  TouchableOpacity(
+                    onTap: () {
+                      if(widget.toggleView == null)return;
+                       widget.toggleView!(false);
+                    },
+                    child: TextSemiBold("Login Now", fontWeight: FontWeight.w800, color: AppColors.background,))
                 ],
               )
 

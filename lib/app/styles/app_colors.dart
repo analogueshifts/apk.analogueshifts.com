@@ -13,7 +13,7 @@ class AppColors {
   static const Color inputFieldColor = Color(0XFFF7F7F7);
   static const Color placeholderColor = Color(0XFFD3D3D3);
   static const Color labelTextColor = Color(0XFF000000);
-  static const Color background = Color(0XFF001529);
+  static const Color background = Color(0XFF000000);
   static Color inputFieldBorder = const Color(0XFFE4E4E4);
   static const Color primaryColorLight = Color(0XFFDED9F2);
   static const Color primaryColorLight2 = Color(0xffABA0DD);

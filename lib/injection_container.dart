@@ -1,3 +1,4 @@
+import 'package:analogue_shifts_mobile/app/notifier/app_notifier.dart';
 import 'package:analogue_shifts_mobile/core/navigators/go_router.dart';
 import 'package:analogue_shifts_mobile/core/network/api_client.dart';
 import 'package:analogue_shifts_mobile/core/network/api_errors.dart';
@@ -37,5 +38,8 @@ Future<void> setupDependencies() async{
   getIt.registerSingleton<GoRouter>(AppRoutes().router);
   getIt.registerSingleton<DBService>(DBService());
   await getIt<DBService>().startHive();
+
+    getIt.registerSingleton<AppChangeNotifier>(AppChangeNotifier());
+    await getIt<AppChangeNotifier>().initAppTheme();
 
 }

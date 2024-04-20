@@ -65,15 +65,10 @@ class _JobViewState extends State<JobView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: AppColors.white,
-        systemOverlayStyle: const SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark),
         leading: Container(
-          width: 20, height: 20,
-          margin: const EdgeInsets.only(left: 8.0),
-          child: Image.asset("assets/images/Avatar Image.png",),
+
         ),
         title: TextBold("Jobs", fontSize: 20,),
         centerTitle: true,

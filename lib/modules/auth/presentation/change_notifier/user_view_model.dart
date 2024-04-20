@@ -84,16 +84,18 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> logoutUser(BuildContext context) async{
+  Future<bool> logoutUser(BuildContext context) async{
     final response = await _logoutUseCase.call();
     response.fold((l) {
       var error = _errorHandler.handleError(l);
       if(error == 'Unauthenticated.'){
         _db.clear();
         if(context.mounted){
-          context.replace(Routes.authenticate);
+          
+          // context.replace(Routes.authenticate);
           AppSnackbar.error(context, message: error);
-          context.pop(context);
+          // context.pop(context);
+          return false;
         }
       }
       if(context.mounted){
@@ -105,10 +107,11 @@ class UserViewModel extends ChangeNotifier {
 
       _db.clear();
       if(context.mounted){
-        context.replace(Routes.authenticate);
-        context.pop(context);
+        // context.replace(Routes.authenticate);
+        // context.pop(context);
       }
+      return true;
     });
-
+    return false;
   }
 }

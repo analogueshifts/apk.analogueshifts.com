@@ -45,5 +45,6 @@ class AppAsset {
      static const String chatAssistant = "assets/images/chat-assistant.svg";
      static const String appleSvg = "assets/icons/Apple.svg";
      static const String logout = 'assets/images/logout.svg';
+     static const String splashBg = 'assets/images/splash-bg.png';
 
 }
