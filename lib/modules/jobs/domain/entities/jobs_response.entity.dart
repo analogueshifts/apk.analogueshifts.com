@@ -1,32 +1,101 @@
 import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-class JobResponse extends Equatable {
-  JobResponse({
+part 'jobs_response.entity.g.dart';
+
+@JsonSerializable(createToJson: false)
+class JobResponseEntity extends Equatable {
+  JobResponseEntity({
+    required this.status,
+    required this.success,
+    required this.data,
+  });
+
+  final int? status;
+  final bool? success;
+  final Data? data;
+
+  factory JobResponseEntity.fromJson(Map<String, dynamic> json) => _$JobResponseEntityFromJson(json);
+
+  @override
+  List<Object?> get props => [
+    status, success, data, ];
+}
+
+@JsonSerializable(createToJson: false)
+class Data extends Equatable {
+  Data({
     required this.jobs,
   });
 
-  final List<Job> jobs;
+  final Jobs? jobs;
 
-  factory JobResponse.fromJson(Map<String, dynamic> json){
-    return JobResponse(
-      jobs: json["jobs"] == null ? [] : List<Job>.from(json["jobs"]!.map((x) => Job.fromJson(x))),
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    "jobs": jobs.map((x) => x.toJson()).toList(),
-  };
+  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
   @override
   List<Object?> get props => [
     jobs, ];
 }
 
-class Job extends Equatable {
-  Job({
+@JsonSerializable(createToJson: false)
+class Jobs extends Equatable {
+  Jobs({
+    required this.currentPage,
+    required this.data,
+    required this.firstPageUrl,
+    required this.from,
+    required this.lastPage,
+    required this.lastPageUrl,
+    required this.links,
+    required this.nextPageUrl,
+    required this.path,
+    required this.perPage,
+    required this.prevPageUrl,
+    required this.to,
+    required this.total,
+  });
+
+  @JsonKey(name: 'current_page')
+  final int? currentPage;
+  final List<Datum>? data;
+
+  @JsonKey(name: 'first_page_url')
+  final String? firstPageUrl;
+  final int? from;
+
+  @JsonKey(name: 'last_page')
+  final int? lastPage;
+
+  @JsonKey(name: 'last_page_url')
+  final String? lastPageUrl;
+  final List<Link>? links;
+
+  @JsonKey(name: 'next_page_url')
+  final String? nextPageUrl;
+  final String? path;
+
+  @JsonKey(name: 'per_page')
+  final int? perPage;
+
+  @JsonKey(name: 'prev_page_url')
+  final dynamic prevPageUrl;
+  final int? to;
+  final int? total;
+
+  factory Jobs.fromJson(Map<String, dynamic> json) => _$JobsFromJson(json);
+
+  @override
+  List<Object?> get props => [
+    currentPage, data, firstPageUrl, from, lastPage, lastPageUrl, links, nextPageUrl, path, perPage, prevPageUrl, to, total, ];
+}
+
+@JsonSerializable(createToJson: false)
+class Datum extends Equatable {
+  Datum({
     required this.id,
+    required this.uuid,
     required this.slug,
-    required this.userId,
+    required this.userUuid,
     required this.title,
     required this.description,
     required this.identifier,
@@ -46,162 +115,76 @@ class Job extends Equatable {
   });
 
   final int? id;
+  final String? uuid;
   final String? slug;
-  final String? userId;
+
+  @JsonKey(name: 'user_uuid')
+  final String? userUuid;
   final String? title;
   final String? description;
   final Identifier? identifier;
   final HiringOrganization? hiringOrganization;
-  final List<ApplicantLocationRequirement> applicantLocationRequirements;
+  final List<dynamic>? applicantLocationRequirements;
   final BaseSalary? baseSalary;
   final String? directApply;
-  final String? employmentType;
+  final dynamic employmentType;
   final JobLocation? jobLocation;
-  final String? jobLocationType;
+  final dynamic jobLocationType;
   final DateTime? validThrough;
   final String? status;
   final String? apply;
   final dynamic alts;
+
+  @JsonKey(name: 'created_at')
   final DateTime? createdAt;
+
+  @JsonKey(name: 'updated_at')
   final DateTime? updatedAt;
 
-  factory Job.fromJson(Map<String, dynamic> json){
-    return Job(
-      id: json["id"],
-      slug: json["slug"],
-      userId: json["user_id"],
-      title: json["title"],
-      description: json["description"],
-      identifier: json["identifier"] == null ? null : Identifier.fromJson(json["identifier"]),
-      hiringOrganization: json["hiringOrganization"] == null ? null : HiringOrganization.fromJson(json["hiringOrganization"]),
-      applicantLocationRequirements: json["applicantLocationRequirements"] == null ? [] : List<ApplicantLocationRequirement>.from(json["applicantLocationRequirements"]!.map((x) => ApplicantLocationRequirement.fromJson(x))),
-      baseSalary: json["baseSalary"] == null ? null : BaseSalary.fromJson(json["baseSalary"]),
-      directApply: json["directApply"],
-      employmentType: json["employmentType"],
-      jobLocation: json["jobLocation"] == null ? null : JobLocation.fromJson(json["jobLocation"]),
-      jobLocationType: json["jobLocationType"],
-      validThrough: DateTime.tryParse(json["validThrough"] ?? ""),
-      status: json["status"],
-      apply: json["apply"],
-      alts: json["alts"],
-      createdAt: DateTime.tryParse(json["created_at"] ?? ""),
-      updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "slug": slug,
-    "user_id": userId,
-    "title": title,
-    "description": description,
-    "identifier": identifier?.toJson(),
-    "hiringOrganization": hiringOrganization?.toJson(),
-    "applicantLocationRequirements": applicantLocationRequirements.map((x) => x.toJson()).toList(),
-    "baseSalary": baseSalary?.toJson(),
-    "directApply": directApply,
-    "employmentType": employmentType,
-    "jobLocation": jobLocation?.toJson(),
-    "jobLocationType": jobLocationType,
-    "validThrough": validThrough,
-    "status": status,
-    "apply": apply,
-    "alts": alts,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-  };
+  factory Datum.fromJson(Map<String, dynamic> json) => _$DatumFromJson(json);
 
   @override
   List<Object?> get props => [
-    id, slug, userId, title, description, identifier, hiringOrganization, applicantLocationRequirements, baseSalary, directApply, employmentType, jobLocation, jobLocationType, validThrough, status, apply, alts, createdAt, updatedAt, ];
+    id, uuid, slug, userUuid, title, description, identifier, hiringOrganization, applicantLocationRequirements, baseSalary, directApply, employmentType, jobLocation, jobLocationType, validThrough, status, apply, alts, createdAt, updatedAt, ];
 }
 
-class ApplicantLocationRequirement extends Equatable {
-  ApplicantLocationRequirement({
-    required this.type,
-    required this.name,
-  });
-
-  final String? type;
-  final String? name;
-
-  factory ApplicantLocationRequirement.fromJson(Map<String, dynamic> json){
-    return ApplicantLocationRequirement(
-      type: json["@type"],
-      name: json["name"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    "@type": type,
-    "name": name,
-  };
-
-  @override
-  List<Object?> get props => [
-    type, name, ];
-}
-
+@JsonSerializable(createToJson: false)
 class BaseSalary extends Equatable {
   BaseSalary({
     required this.type,
     required this.value,
-    required this.currency,
   });
 
+  @JsonKey(name: '@type')
   final String? type;
   final Value? value;
-  final String? currency;
 
-  factory BaseSalary.fromJson(Map<String, dynamic> json){
-    return BaseSalary(
-      type: json["@type"],
-      value: json["value"] == null ? null : Value.fromJson(json["value"]),
-      currency: json["currency"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    "@type": type,
-    "value": value?.toJson(),
-    "currency": currency,
-  };
+  factory BaseSalary.fromJson(Map<String, dynamic> json) => _$BaseSalaryFromJson(json);
 
   @override
   List<Object?> get props => [
-    type, value, currency, ];
+    type, value, ];
 }
 
+@JsonSerializable(createToJson: false)
 class Value extends Equatable {
   Value({
     required this.type,
     required this.value,
-    required this.unitText,
   });
 
+  @JsonKey(name: '@type')
   final String? type;
   final String? value;
-  final String? unitText;
 
-  factory Value.fromJson(Map<String, dynamic> json){
-    return Value(
-      type: json["@type"],
-      value: json["value"],
-      unitText: json["unitText"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    "@type": type,
-    "value": value,
-    "unitText": unitText,
-  };
+  factory Value.fromJson(Map<String, dynamic> json) => _$ValueFromJson(json);
 
   @override
   List<Object?> get props => [
-    type, value, unitText, ];
+    type, value, ];
 }
 
+@JsonSerializable(createToJson: false)
 class HiringOrganization extends Equatable {
   HiringOrganization({
     required this.type,
@@ -210,32 +193,20 @@ class HiringOrganization extends Equatable {
     required this.logo,
   });
 
+  @JsonKey(name: '@type')
   final String? type;
   final String? name;
   final String? sameAs;
   final dynamic logo;
 
-  factory HiringOrganization.fromJson(Map<String, dynamic> json){
-    return HiringOrganization(
-      type: json["@type"],
-      name: json["name"],
-      sameAs: json["sameAs"],
-      logo: json["logo"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    "@type": type,
-    "name": name,
-    "sameAs": sameAs,
-    "logo": logo,
-  };
+  factory HiringOrganization.fromJson(Map<String, dynamic> json) => _$HiringOrganizationFromJson(json);
 
   @override
   List<Object?> get props => [
     type, name, sameAs, logo, ];
 }
 
+@JsonSerializable(createToJson: false)
 class Identifier extends Equatable {
   Identifier({
     required this.type,
@@ -243,55 +214,37 @@ class Identifier extends Equatable {
     required this.value,
   });
 
+  @JsonKey(name: '@type')
   final String? type;
   final String? name;
   final dynamic value;
 
-  factory Identifier.fromJson(Map<String, dynamic> json){
-    return Identifier(
-      type: json["@type"],
-      name: json["name"],
-      value: json["value"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    "@type": type,
-    "name": name,
-    "value": value,
-  };
+  factory Identifier.fromJson(Map<String, dynamic> json) => _$IdentifierFromJson(json);
 
   @override
   List<Object?> get props => [
     type, name, value, ];
 }
 
+@JsonSerializable(createToJson: false)
 class JobLocation extends Equatable {
   JobLocation({
     required this.type,
     required this.address,
   });
 
+  @JsonKey(name: '@type')
   final String? type;
   final Address? address;
 
-  factory JobLocation.fromJson(Map<String, dynamic> json){
-    return JobLocation(
-      type: json["@type"],
-      address: json["address"] == null ? null : Address.fromJson(json["address"]),
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    "@type": type,
-    "address": address?.toJson(),
-  };
+  factory JobLocation.fromJson(Map<String, dynamic> json) => _$JobLocationFromJson(json);
 
   @override
   List<Object?> get props => [
     type, address, ];
 }
 
+@JsonSerializable(createToJson: false)
 class Address extends Equatable {
   Address({
     required this.type,
@@ -302,34 +255,36 @@ class Address extends Equatable {
     required this.addressCountry,
   });
 
+  @JsonKey(name: '@type')
   final String? type;
   final dynamic streetAddress;
-  final String? addressLocality;
+  final dynamic addressLocality;
   final dynamic addressRegion;
   final dynamic postalCode;
-  final String? addressCountry;
+  final dynamic addressCountry;
 
-  factory Address.fromJson(Map<String, dynamic> json){
-    return Address(
-      type: json["@type"],
-      streetAddress: json["streetAddress"],
-      addressLocality: json["addressLocality"],
-      addressRegion: json["addressRegion"],
-      postalCode: json["postalCode"],
-      addressCountry: json["addressCountry"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    "@type": type,
-    "streetAddress": streetAddress,
-    "addressLocality": addressLocality,
-    "addressRegion": addressRegion,
-    "postalCode": postalCode,
-    "addressCountry": addressCountry,
-  };
+  factory Address.fromJson(Map<String, dynamic> json) => _$AddressFromJson(json);
 
   @override
   List<Object?> get props => [
     type, streetAddress, addressLocality, addressRegion, postalCode, addressCountry, ];
+}
+
+@JsonSerializable(createToJson: false)
+class Link extends Equatable {
+  Link({
+    required this.url,
+    required this.label,
+    required this.active,
+  });
+
+  final String? url;
+  final String? label;
+  final bool? active;
+
+  factory Link.fromJson(Map<String, dynamic> json) => _$LinkFromJson(json);
+
+  @override
+  List<Object?> get props => [
+    url, label, active, ];
 }

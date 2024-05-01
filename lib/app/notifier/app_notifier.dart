@@ -22,12 +22,16 @@ class AppChangeNotifier extends ChangeNotifier {
 
   initAppTheme() async {
    bool? theme = await _db.getTheme();
-   if(theme == null)return;
-   _isDarkMode = theme;
+   if(theme == null){
+     toggleTheme(ThemeMode.system == ThemeMode.dark ? true : false);
+   }else{
+    _isDarkMode = theme;
    Logger().d('Notifier Teme $isDarkMode');
    toggleTheme(theme);
    notifyListeners();
-}
+   }
+   notifyListeners();
+} 
 }
 
 

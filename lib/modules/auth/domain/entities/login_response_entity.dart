@@ -7,7 +7,7 @@ class LoginResponse extends Equatable {
     required this.user,
   });
 
-  final String? status;
+  final int? status;
   final String? token;
   final User? user;
 

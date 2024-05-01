@@ -3,10 +3,17 @@ import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/views/change_password.screen.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/views/verify_user_otp_view.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
+import 'package:analogue_shifts_mobile/modules/notification/presentation/views/notification_screen.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/introduction._screen.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/splash_screen.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/change_password_screen.dart';
+import 'package:analogue_shifts_mobile/modules/profile/presentation/views/deactivate_account_screen.dart';
+import 'package:analogue_shifts_mobile/modules/profile/presentation/views/faq_screen.dart';
+import 'package:analogue_shifts_mobile/modules/profile/presentation/views/help_center_screen.dart';
+import 'package:analogue_shifts_mobile/modules/profile/presentation/views/jobs_applied.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/settings_screen.drt.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -32,6 +39,19 @@ class AppRoutes {
         builder: (context, state) => const Authenticate(),
       ),
       GoRoute(
+        path: Routes.verifyUserOtp,
+        builder: (context, state) => const VerifyUserOtpScreen(),
+        routes: []
+      ),
+      GoRoute(
+        path: Routes.resetChangePassword,
+        builder: (context, state) => const ResetChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: Routes.notification,
+        builder: (context, state) => const NotificationScreen()
+      ),
+      GoRoute(
         path: Routes.homeNavigation,
         builder: (context, state) => const HomeNavigation(),
         routes: [
@@ -48,6 +68,36 @@ class AppRoutes {
                 name: 'change-password',
                 builder: (context, state) => const ChangePasswordScreen(),
                 
+          ),
+          GoRoute(
+                path: Routes.jobsApplied,
+                name: 'jobs-applied',
+                builder: (context, state) => const JobsAppliedScreen()
+                
+          ),
+          GoRoute(
+                path: Routes.deactivateAccount,
+                name: 'deactivate-account',
+                builder: (context, state) => const DeactivateAccountScreen()
+                
+          ),
+          GoRoute(
+                path: Routes.helpCenter,
+                name: 'help-center',
+                builder: (context, state) => const HelpCenterScreen()
+                
+          ),
+          GoRoute(
+                path: Routes.helpCenter,
+                name: 'faq-screen',
+                builder: (context, state) => JobsAppliedScreen()
+                
+          ),
+           GoRoute(
+            path: 'notification',
+            // path: Routes.notification,
+            name: 'notification',
+            builder: (context, state) => const NotificationScreen()
           ),
         ],
       ),

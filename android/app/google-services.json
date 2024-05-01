@@ -1,1 +1,39 @@
-{"installed":{"client_id":"1049258121048-6rja5rf838ch3sahc9gqf4bpj4rpt6j6.apps.googleusercontent.com","project_id":"pool-416518","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs"}}
+{
+  "project_info": {
+    "project_number": "40068646233",
+    "project_id": "analogue-shifts",
+    "storage_bucket": "analogue-shifts.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:40068646233:android:7db1ba5d7739e4e899f848",
+        "android_client_info": {
+          "package_name": "com.example.analogue_shifts_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "40068646233-353skg8bdn8nhuqsaq0o1ner51thqr0e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi4ARPy9EQLZ4h22ysmz4LiqxWo5i3t2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "40068646233-353skg8bdn8nhuqsaq0o1ner51thqr0e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

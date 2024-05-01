@@ -19,7 +19,7 @@ class AppBackButton extends StatelessWidget {
       child: Center(
         child: Icon(
           Icons.arrow_back_ios_outlined,
-          color: AppColors.background,
+          color:Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white
       )
       ),
     );

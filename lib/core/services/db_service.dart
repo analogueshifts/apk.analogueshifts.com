@@ -9,10 +9,10 @@ class DBService {
   Future<void> startHive() async {
     await Hive.initFlutter();
     await Hive.openBox(box);
-    if(getTheme() == null){
-      Logger().d('runnedekj nullsjwe');
-      await saveTheme(false);
-    }
+    // if(getTheme() == null){
+    //   Logger().d('runnedekj nullsjwe');
+    //   await saveTheme(false);
+    // }
     
     log.d("Hive Service Started");
   }
@@ -24,6 +24,11 @@ class DBService {
   Future<void> save(String key, dynamic value) async {
     final box = getBox();
     await box.put(key, value);
+  }
+
+  Future<void> saveFirebaseToken(String value) async {
+    final box = getBox();
+    await box.put("_firebase-token", value);
   }
 
   Future<void> saveToken(String value) async {
@@ -57,9 +62,22 @@ class DBService {
     return value;
   }
 
+
+  String? getFirebaseToken() {
+    final box = getBox();
+    var value = box.get("_firebase-token");
+    return value;
+  }
+
   Future<void> remove(String key) async {
     final box = getBox();
     await box.delete(key);
+  }
+
+
+  Future<void> removeAuthToken(String key) async {
+    final box = getBox();
+    await box.delete('_db-token');
   }
 
   Future<void> clear() async {

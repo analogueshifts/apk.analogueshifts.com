@@ -58,7 +58,8 @@ class _HomeNavigationState extends State<HomeNavigation> {
       const ProfileView()
     ];
     return Scaffold(
-      drawer: const Drawer(
+      drawer: Drawer(
+    
         shape: RoundedRectangleBorder(),
     child: DrawerWidget()
       ),

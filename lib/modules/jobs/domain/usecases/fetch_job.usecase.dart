@@ -11,7 +11,7 @@ class FetchJobsUseCase {
   final JobsRepository _jobRepository = GetIt.instance<JobsRepository>();
 
 
-  Future<Either<Exception, JobResponse>> call() async {
+  Future<Either<Exception, JobResponseEntity>> call([int? page]) async {
     return await _jobRepository.fetchJobs();
   }
 }

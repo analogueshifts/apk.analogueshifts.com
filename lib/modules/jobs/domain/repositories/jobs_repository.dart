@@ -6,5 +6,5 @@ import 'package:dartz/dartz.dart';
 
 
 abstract class JobsRepository {
-  Future<Either<Exception, JobResponse>> fetchJobs();
+  Future<Either<Exception, JobResponseEntity>> fetchJobs([int? page]);
 }

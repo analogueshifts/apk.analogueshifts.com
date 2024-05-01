@@ -5,6 +5,7 @@ import 'package:analogue_shifts_mobile/modules/auth/data/models/user_login.model
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/repositories/auth.repository.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/data/model/jobsResponseModel.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/repositories/jobs_repository.dart';
 import 'package:dartz/dartz.dart';
@@ -16,14 +17,14 @@ class JobsRepositoryImpl implements JobsRepository {
   JobsRepositoryImpl(this.dioManager);
 
   @override
-  Future<Either<Exception, JobResponse>> fetchJobs() async {
+  Future<Either<Exception, JobResponseEntity>> fetchJobs([int? page]) async {
     try {
-      final response = await dioManager.dio.get('jobs');
-      logger.d(response.data);
+      final response = await dioManager.dio.get('jobs?page=${page ?? 1}');
+      // logger.d(response.data);
 
       if (response.statusCode == 200) {
-        logger.d(response.data);
-        final jobModel = JobResponse.fromJson(response.data);
+        // logger.d(response.data);
+        final jobModel = JobResponseEntity.fromJson(response.data);
         return Right(jobModel);
       } else {
         return Left(Exception('Unable to fetch jobs'));

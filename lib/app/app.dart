@@ -3,6 +3,7 @@ import 'package:analogue_shifts_mobile/app/theme/dark_theme.dart';
 import 'package:analogue_shifts_mobile/app/theme/light_theme.dart';
 import 'package:analogue_shifts_mobile/core/navigators/go_router.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
+import 'package:analogue_shifts_mobile/firebase_handler.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/providers.dart';
@@ -21,6 +22,13 @@ class AnalogueApp extends StatefulWidget {
 }
 
 class _AnalogueAppState extends State<AnalogueApp> {
+  final messagingService = PushNotificationService();
+
+  @override
+  void initState() {
+    messagingService.initialize();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +49,10 @@ class _AnalogueAppState extends State<AnalogueApp> {
             routerDelegate: getIt<GoRouter>().routerDelegate,
             backButtonDispatcher: getIt<GoRouter>().backButtonDispatcher,
             debugShowCheckedModeBanner: false,
-            theme: appNotifier.isDarkMode == null ? getIt<AppChangeNotifier>().isDarkMode == true ? darkTheme : lightTheme : appNotifier.isDarkMode == true ? darkTheme : lightTheme
+            themeMode:  getIt<AppChangeNotifier>().isDarkMode != null && true ? ThemeMode.dark : ThemeMode.light,
+            darkTheme: darkTheme,
+            
+            // theme: appNotifier.isDarkMode == null ? getIt<AppChangeNotifier>().isDarkMode == true ? darkTheme : lightTheme : appNotifier.isDarkMode == true ? darkTheme : lightTheme
             // theme: appNotifier.isDarkMode == null || appNotifier.isDarkMode == false && getIt<AppChangeNotifier>().isDarkMode  == false  ? lightTheme : darkTheme
           );
            }

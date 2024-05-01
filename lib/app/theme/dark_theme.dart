@@ -50,6 +50,12 @@ final darkTheme = ThemeData(
     fontFamily: AppFonts.manRope,
     color: AppColors.white,
   ),
+   bodySmall: TextStyle(
+    fontFamily: AppFonts.manRope,
+    color: AppColors.white,
+    fontWeight: FontWeight.w400,
+    fontSize: 11
+  ),
   titleMedium: TextStyle(
     fontFamily: AppFonts.manRope,
     color: AppColors.white,

@@ -285,12 +285,12 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                       ? Column(
                     children: [
                       FittedBox(
-                        child: const Text(
+                        child: Text(
                           'Welcome!',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: AppColors.background,
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,
                             fontSize: 26.0,
                             fontFamily: AppFonts.manRope,
                             height: 1.2,
@@ -312,7 +312,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                     ],
                   )
                       : currentIndex == 1
-                      ? const Column(
+                      ? Column(
                     children: [
                       FittedBox(
                         child: Text(
@@ -320,7 +320,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: AppColors.background,
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,
                             fontSize: 26.0,
                             fontFamily: AppFonts.manRope,
                             height: 1.2,
@@ -344,13 +344,13 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                       : Column(
                     children: [
                       FittedBox(
-                        child: const Text(
+                        child: Text(
                           'Ready to find a job?',
                           textAlign: TextAlign.center,
                           maxLines: 1,
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: AppColors.background,
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,
                             fontSize: 26.0,
                             fontFamily: AppFonts.manRope,
                             height: 1.2,
@@ -387,25 +387,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                       );
                     }
                   },
-                  child:currentIndex == 2 ?  Container(
-                    width: screenWidth(context) * 0.5,
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                    height: 55,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: currentIndex != 2 ? const Icon(Icons.arrow_forward_outlined, color: Colors.white,) : Text(
-                        currentIndex == 2 ? 'Get Started' : 'Next',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimaryColor,
-                          fontFamily: AppFonts.manRope,
-                        ),
-                      ), 
-                    ),
-                  ) : AnimatedContainer(
+                  child: AnimatedContainer(
                     width: 70,
                     // margin: const EdgeInsets.symmetric(horizontal: 20),
                     height: 70,
@@ -418,14 +400,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
 
 
                     child: Center(
-                      child: currentIndex != 2 ? const Icon(Icons.arrow_forward_outlined, color: Colors.white,size: 30,) : Text(
-                        currentIndex == 2 ? 'Proceed' : 'Next',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimaryColor,
-                          fontFamily: AppFonts.manRope,
-                        ),
-                      ),
+                      child: const Icon(Icons.arrow_forward_outlined, color: Colors.white,size: 30,)
                     ),
                   ),
                 )

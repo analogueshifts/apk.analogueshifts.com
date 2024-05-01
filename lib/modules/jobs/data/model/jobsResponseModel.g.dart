@@ -8,20 +8,71 @@ part of 'jobsResponseModel.dart';
 
 JobResponseModel _$JobResponseModelFromJson(Map<String, dynamic> json) =>
     JobResponseModel(
-      jobs: (json['jobs'] as List<dynamic>?)
-          ?.map((e) => Job.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      status: json['status'] as int?,
+      success: json['success'] as bool?,
+      data: json['data'] == null
+          ? null
+          : Data.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$JobResponseModelToJson(JobResponseModel instance) =>
     <String, dynamic>{
+      'status': instance.status,
+      'success': instance.success,
+      'data': instance.data,
+    };
+
+Data _$DataFromJson(Map<String, dynamic> json) => Data(
+      jobs: json['jobs'] == null
+          ? null
+          : Jobs.fromJson(json['jobs'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
       'jobs': instance.jobs,
     };
 
-Job _$JobFromJson(Map<String, dynamic> json) => Job(
+Jobs _$JobsFromJson(Map<String, dynamic> json) => Jobs(
+      currentPage: json['current_page'] as int?,
+      data: (json['data'] as List<dynamic>?)
+          ?.map((e) => Datum.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      firstPageUrl: json['first_page_url'] as String?,
+      from: json['from'] as int?,
+      lastPage: json['last_page'] as int?,
+      lastPageUrl: json['last_page_url'] as String?,
+      links: (json['links'] as List<dynamic>?)
+          ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      nextPageUrl: json['next_page_url'] as String?,
+      path: json['path'] as String?,
+      perPage: json['per_page'] as int?,
+      prevPageUrl: json['prev_page_url'],
+      to: json['to'] as int?,
+      total: json['total'] as int?,
+    );
+
+Map<String, dynamic> _$JobsToJson(Jobs instance) => <String, dynamic>{
+      'current_page': instance.currentPage,
+      'data': instance.data,
+      'first_page_url': instance.firstPageUrl,
+      'from': instance.from,
+      'last_page': instance.lastPage,
+      'last_page_url': instance.lastPageUrl,
+      'links': instance.links,
+      'next_page_url': instance.nextPageUrl,
+      'path': instance.path,
+      'per_page': instance.perPage,
+      'prev_page_url': instance.prevPageUrl,
+      'to': instance.to,
+      'total': instance.total,
+    };
+
+Datum _$DatumFromJson(Map<String, dynamic> json) => Datum(
       id: json['id'] as int?,
+      uuid: json['uuid'] as String?,
       slug: json['slug'] as String?,
-      userId: json['user_id'] as String?,
+      userUuid: json['user_uuid'] as String?,
       title: json['title'] as String?,
       description: json['description'] as String?,
       identifier: json['identifier'] == null
@@ -31,20 +82,17 @@ Job _$JobFromJson(Map<String, dynamic> json) => Job(
           ? null
           : HiringOrganization.fromJson(
               json['hiringOrganization'] as Map<String, dynamic>),
-      applicantLocationRequirements: (json['applicantLocationRequirements']
-              as List<dynamic>?)
-          ?.map((e) =>
-              ApplicantLocationRequirement.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      applicantLocationRequirements:
+          json['applicantLocationRequirements'] as List<dynamic>?,
       baseSalary: json['baseSalary'] == null
           ? null
           : BaseSalary.fromJson(json['baseSalary'] as Map<String, dynamic>),
       directApply: json['directApply'] as String?,
-      employmentType: json['employmentType'] as String?,
+      employmentType: json['employmentType'],
       jobLocation: json['jobLocation'] == null
           ? null
           : JobLocation.fromJson(json['jobLocation'] as Map<String, dynamic>),
-      jobLocationType: json['jobLocationType'] as String?,
+      jobLocationType: json['jobLocationType'],
       validThrough: json['validThrough'] == null
           ? null
           : DateTime.parse(json['validThrough'] as String),
@@ -59,10 +107,11 @@ Job _$JobFromJson(Map<String, dynamic> json) => Job(
           : DateTime.parse(json['updated_at'] as String),
     );
 
-Map<String, dynamic> _$JobToJson(Job instance) => <String, dynamic>{
+Map<String, dynamic> _$DatumToJson(Datum instance) => <String, dynamic>{
       'id': instance.id,
+      'uuid': instance.uuid,
       'slug': instance.slug,
-      'user_id': instance.userId,
+      'user_uuid': instance.userUuid,
       'title': instance.title,
       'description': instance.description,
       'identifier': instance.identifier,
@@ -81,45 +130,27 @@ Map<String, dynamic> _$JobToJson(Job instance) => <String, dynamic>{
       'updated_at': instance.updatedAt?.toIso8601String(),
     };
 
-ApplicantLocationRequirement _$ApplicantLocationRequirementFromJson(
-        Map<String, dynamic> json) =>
-    ApplicantLocationRequirement(
-      type: json['@type'] as String?,
-      name: json['name'] as String?,
-    );
-
-Map<String, dynamic> _$ApplicantLocationRequirementToJson(
-        ApplicantLocationRequirement instance) =>
-    <String, dynamic>{
-      '@type': instance.type,
-      'name': instance.name,
-    };
-
 BaseSalary _$BaseSalaryFromJson(Map<String, dynamic> json) => BaseSalary(
       type: json['@type'] as String?,
       value: json['value'] == null
           ? null
           : Value.fromJson(json['value'] as Map<String, dynamic>),
-      currency: json['currency'] as String?,
     );
 
 Map<String, dynamic> _$BaseSalaryToJson(BaseSalary instance) =>
     <String, dynamic>{
       '@type': instance.type,
       'value': instance.value,
-      'currency': instance.currency,
     };
 
 Value _$ValueFromJson(Map<String, dynamic> json) => Value(
       type: json['@type'] as String?,
       value: json['value'] as String?,
-      unitText: json['unitText'] as String?,
     );
 
 Map<String, dynamic> _$ValueToJson(Value instance) => <String, dynamic>{
       '@type': instance.type,
       'value': instance.value,
-      'unitText': instance.unitText,
     };
 
 HiringOrganization _$HiringOrganizationFromJson(Map<String, dynamic> json) =>
@@ -167,10 +198,10 @@ Map<String, dynamic> _$JobLocationToJson(JobLocation instance) =>
 Address _$AddressFromJson(Map<String, dynamic> json) => Address(
       type: json['@type'] as String?,
       streetAddress: json['streetAddress'],
-      addressLocality: json['addressLocality'] as String?,
+      addressLocality: json['addressLocality'],
       addressRegion: json['addressRegion'],
       postalCode: json['postalCode'],
-      addressCountry: json['addressCountry'] as String?,
+      addressCountry: json['addressCountry'],
     );
 
 Map<String, dynamic> _$AddressToJson(Address instance) => <String, dynamic>{
@@ -180,4 +211,16 @@ Map<String, dynamic> _$AddressToJson(Address instance) => <String, dynamic>{
       'addressRegion': instance.addressRegion,
       'postalCode': instance.postalCode,
       'addressCountry': instance.addressCountry,
+    };
+
+Link _$LinkFromJson(Map<String, dynamic> json) => Link(
+      url: json['url'] as String?,
+      label: json['label'] as String?,
+      active: json['active'] as bool?,
+    );
+
+Map<String, dynamic> _$LinkToJson(Link instance) => <String, dynamic>{
+      'url': instance.url,
+      'label': instance.label,
+      'active': instance.active,
     };

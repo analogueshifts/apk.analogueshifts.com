@@ -22,8 +22,9 @@ class HanddietextBase extends StatelessWidget {
     assert(text != null, 'test can not be null');
     return Text(
       text ?? '',
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 15,
+        color:  Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,
         fontFamily: AppFonts.manRope,
       ).merge(style),
       textAlign: textAlign,
@@ -128,7 +129,7 @@ class TextSemiBold extends HanddietextBase {
     maxLines: maxLines,
     style: TextStyle(
       fontSize: fontSize ?? 14,
-      color: color ?? AppColors.background,
+      color: color,
       fontWeight: fontWeight,
     ).merge(style),
     textAlign: textAlign,

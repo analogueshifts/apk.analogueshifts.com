@@ -25,7 +25,6 @@ class PaylonyAppBarTwo extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.white,
       // backgroundColor: Color(0xffFBFBFB),
       // systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: AppColors.white, statusBarIconBrightness: Brightness.dark),
       leading: TouchableOpacity(
@@ -34,8 +33,7 @@ class PaylonyAppBarTwo extends StatelessWidget implements PreferredSizeWidget {
       ),
       title: TextBold(
         title,
-        fontSize: 18,
-        color: titleColor ?? AppColors.background,
+        style: Theme.of(context).textTheme.titleLarge,
       ),
       actions: actions,
       elevation: elevation ?? 0,

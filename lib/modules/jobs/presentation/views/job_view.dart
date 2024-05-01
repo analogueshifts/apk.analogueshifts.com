@@ -1,5 +1,6 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
+import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
@@ -27,6 +28,9 @@ class _JobViewState extends State<JobView> {
 
   bool _isLoading = false;
 
+  final _scrollController = ScrollController();
+  bool _isPaginateButton = false;
+
   void setSearchLoader(){
     setState(() {
       _isLoading = true;
@@ -49,19 +53,37 @@ class _JobViewState extends State<JobView> {
       if(mounted){
         context.read<JobProvider>().getJobs(context);
       }
-
-
     });
+    _scrollController.addListener(_onScroll);
     super.initState();
-
   }
 
 
   @override
   void dispose() {
     _search.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
+
+  void _onScroll() {
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (maxScroll - currentScroll <= 200) {
+      final jobmodel = context.read<JobProvider>();
+      if (jobmodel.lastPage != jobmodel.currentPage) {
+        setState(() {
+          _isPaginateButton = true;
+        });
+        // context.read<JobProvider>().getJobs(context, context.read<JobProvider>().currentPage + 1);
+      }
+    }else{
+       setState(() {
+          _isPaginateButton = false;
+        });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +92,7 @@ class _JobViewState extends State<JobView> {
         leading: Container(
 
         ),
-        title: TextBold("Jobs", fontSize: 20,),
+        title: TextBold("Jobs", fontSize: 20, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
         centerTitle: true,
         actions: [
           Padding(
@@ -86,6 +108,7 @@ class _JobViewState extends State<JobView> {
             backgroundColor: AppColors.primaryColor,
             onRefresh: () => job.getJobs(context), // Your refresh logic
             child: SingleChildScrollView(
+              controller: _scrollController,
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               child: Column(
                 children: [
@@ -133,12 +156,13 @@ class _JobViewState extends State<JobView> {
                     ),
                   ) :
                   ListView.builder(
+                    
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: job.job.length,
                       itemBuilder:(context, index) {
                         final e = job.job[index];
-                        logger.d(e);
+                        // logger.d(e);
                         return _recentJobCard(e.hiringOrganization?.logo ?? "", e.title ?? "", e.hiringOrganization?.name ?? "");
                         // return _recentJobCard(jobData.hiringOrganization?.logo, jobData.title.toString(), jobData.hiringOrganization?.name.toString() ?? "");
                       }
@@ -147,6 +171,10 @@ class _JobViewState extends State<JobView> {
                   // Column(
                   //   children: job.job.map((e) => _recentJobCard(e.hiringOrganization?.logo ?? "", e.title ?? "", e.hiringOrganization?.name ?? "")).toList(),
                   // )
+                  _isPaginateButton ? BusyButton(title: "Load More...", onTap:() {
+                    final _updateCurrentPage = job.currentPage + 1;
+                    job.getJobs(context, _updateCurrentPage);
+                  },) : Text("")
                 ],
               ),
             ),

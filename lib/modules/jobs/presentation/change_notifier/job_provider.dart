@@ -24,8 +24,12 @@ class JobProvider extends ChangeNotifier {
   JobState get jobhState => _jobState;
 
 
-  List<Job> _jobs = [];
-  List<Job> get job => _jobs;
+  List<Datum> _jobs = [];
+  List<Datum> get job => _jobs;
+  int _currentPage = 1;
+  int get currentPage => _currentPage;
+  int? _lastPage;
+  int? get lastPage => _lastPage;
 
   void toggleGenerating(bool value) {
     if(jobhState.isGenerating == value)return;
@@ -37,10 +41,11 @@ class JobProvider extends ChangeNotifier {
 
 
 
-  Future<void> getJobs(BuildContext context) async {
+  Future<void> getJobs(BuildContext context, [int? page]) async {
+    logger.d(page);
     toggleGenerating(true);
     notifyListeners();
-    final result = await _fetchJobsUseCase.call();
+    final result = await _fetchJobsUseCase.call(page);
     toggleGenerating(false);
     result.fold(
           (exception) {
@@ -51,13 +56,15 @@ class JobProvider extends ChangeNotifier {
 
       },
           (result) async{
-      _jobs.addAll(result.jobs);
-      // updateJobs(result);
+            _lastPage = result.data?.jobs?.lastPage;
+            final newJobs = result.data!.jobs!.data!.where((job) => !_jobs.contains(job)).toList();
+      _jobs.addAll(newJobs);
+      logger.d(_currentPage);
+      _currentPage++;
       notifyListeners();
 
       },
     );
     notifyListeners();
   }
-
 }

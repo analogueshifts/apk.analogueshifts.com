@@ -74,7 +74,13 @@ final lightTheme = ThemeData(
     color: AppColors.background,
     fontSize: 20,
     fontWeight: FontWeight.w900
-  )
+  ),
+  displayMedium: const TextStyle(
+    fontFamily: AppFonts.manRope,
+    color: AppColors.background,
+    fontSize: 18,
+    fontWeight: FontWeight.w900
+  ),
   ),
   
   // applyElevationOverlayColor: false,
