@@ -8,6 +8,7 @@ import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
+import 'package:analogue_shifts_mobile/core/utils/functions.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
@@ -15,6 +16,7 @@ import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/edit_profile_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -49,43 +51,54 @@ class _ProfileViewState extends State<ProfileView> {
         ),
         title: TextBold(""),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-        child: ListView(children: [
-          const Gap(20),
-          Row(
-            children: [
-              const Image(image: AssetImage("assets/images/Avatar Image.png"), width: 60, height: 60,),
-              const Gap(8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextBold("Hi!, John", fontSize: 16, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 17
-                  ),),
-                  TextSemiBold("john@gmail.com", color: AppColors.grey,)
-                ],
-              )
-            ],
-          ),
-          const Gap(30),
-          _navCard(const Image(image: AssetImage("assets/images/avatar_image.png"), width: 45,height: 45,), "Edit Profile", () {
-             Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EditProfileScreen()
-          ),
+      body: Consumer<UserViewModel>(
+        builder: (context, UserViewModel user, child) {
+          final name = Functions.capitalize(user.authState.user?.name ?? "");
+        final splitName = name.split(' ');
+        final firstName = splitName[0];
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+          child: ListView(children: [
+            const Gap(20),
+            Row(
+              children: [
+                user.authState.user?.profile == null ? Icon(Icons.verified_user) : CachedNetworkImage(
+                imageUrl: user.authState.user?.profile ?? "",
+                placeholder: (context, url) => SizedBox(width: 40.w, height:30, child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
+                const Gap(8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextBold("Hi!, $firstName", fontSize: 16, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 17
+                    ),),
+                    TextSemiBold("${user.authState.user?.email}", color: AppColors.grey,)
+                  ],
+                )
+              ],
+            ),
+            const Gap(30),
+            _navCard(const Image(image: AssetImage("assets/images/avatar_image.png"), width: 45,height: 45,), "Edit Profile", () {
+               Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditProfileScreen()
+            ),
+          );
+             }),
+            _navCard(const Image(image: AssetImage("assets/images/work.png"), width: 45,height: 45,), "Jobs Applied", () { 
+              context.goNamed('jobs-applied');
+            }),
+            _navCard(const Image(image: AssetImage("assets/images/settings.png"), width: 45,height: 45,), "Settings", () {
+              context.goNamed("settings");
+        
+            }),
+          ],),
         );
-           }),
-          _navCard(const Image(image: AssetImage("assets/images/work.png"), width: 45,height: 45,), "Jobs Applied", () { 
-            context.goNamed('jobs-applied');
-          }),
-          _navCard(const Image(image: AssetImage("assets/images/settings.png"), width: 45,height: 45,), "Settings", () {
-            context.goNamed("settings");
-
-          }),
-        ],),
+        }
       ),
     );
   }

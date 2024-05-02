@@ -10,9 +10,13 @@ import 'package:analogue_shifts_mobile/firebase_handler.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/repositories/auth_repositoryImpl.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/repositories/auth.repository.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/usecases/register.usecase.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/data/repositories/jobs_repositoryImpl.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/repositories/jobs_repository.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/usecases/fetch_job.usecase.dart';
+import 'package:analogue_shifts_mobile/modules/uploads/data/repositories/file_repository_impl.dart';
+import 'package:analogue_shifts_mobile/modules/uploads/domain/repositories/file_repository.dart';
+import 'package:analogue_shifts_mobile/modules/uploads/domain/usecases/file_upload_usecase.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 final getIt = GetIt.instance;
@@ -24,6 +28,10 @@ Future<void> setupDependencies() async{
   );
   getIt.registerLazySingleton<JobsRepository>(
         () => JobsRepositoryImpl(getIt<DioManager>()),
+  );
+
+   getIt.registerLazySingleton<UploadRepository>(
+        () => UploadRepositoryImpl(getIt<DioManager>()),
   );
 
   getIt.registerLazySingleton<LoginUseCase>(
@@ -53,6 +61,19 @@ Future<void> setupDependencies() async{
         () => FetchJobsUseCase(),
   );
 
+  getIt.registerLazySingleton<UpdateUserUseCase>(
+        () => UpdateUserUseCase(),
+  );
+
+  getIt.registerLazySingleton<FetchUserUseCase>(
+        () => FetchUserUseCase(),
+  );
+
+
+  getIt.registerLazySingleton<UploadImageUseCase>(
+        () => UploadImageUseCase(),
+  );
+
   getIt.registerLazySingleton<ErrorHandler>(
         () => ErrorHandler(),
   );
@@ -75,6 +96,8 @@ Future<void> setupDependencies() async{
   await getIt<DBService>().startHive();
 
   getIt.registerSingleton<AppChangeNotifier>(AppChangeNotifier());
+  getIt.registerSingleton<UserViewModel>(UserViewModel());
   await getIt<AppChangeNotifier>().initAppTheme();
     await getIt<FirebaseHandler>().init();
+    await getIt<UserViewModel>().init();
 }

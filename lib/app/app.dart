@@ -49,10 +49,10 @@ class _AnalogueAppState extends State<AnalogueApp> {
             routerDelegate: getIt<GoRouter>().routerDelegate,
             backButtonDispatcher: getIt<GoRouter>().backButtonDispatcher,
             debugShowCheckedModeBanner: false,
-            themeMode:  getIt<AppChangeNotifier>().isDarkMode != null && true ? ThemeMode.dark : ThemeMode.light,
-            darkTheme: darkTheme,
+            // themeMode:  getIt<AppChangeNotifier>().isDarkMode != null && true ? ThemeMode.dark : ThemeMode.light,
+            // darkTheme: darkTheme,
             
-            // theme: appNotifier.isDarkMode == null ? getIt<AppChangeNotifier>().isDarkMode == true ? darkTheme : lightTheme : appNotifier.isDarkMode == true ? darkTheme : lightTheme
+            theme: appNotifier.isDarkMode == null ? getIt<AppChangeNotifier>().isDarkMode == true ? darkTheme : lightTheme : appNotifier.isDarkMode == true ? darkTheme : lightTheme
             // theme: appNotifier.isDarkMode == null || appNotifier.isDarkMode == false && getIt<AppChangeNotifier>().isDarkMode  == false  ? lightTheme : darkTheme
           );
            }

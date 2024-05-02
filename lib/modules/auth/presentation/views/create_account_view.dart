@@ -11,6 +11,7 @@ import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/device_info.dart';
+import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/validator.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/registration_request_entity.dart';
@@ -91,137 +92,146 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PaylonyAppBarTwo(title: "Sign Up", centerTitle: false, backTap: (){
-        if(widget.toggleView == null)return;
-        widget.toggleView!(false);
-      },),
-      body: Consumer<UserViewModel>(
-        builder: (_, auth, __) {
-         return  SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Gap(20),
-                TextSemiBold("Sign up with one of the following", color: AppColors.grey,),
-                Gap(15),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(color: AppColors.primaryGrey2, width: 1)
-                    ),
-                    child: Center(child: SvgPicture.asset(AppAsset.google))),
-                Gap(20),
-                TextSemiBold("Name", color: AppColors.background,fontWeight: FontWeight.w700,),
-                Gap(6),
-                TextFormField(
-                  controller: _nameController,
-                  validator: (value){
-                    CustomValidator.isEmptyString(value!, "name");
-                    if(value.isEmpty){
-                      return ("Input your name");
-                    }
-        
-                    return null;
-                  },
-                  decoration: textInputDecoration.copyWith(
-                    hintText: 'Full Name'
-                  ),
-                  onChanged: (value){
-                    _setFormValidState();
-        
-                  },
-                ),
-                Gap(15),
-                TextSemiBold("Email", color: AppColors.background,fontWeight: FontWeight.w700,),
-                Gap(6),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: textInputDecoration.copyWith(
-                      hintText: 'Enter your email address'
-                  ),
-        
-                  validator: (value){
-                    if(value == null)return ("Enter your email");
-                    if(CustomValidator.validEmail(value.trim()) == false)return ("Invalid email");
-        
-                    return null;
-                  },
-                  onChanged: (value){
-                    _setFormValidState();
-        
-                  },
-                ),
-                Gap(15),
-                TextSemiBold("Password", color: AppColors.background,fontWeight: FontWeight.w700,),
-                Gap(6),
-                TextFormField(
-                    controller: _passwordController,
-                    obscureText: _isPasswordVisible,
+    UserViewModel user = context.read<UserViewModel>();
+    return AbsorbPointer(
+      absorbing: user.authState.isGenerating,
+      child: Scaffold(
+        appBar: PaylonyAppBarTwo(title: "Sign Up", centerTitle: false, backTap: (){
+          if(widget.toggleView == null)return;
+          widget.toggleView!(false);
+        },),
+        body: Consumer<UserViewModel>(
+          builder: (_, auth, __) {
+           return  SingleChildScrollView(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Gap(20),
+                  TextSemiBold("Sign up with one of the following", color: AppColors.grey,),
+                  Gap(15),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: AppColors.primaryGrey2, width: 1)
+                      ),
+                      child: Center(child: SvgPicture.asset(AppAsset.google))),
+                  Gap(20),
+                  TextSemiBold("Name", color: AppColors.background,fontWeight: FontWeight.w700,),
+                  Gap(6),
+                  TextFormField(
+                    controller: _nameController,
                     validator: (value){
-                      if(value == null)return "Input password";
-                      if(value.length < 6)return "Password must contain 6 characters ";
+                      CustomValidator.isEmptyString(value!, "name");
+                      if(value.isEmpty){
+                        return ("Input your name");
+                      }
+          
+                      return null;
+                    },
+                    decoration: textInputDecoration.copyWith(
+                      hintText: 'Full Name'
+                    ),
+                    onChanged: (value){
+                      _setFormValidState();
+          
+                    },
+                  ),
+                  Gap(15),
+                  TextSemiBold("Email", color: AppColors.background,fontWeight: FontWeight.w700,),
+                  Gap(6),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: textInputDecoration.copyWith(
+                        hintText: 'Enter your email address'
+                    ),
+          
+                    validator: (value){
+                      if(value == null)return ("Enter your email");
+                      if(CustomValidator.validEmail(value.trim()) == false)return ("Invalid email");
+          
                       return null;
                     },
                     onChanged: (value){
                       _setFormValidState();
-        
+          
                     },
-                    obscuringCharacter: '*',
-                    decoration: textInputDecoration.copyWith(
-                      // contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      fillColor: AppColors.white,
-                      hintText: "Enter your password",
-                      suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
-                          icon: !_isPasswordVisible ? const Icon(Icons.visibility_outlined) : const Icon(
-                              Icons.visibility_off_outlined,
-                              color: AppColors.background
-                          )
-                      ),
-                    )
-                ),
-                Gap(4),
-                TextSemiBold(_passwordController.text.length < 8 ? "Must be at least 8 characters" : "", color: AppColors.grey, fontSize: 12,),
-                Gap(40),
-                BusyButton(disabled: _isFormValid, title: "Create Account", isLoading: auth.authState.isGenerating, textColor: Colors.white, height: 58,
-                    onTap:() async {
-                  if(_formKey.currentState == null)return;
-                  if(_formKey.currentState!.validate()){
-                    int deviceType = _deviceInfo.getDeviceType();
-                    final firebaseToken = getIt<DBService>().getFirebaseToken();
-                    auth.registerUser(RegisterRequest(name: _nameController.text.trim(), email: _emailController.text.trim(), password: _passwordController.text.trim(), passwordConfirmation: _passwordController.text.trim(), deviceToken: firebaseToken ?? "", deviceType: deviceType.toString()), context);
-                  }
-        
-                }),
-                Gap(40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextSemiBold("Already have an account?",color: AppColors.textPrimaryColor2,),
-                    Gap(5),
-                    TouchableOpacity(
-                      onTap: () {
-                        if(widget.toggleView == null)return;
-                         widget.toggleView!(false);
+                  ),
+                  Gap(15),
+                  TextSemiBold("Password", color: AppColors.background,fontWeight: FontWeight.w700,),
+                  Gap(6),
+                  TextFormField(
+                      controller: _passwordController,
+                      obscureText: _isPasswordVisible,
+                      validator: (value){
+                        if(value == null)return "Input password";
+                        if(value.length < 6)return "Password must contain 6 characters ";
+                        return null;
                       },
-                      child: TextSemiBold("Login Now", fontWeight: FontWeight.w800, color: AppColors.background,))
-                  ],
-                )
-        
-              ],
+                      onChanged: (value){
+                        _setFormValidState();
+          
+                      },
+                      obscuringCharacter: '*',
+                      decoration: textInputDecoration.copyWith(
+                        // contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                        fillColor: AppColors.white,
+                        hintText: "Enter your password",
+                        suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                            icon: !_isPasswordVisible ? const Icon(Icons.visibility_outlined) : const Icon(
+                                Icons.visibility_off_outlined,
+                                color: AppColors.background
+                            )
+                        ),
+                      )
+                  ),
+                  Gap(4),
+                  TextSemiBold(_passwordController.text.length < 8 ? "Must be at least 8 characters" : "", color: AppColors.grey, fontSize: 12,),
+                  Gap(40),
+                  BusyButton(disabled: _isFormValid, title: "Create Account", isLoading: auth.authState.isGenerating, textColor: Colors.white, height: 58,
+                      onTap:() async {
+                    if(_formKey.currentState == null)return;
+                    if(_formKey.currentState!.validate()){
+                      int deviceType = _deviceInfo.getDeviceType();
+                      final firebaseToken = getIt<DBService>().getFirebaseToken();
+                      logger.d(firebaseToken);
+                       FocusScopeNode currentFocus = FocusScope.of(context);
+                        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                          currentFocus.focusedChild?.unfocus();
+                        }
+                      auth.registerUser(RegisterRequest(name: _nameController.text.trim(), email: _emailController.text.trim(), password: _passwordController.text.trim(), passwordConfirmation: _passwordController.text.trim(), deviceToken: firebaseToken.toString() ?? "", deviceType: deviceType.toString()), context);
+                    }
+          
+                  }),
+                  Gap(40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextSemiBold("Already have an account?",color: AppColors.textPrimaryColor2,),
+                      Gap(5),
+                      TouchableOpacity(
+                        onTap: () {
+                          if(widget.toggleView == null)return;
+                           widget.toggleView!(false);
+                        },
+                        child: TextSemiBold("Login Now", fontWeight: FontWeight.w800, color: AppColors.background,))
+                    ],
+                  )
+          
+                ],
+              ),
             ),
-          ),
-        );
-        }
+          );
+          }
+        ),
       ),
     );
   }

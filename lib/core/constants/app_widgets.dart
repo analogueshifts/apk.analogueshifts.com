@@ -4,6 +4,7 @@ import 'package:analogue_shifts_mobile/core/constants/app_strings.dart';
 import 'package:analogue_shifts_mobile/core/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:logo_n_spinner/logo_n_spinner.dart';
 
 class AppWidgets{
   final Widget logoIcon = Image.asset(
@@ -15,5 +16,12 @@ class AppWidgets{
     color: AppColors.white,
     fontSize: 12,
     fontWeight: FontWeight.w500,
+  );
+
+  final Widget logoSpinner = LogoandSpinner(
+    imageAssets: 'assets/images/logo.png',
+    reverse: true,
+    arcColor: AppColors.primaryColor,
+    spinSpeed: Duration(milliseconds: 500),
   );
 }

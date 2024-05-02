@@ -13,4 +13,6 @@ abstract class UserRepository {
   Future<Either<Exception, String>> registerUser(RegisterRequest payload);
   Future<Either<Exception, bool>> forgotPassword(String email);
   Future<Either<Exception, bool>> verifyPasswordOtp(VerifyPasswordEntity payload);
+  Future<Either<Exception, User>> updateUser(User user);
+  Future<Either<Exception, User>> fetchUser();
 }

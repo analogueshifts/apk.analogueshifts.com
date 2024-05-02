@@ -84,29 +84,43 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     UserViewModel read = context.read<UserViewModel>();
-    return  Scaffold(
-      appBar: PaylonyAppBarTwo(title: "Login", centerTitle: false,backTap: (){
-        if(widget.toggleView == null)return;
-        widget.toggleView!(true);
-      },),
-       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Gap(20),
-              TextSemiBold(
-                "Sign up with one of the following",
-                color: AppColors.grey,
-              ),
-              Gap(15),
-              Row(
-                children: [
-                  Expanded(
-                    child: TouchableOpacity(
-                      onTap: () => read.continueWithGoogle(context),
+    return  AbsorbPointer(
+      absorbing: read.authState.isGenerating,
+      child: Scaffold(
+        appBar: PaylonyAppBarTwo(title: "Login", centerTitle: false,backTap: (){
+          if(widget.toggleView == null)return;
+          widget.toggleView!(true);
+        },),
+         body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Gap(20),
+                TextSemiBold(
+                  "Sign up with one of the following",
+                  color: AppColors.grey,
+                ),
+                Gap(15),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TouchableOpacity(
+                        onTap: () => read.continueWithGoogle(context),
+                        child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                border: Border.all(
+                                    color: AppColors.primaryGrey2, width: 1)),
+                            child:
+                                Center(child: SvgPicture.asset(AppAsset.google))),
+                      ),
+                    ),
+                    const Gap(10),
+                    Expanded(
                       child: Container(
                           padding: EdgeInsets.symmetric(vertical: 15),
                           decoration: BoxDecoration(
@@ -114,102 +128,95 @@ class _LoginViewState extends State<LoginView> {
                               border: Border.all(
                                   color: AppColors.primaryGrey2, width: 1)),
                           child:
-                              Center(child: SvgPicture.asset(AppAsset.google))),
+                              Center(child: SvgPicture.asset(AppAsset.appleSvg))),
                     ),
-                  ),
-                  const Gap(10),
-                  Expanded(
-                    child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                                color: AppColors.primaryGrey2, width: 1)),
-                        child:
-                            Center(child: SvgPicture.asset(AppAsset.appleSvg))),
-                  ),
-                ],
-              ),
-              Gap(20),
-              TextSemiBold("Email", color: AppColors.background,fontWeight: FontWeight.w700,),
-              Gap(6),
-              TextFormField(
-                controller: _emailController,
-                decoration: textInputDecoration.copyWith(
-                    hintText: 'Enter your email address'),
-                validator: (value) {
-                  if (value == null) return ("Enter your email");
-                  if (CustomValidator.validEmail(value.trim()) == false)
-                    return ("Invalid email");
-
-                  return null;
-                },
-                onChanged: (value) {
-                  _setFormValidState();
-                },
-              ),
-              Gap(15),
-              TextSemiBold(
-                "Password",
-                color: AppColors.background,
-                fontWeight: FontWeight.w700,
-              ),
-              Gap(6),
-              TextFormField(
-                  controller: _passwordController,
-                  obscureText: _isPasswordVisible,
+                  ],
+                ),
+                Gap(20),
+                TextSemiBold("Email", color: AppColors.background,fontWeight: FontWeight.w700,),
+                Gap(6),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: textInputDecoration.copyWith(
+                      hintText: 'Enter your email address'),
                   validator: (value) {
-                    if (value == null) return "Input password";
-                    if (value.length < 6)
-                      return "Password must contain 6 characters ";
+                    if (value == null) return ("Enter your email");
+                    if (CustomValidator.validEmail(value.trim()) == false)
+                      return ("Invalid email");
+      
                     return null;
                   },
                   onChanged: (value) {
                     _setFormValidState();
                   },
-                  obscuringCharacter: '*',
-                  decoration: textInputDecoration.copyWith(
-                    // contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                    fillColor: AppColors.white,
-                    hintText: "Enter your password",
-                    suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _isPasswordVisible = !_isPasswordVisible;
-                          });
+                ),
+                Gap(15),
+                TextSemiBold(
+                  "Password",
+                  color: AppColors.background,
+                  fontWeight: FontWeight.w700,
+                ),
+                Gap(6),
+                TextFormField(
+                    controller: _passwordController,
+                    obscureText: _isPasswordVisible,
+                    validator: (value) {
+                      if (value == null) return "Input password";
+                      if (value.length < 6)
+                        return "Password must contain 6 characters ";
+                      return null;
+                    },
+                    onChanged: (value) {
+                      _setFormValidState();
+                    },
+                    obscuringCharacter: '*',
+                    decoration: textInputDecoration.copyWith(
+                      // contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                      fillColor: AppColors.white,
+                      hintText: "Enter your password",
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          icon: !_isPasswordVisible
+                              ? const Icon(Icons.visibility_outlined)
+                              : const Icon(Icons.visibility_off_outlined,
+                                  color: AppColors.background)),
+                    )),
+                Gap(24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TouchableOpacity(
+                        onTap: () {
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => ForgotPasswordView()));
                         },
-                        icon: !_isPasswordVisible
-                            ? const Icon(Icons.visibility_outlined)
-                            : const Icon(Icons.visibility_off_outlined,
-                                color: AppColors.background)),
-                  )),
-              Gap(24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TouchableOpacity(
-                      onTap: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => ForgotPasswordView()));
-                      },
-                      child: TextSemiBold(
-                        "Forgot Password",
-                        color: AppColors.primaryColor,
-                        fontSize: 14,
-                      )),
-                ],
-              ),
-              Gap(40),
-              BusyButton(disabled: _isFormValid, title: "Login", isLoading: context.watch<UserViewModel>().authState.isGenerating == false ? false : true, textColor: Colors.white, height: 58, onTap:(){
-                // setLoader();
-                if(_formKey.currentState == null)return;
-                if(_formKey.currentState!.validate()){
-                  final user = LoginUser(email: _emailController.text.trim(), password: _passwordController.text.trim().toString());
-                  context.read<UserViewModel>().loginUser(user, context);
+                        child: TextSemiBold(
+                          "Forgot Password",
+                          color: AppColors.primaryColor,
+                          fontSize: 14,
+                        )),
+                  ],
+                ),
+                Gap(40),
+                BusyButton(disabled: _isFormValid, title: "Login", isLoading: context.watch<UserViewModel>().authState.isGenerating == false ? false : true, textColor: Colors.white, height: 58, onTap:(){
                   // setLoader();
-                }
-              }),
-            ],
+                  if(_formKey.currentState == null)return;
+                  if(_formKey.currentState!.validate()){
+                     FocusScopeNode currentFocus = FocusScope.of(context);
+                        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                          currentFocus.focusedChild?.unfocus();
+                        }
+                    final user = LoginUser(email: _emailController.text.trim(), password: _passwordController.text.trim().toString());
+                    context.read<UserViewModel>().loginUser(user, context);
+                    // setLoader();
+                  }
+                }),
+              ],
+            ),
           ),
         ),
       ),

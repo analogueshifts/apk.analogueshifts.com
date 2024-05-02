@@ -3,7 +3,7 @@ import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/connectors/v1.dart';
+import 'package:awesome_dio_interceptor/awesome_dio_interceptor.dart';
 
 import '../utils/logger.dart';
 

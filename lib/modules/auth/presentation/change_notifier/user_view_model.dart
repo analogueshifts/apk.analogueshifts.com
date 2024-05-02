@@ -7,17 +7,13 @@ import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
-import 'package:analogue_shifts_mobile/modules/auth/domain/entities/no_data.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/registration_request_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/verify_password.entity.dart';
-import 'package:analogue_shifts_mobile/modules/auth/domain/repositories/auth.repository.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/usecases/register.usecase.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/authState.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/change_password.screen.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/user_verification.view.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/verify_user_otp_view.dart';
-import 'package:dartz/dartz.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -31,6 +27,9 @@ class UserViewModel extends ChangeNotifier {
     final ForgotPasswordUseCase _forgetPasswordUseCase = GetIt.instance<ForgotPasswordUseCase>();
       final VerifyPasswordOtpUseCase _verifyFirgetPassWordOtpUseCase = GetIt.instance<VerifyPasswordOtpUseCase>();
   final ErrorHandler _errorHandler = GetIt.instance<ErrorHandler>();
+   final UpdateUserUseCase _updateUserUseCase = GetIt.instance<UpdateUserUseCase>();
+  final FetchUserUseCase _fetchUserUseCase = GetIt.instance<FetchUserUseCase>();
+
   final _db = getIt<DBService>();
   // final GoogleSignIn googleSignIn = GoogleSignIn();
   final GoogleSignIn googleSignIn = GoogleSignIn(
@@ -43,9 +42,27 @@ class UserViewModel extends ChangeNotifier {
 
   AuthState get authState => _authState;
 
+  init(){
+    final user = _db.getUser(0);
+    logger.d('fetch from cache ${user?.email}');
+    logger.e("running PP FUNXTION");
+    if (user == null) return;
+    final dbUser = user;
+    saveUser(User(id: dbUser.id, uuid: dbUser.uuid, name: dbUser.name, username: dbUser.username, email: dbUser.email, tel: dbUser.tel, role: dbUser.role, profile: dbUser.profile, otp: dbUser.otp, isVerified: dbUser.isVerified, googleToken: dbUser.googleToken, emailVerifiedAt: dbUser.emailVerifiedAt, createdAt: dbUser.createdAt, updatedAt: dbUser.updatedAt));
+    logger.i(_authState.user);
+    notifyListeners();
+
+  }
+
   void toggleGenerating(bool value) {
     if(authState.isGenerating == value)return;
     _authState.toggleGenerating();
+    notifyListeners();
+  }
+
+
+  void saveUser(User value){
+    _authState.updateUser(value);
     notifyListeners();
   }
 
@@ -159,15 +176,25 @@ class UserViewModel extends ChangeNotifier {
       },
           (user) async{
             logger.i('Login successful: $user');
-            if(user.token == null) {
+            if(user.data?.token == null) {
               AppSnackbar.error(context, message: "Login failed");
+            }else{
+              if (user.data == null) {
+                AppSnackbar.error(context, message: "Login failed");
+              }else{
+                 await _db.saveToken(user.data!.token.toString());
+            if (user.data?.user != null) {
+              saveUser(user.data!.user!);
+              _db.saveUser(user.data!.user!);
             }
-            await _db.saveToken(user.token.toString());
+            
             if(context.mounted){
               // await AppSnackbar.success(context, message: "Login Successful✅");
               context.replace(Routes.homeNavigation);
             }
-
+              }
+             
+            }
       },
     );
     notifyListeners();
@@ -244,5 +271,50 @@ class UserViewModel extends ChangeNotifier {
       AppSnackbar.success(context, message: r.message.toString());
       context.replace(Routes.authenticate);
     });
+  }
+
+   Future<void> updateUser(User user, BuildContext context) async {
+    toggleGenerating(true);
+    notifyListeners();
+    final result = await _updateUserUseCase.call(user);
+    toggleGenerating(false);
+    result.fold(
+          (exception) {
+        var error = _errorHandler.handleError(exception);
+        if(context.mounted){
+          AppSnackbar.error(context, message: error);
+        }
+
+      },
+          (user) async{
+            logger.i('Update successful: $user');
+            saveUser(user);
+            _db.saveUser(user);
+            notifyListeners();
+      },
+    );
+    notifyListeners();
+  }
+
+
+  Future<void> fetchUser(BuildContext context) async {
+    logger.d('<<<<!!!>>>>>');
+    final result = await _fetchUserUseCase.call();
+    result.fold(
+          (exception) {
+        var error = _errorHandler.handleError(exception);
+        if(context.mounted){
+          AppSnackbar.error(context, message: error);
+        }
+
+      },
+          (user) async{
+            logger.i('Update successful: $user');
+            await _db.saveUser(user);
+            saveUser(user);  
+            notifyListeners();
+      },
+    );
+    notifyListeners();
   }
 }

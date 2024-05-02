@@ -2,9 +2,12 @@ import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
+import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
+import 'package:analogue_shifts_mobile/core/utils/functions.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/data/model/job_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key,});
@@ -56,6 +60,11 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
 
   @override
   void dispose() {
@@ -64,6 +73,10 @@ class _HomeViewState extends State<HomeView> {
   }
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<UserViewModel>();
+    final name = Functions.capitalize(user.authState.user?.name ?? "");
+    final splitName = name.split(' ');
+    final firstName = splitName[0];
     return Scaffold(
       
       appBar: AppBar(
@@ -80,9 +93,10 @@ class _HomeViewState extends State<HomeView> {
           ),
         ),
         title: Text(
-          "Hi, John",
+          'Hi, ${firstName}',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontSize: 16
+            fontSize: 16,
+            fontFamily: AppFonts.manRope
           )
         ),
         centerTitle: false,

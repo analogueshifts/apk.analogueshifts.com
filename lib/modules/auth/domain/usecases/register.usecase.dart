@@ -59,3 +59,23 @@ class InitiateVerificationUseCase {
     return await _userRepository.initiateVerificationCode();
   }
 }
+
+
+class UpdateUserUseCase {
+  final UserRepository _userRepository = GetIt.instance<UserRepository>();
+
+  Future<Either<Exception, User>> call(
+      User payload) async {
+    return await _userRepository.updateUser(payload);
+  }
+
+}
+
+class FetchUserUseCase {
+  final UserRepository _userRepository = GetIt.instance<UserRepository>();
+
+  Future<Either<Exception, User>> call() async {
+    return await _userRepository.fetchUser();
+  }
+
+}

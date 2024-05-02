@@ -49,11 +49,7 @@ class _JobViewState extends State<JobView> {
   }
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      if(mounted){
-        context.read<JobProvider>().getJobs(context);
-      }
-    });
+   
     _scrollController.addListener(_onScroll);
     super.initState();
   }
@@ -89,8 +85,16 @@ class _JobViewState extends State<JobView> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        leading: Container(
-
+        leading: TouchableOpacity(
+          onTap: () {
+             Scaffold.of(context).openDrawer();
+          },
+          child: Container(
+              width: 20, height: 20,
+            margin: EdgeInsets.zero,
+            padding: EdgeInsets.zero,
+            child: const Icon(Icons.menu)
+          ),
         ),
         title: TextBold("Jobs", fontSize: 20, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
         centerTitle: true,
@@ -103,80 +107,75 @@ class _JobViewState extends State<JobView> {
       ),
       body: Consumer<JobProvider>(
         builder: (context, job, child) {
-          return job.jobhState.isGenerating ? const Center(child: CircularProgressIndicator()) : RefreshIndicator(
-            color: Colors.white,
-            backgroundColor: AppColors.primaryColor,
-            onRefresh: () => job.getJobs(context), // Your refresh logic
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 5,
-                        child: SizedBox(
-                          height: 60,
-                          child: TextFormField(
-                            controller: _search,
-                            decoration: textInputDecoration.copyWith(
-                                prefixIcon: _isLoading ? Container(margin: const EdgeInsets.only(left:
-                                5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: const CircularProgressIndicator(color: AppColors.primaryColor,),)  : const Icon(Icons.search)
-                            ),
+          return job.jobhState.isGenerating ? const Center(child: CircularProgressIndicator()) : SingleChildScrollView(
+            controller: _scrollController,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: SizedBox(
+                        height: 60,
+                        child: TextFormField(
+                          controller: _search,
+                          decoration: textInputDecoration.copyWith(
+                              prefixIcon: _isLoading ? Container(margin: const EdgeInsets.only(left:
+                              5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: const CircularProgressIndicator(color: AppColors.primaryColor,),)  : const Icon(Icons.search)
                           ),
                         ),
                       ),
-                      const Gap(10),
-                      Expanded(
-                        flex: 1,
-                        child: TouchableOpacity(
-                          onTap: (){
-                            setSearchLoader();
-
-                          },
-                          child: Container(
-                            height: 60,
-                            decoration: BoxDecoration(
-                                color: AppColors.primaryColor,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            child:const Icon(Icons.tune_outlined, color: Colors.white,),
+                    ),
+                    const Gap(10),
+                    Expanded(
+                      flex: 1,
+                      child: TouchableOpacity(
+                        onTap: (){
+                          setSearchLoader();
+          
+                        },
+                        child: Container(
+                          height: 60,
+                          decoration: BoxDecoration(
+                              color: AppColors.primaryColor,
+                              borderRadius: BorderRadius.circular(10)
                           ),
+                          child:const Icon(Icons.tune_outlined, color: Colors.white,),
                         ),
-                      )
+                      ),
+                    )
+                  ],
+                ),
+                const Gap(30),
+                job == null ? Center(
+                  child: Column(
+                    children: [
+                      TextSemiBold("No job available")
                     ],
                   ),
-                  const Gap(30),
-                  job == null ? Center(
-                    child: Column(
-                      children: [
-                        TextSemiBold("No job available")
-                      ],
-                    ),
-                  ) :
-                  ListView.builder(
-                    
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: job.job.length,
-                      itemBuilder:(context, index) {
-                        final e = job.job[index];
-                        // logger.d(e);
-                        return _recentJobCard(e.hiringOrganization?.logo ?? "", e.title ?? "", e.hiringOrganization?.name ?? "");
-                        // return _recentJobCard(jobData.hiringOrganization?.logo, jobData.title.toString(), jobData.hiringOrganization?.name.toString() ?? "");
-                      }
-                  ),
-                  // job == null ? CircularProgressIndicator() :
-                  // Column(
-                  //   children: job.job.map((e) => _recentJobCard(e.hiringOrganization?.logo ?? "", e.title ?? "", e.hiringOrganization?.name ?? "")).toList(),
-                  // )
-                  _isPaginateButton ? BusyButton(title: "Load More...", onTap:() {
-                    final _updateCurrentPage = job.currentPage + 1;
-                    job.getJobs(context, _updateCurrentPage);
-                  },) : Text("")
-                ],
-              ),
+                ) :
+                ListView.builder(
+                  
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: job.job.length,
+                    itemBuilder:(context, index) {
+                      final e = job.job[index];
+                      // logger.d(e);
+                      return _recentJobCard(e.hiringOrganization?.logo ?? "", e.title ?? "", e.hiringOrganization?.name ?? "");
+                      // return _recentJobCard(jobData.hiringOrganization?.logo, jobData.title.toString(), jobData.hiringOrganization?.name.toString() ?? "");
+                    }
+                ),
+                // job == null ? CircularProgressIndicator() :
+                // Column(
+                //   children: job.job.map((e) => _recentJobCard(e.hiringOrganization?.logo ?? "", e.title ?? "", e.hiringOrganization?.name ?? "")).toList(),
+                // )
+                _isPaginateButton ? BusyButton(title: "Load More...", onTap:() {
+                  final _updateCurrentPage = job.currentPage + 1;
+                  job.getJobs(context, _updateCurrentPage);
+                },) : Text("")
+              ],
             ),
           );
           // return TextSemiBold("No Jobs available");

@@ -7,9 +7,12 @@ import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
+import 'package:analogue_shifts_mobile/core/utils/functions.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
+import 'package:analogue_shifts_mobile/modules/profile/presentation/views/edit_profile_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,7 +34,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
 @override
   void initState() {
-    biometrics = getIt<DBService>().getTheme()!;
+    
+    biometrics = getIt<DBService>().getTheme() == null ? false : true;
     Logger().d(biometrics);
     super.initState();
   }
@@ -39,168 +43,186 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   bool biometrics = false;
   @override
   Widget build(BuildContext context) {
-    return CustomSingleChildScrollView(
-      key: _scaffoldkey,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.brightness ==Brightness.light ?  AppColors.white : AppColors.background
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        child: Column(
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(width: 0.1, color: Theme.of(context).colorScheme.brightness ==Brightness.light ?  AppColors.grey : AppColors.white))
-            ),
-         
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TouchableOpacity(
-                      onTap:() => Navigator.pop(context),
-                      child: SvgPicture.asset("assets/icons/close_icon.svg"))
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Image.asset("assets/images/Avatar Image.png", width: 40.w,),
-                    const Gap(5),
-                    TextBold("Hello, John", style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontSize: 16
-                    )),
-                    const Gap(3),
-                    TextSemiBold("@JohnJames", style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontSize: 9
-                    ),),
-                    // Gap(10)
-                  ],
-                )
-              ],
-            ),
+    return Consumer<UserViewModel>(
+      builder: (context, UserViewModel user, child) {
+        final name = Functions.capitalize(user.authState.user?.name ?? "");
+        final splitName = name.split(' ');
+        final firstName = splitName[0];
+      return CustomSingleChildScrollView(
+        key: _scaffoldkey,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.brightness ==Brightness.light ?  AppColors.white : AppColors.background
           ),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Image.asset("assets/images/avatar_image.png", width: 40.w,),
-            title: Text('My Profile', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600
-            ),),
-            onTap: () {
-            },
-          ),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Image.asset("assets/images/document.png", width: 40.w,),
-            title: Text('Vetting System', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600
-            ),),
-            onTap: () {
-            },
-          ),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Image.asset("assets/images/card.png", width: 40.w,),
-            title: Row(
-              children: [
-                Text('Payment Gateway', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w600
-                ),),
-                Gap(2),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 1, horizontal: 2),
-                  decoration: BoxDecoration(
-                    color: Color(0xffD399AF).withOpacity(0.14),
-                    borderRadius: BorderRadius.circular(10)
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Column(
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(width: 0.1, color: Theme.of(context).colorScheme.brightness ==Brightness.light ?  AppColors.grey : AppColors.white))
+              ),
+           
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TouchableOpacity(
+                        onTap:() => Navigator.pop(context),
+                        child: SvgPicture.asset("assets/icons/close_icon.svg"))
+                    ],
                   ),
-                  child: Text("Coming Soon", style: TextStyle(
-                    color: Color(0xffE16592),
-                    fontSize: 8
-                  ),),
-                )
-              ],
-            ),
-            // onTap: () {
-            // },
-          ),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Image.asset("assets/images/write.png", width: 40.w,),
-            title: Text('Help Center', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600
-            ),),
-            onTap: () {
-              context.goNamed('help-center');
-            },
-          ),
-          ListTile(
-          
-            contentPadding: EdgeInsets.zero,
-            leading: Image.asset("assets/images/moon.png", width: 40.w,),
-            title: Text('Dark Mode', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600
-            ),),
-            trailing: Transform.scale(
-              scale: 0.5,
-              child: Switch(
-                value: biometrics,
-                activeColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors
-                .primaryColor,
-                onChanged: (bool value) {
-                  if(mounted == false)return;
-                  setState(() {
-                    biometrics = value;
-                    Logger().d(value);
-                    context.read<AppChangeNotifier>().toggleTheme(value);
-                  });
-                },
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      user.authState.user?.profile == null ? const Icon(Icons.verified_user) : CachedNetworkImage(
+                        imageUrl: user.authState.user?.profile ?? "",
+                        placeholder: (context, url) => SizedBox(width: 40.w, height:30, child: const CircularProgressIndicator()),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                      ),
+                      // Image.asset("assets/images/Avatar Image.png", width: 40.w,),
+                      const Gap(5),
+                      TextBold("Hello, ${firstName}", style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontSize: 16
+                      )),
+                      const Gap(3),
+                      TextSemiBold("@${user.authState.user?.username ?? ""}", style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontSize: 9
+                      ),),
+                      // Gap(10)
+                    ],
+                  )
+                ],
               ),
             ),
-            // onTap: () {
-            // },
-          ),
-          const Gap(10),
-          const Spacer(),
-          Container(
-            height: 80.h,
-            decoration: const BoxDecoration(
-              image: DecorationImage(image: AssetImage("assets/images/banner.png"), fit: BoxFit.fill)
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Image.asset("assets/images/avatar_image.png", width: 40.w,),
+              title: Text('My Profile', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600
+              ),),
+              onTap: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditProfileScreen()
+                  ),
+          );
+              },
             ),
-          ),
-          const Gap(10),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Image.asset("assets/images/star.png", width: 40.w,),
-            title: Text('Rate Us', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600
-            ),),
-            onTap: () {
-            },
-          ),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Image.asset("assets/images/logout.png", width: 40.w,),
-            title: Text('Log Out', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontWeight: FontWeight.w600
-            ),),
-            onTap: () {
-              if(_scaffoldkey.currentContext == null)return;
-              showDialog(context: _scaffoldkey.currentContext!, builder:(context) {
-             return dialog(context);
-           },);
-            },
-          ),
-        ],
-          ),
-      ),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Image.asset("assets/images/document.png", width: 40.w,),
+              title: Text('Vetting System', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600
+              ),),
+              onTap: () {
+              },
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Image.asset("assets/images/card.png", width: 40.w,),
+              title: Row(
+                children: [
+                  Text('Payment Gateway', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600
+                  ),),
+                  const Gap(2),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 2),
+                    decoration: BoxDecoration(
+                      color: const Color(0xffD399AF).withOpacity(0.14),
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: const Text("Coming Soon", style: TextStyle(
+                      color: Color(0xffE16592),
+                      fontSize: 8
+                    ),),
+                  )
+                ],
+              ),
+              // onTap: () {
+              // },
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Image.asset("assets/images/write.png", width: 40.w,),
+              title: Text('Help Center', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600
+              ),),
+              onTap: () {
+                context.goNamed('help-center');
+              },
+            ),
+            ListTile(
+            
+              contentPadding: EdgeInsets.zero,
+              leading: Image.asset("assets/images/moon.png", width: 40.w,),
+              title: Text('Dark Mode', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600
+              ),),
+              trailing: Transform.scale(
+                scale: 0.5,
+                child: Switch(
+                  value: biometrics,
+                  activeColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors
+                  .primaryColor,
+                  onChanged: (bool value) {
+                    if(mounted == false)return;
+                    setState(() {
+                      biometrics = value;
+                      Logger().d(value);
+                      context.read<AppChangeNotifier>().toggleTheme(value);
+                    });
+                  },
+                ),
+              ),
+              // onTap: () {
+              // },
+            ),
+            const Gap(10),
+            const Spacer(),
+            Container(
+              height: 80.h,
+              decoration: const BoxDecoration(
+                image: DecorationImage(image: AssetImage("assets/images/banner.png"), fit: BoxFit.fill)
+              ),
+            ),
+            const Gap(10),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Image.asset("assets/images/star.png", width: 40.w,),
+              title: Text('Rate Us', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600
+              ),),
+              onTap: () {
+              },
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Image.asset("assets/images/logout.png", width: 40.w,),
+              title: Text('Log Out', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600
+              ),),
+              onTap: () {
+                if(_scaffoldkey.currentContext == null)return;
+                showDialog(context: _scaffoldkey.currentContext!, builder:(context) {
+               return dialog(context);
+             },);
+              },
+            ),
+          ],
+            ),
+        ),
+      );
+      }
     );
   }
 
-   Widget dialog(context) {
+   Widget dialog(BuildContext context) {
     bool _isProcessing = false;
     return Dialog(
       insetPadding: const EdgeInsets.all(10),
@@ -259,7 +281,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     children: [
                       TouchableOpacity(
                         onTap: () async {
-                          context.pop();
+                        //  Navigator.pop(context);
+                        context.pop(context);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
@@ -321,7 +344,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               child: Center(
                                 child: _isProcessing ?  SizedBox(
                                   height: 25.h,
-                                  child: CircularProgressIndicator()) : Text(
+                                  child: const CircularProgressIndicator()) : const Text(
                                   "Yes, log me out",
                                   style: TextStyle(
                                     fontFamily: AppFonts.manRope,

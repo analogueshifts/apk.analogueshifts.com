@@ -22,7 +22,16 @@ class _BlogViewState extends State<BlogView> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        leading: Container(
+        leading: TouchableOpacity(
+          onTap: () {
+             Scaffold.of(context).openDrawer();
+          },
+          child: Container(
+              width: 20, height: 20,
+            margin: EdgeInsets.zero,
+            padding: EdgeInsets.zero,
+            child: const Icon(Icons.menu)
+          ),
         ),
         title: TextBold("Blogs", fontSize: 20,),
         centerTitle: true,

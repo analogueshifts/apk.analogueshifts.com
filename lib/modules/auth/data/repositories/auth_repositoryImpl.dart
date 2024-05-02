@@ -6,6 +6,7 @@ import 'package:analogue_shifts_mobile/core/network/api_errors.dart';
 import 'package:analogue_shifts_mobile/core/network/network_info.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/nodata_model.dart';
+import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/user_login.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/verify_password_otp.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
@@ -173,6 +174,58 @@ class UserRepositoryImpl implements UserRepository {
     } catch (e) {
       logger.e(e);
       // var error = _errorHandler.handleError(e);
+      return Left(e as Exception);
+    }
+  }
+
+   @override
+  Future<Either<Exception, User>> updateUser(User user) async {
+    logger.d(user.email);
+    try {
+      if (await _deviceNetwork.isConnected() == false) {
+        throw const SocketException('Network Error');
+      }
+      
+      final response = await dioManager.dio.post(
+        'profile',
+         data: json.encode(UpdateUser(name: user.name, username: user.username, tel: user.tel, profile: user.profile)),
+      );
+      logger.d(response.data);
+      logger.d(response.statusCode);
+
+      if (response.statusCode == 200) {
+        logger.d(response.data);
+        logger.d(response.data[0]);
+        final userModel = User.fromJson(response.data['data']['user']);
+        return Right(userModel);
+      } else {
+        throw Exception('User update failed');
+      }
+    } catch (e) {
+      return Left(e as Exception);
+    }
+  }
+
+   @override
+  Future<Either<Exception, User>> fetchUser() async {
+    try {
+      logger.d("rujsknjwnwkej");
+      // if (await _deviceNetwork.isConnected() == false) {
+      //   throw const SocketException('Network Error');
+      // }  
+      final response = await dioManager.dio.get('https://api.analogueshifts.com/api/user');
+      logger.d(response.data);
+      logger.d(response.statusCode);
+
+      if (response.statusCode == 200) {
+        logger.d(response.data);
+        logger.d(response.data);
+        final userModel = User.fromJson(response.data);
+        return Right(userModel);
+      } else {
+        throw Exception('Failed to fetch user.');
+      }
+    } catch (e) {
       return Left(e as Exception);
     }
   }
