@@ -15,4 +15,5 @@ class Routes {
   static const String faq = 'home/faq';
   static const String notification = '/notification';
   static const String resetChangePassword = '/change-reset-password';
+   static const String vetting = '/vetting';
 }

@@ -35,13 +35,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
 @override
   void initState() {
-    
-    biometrics = getIt<DBService>().getTheme() == null ? false : true;
-    Logger().d(biometrics);
+  
     super.initState();
   }
-
-  bool biometrics = false;
   @override
   Widget build(BuildContext context) {
     return Consumer<UserViewModel>(
@@ -125,6 +121,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   fontWeight: FontWeight.w600
                 ),),
                 onTap: () {
+                  Navigator.pushNamed(context, Routes.vetting);
                 },
               ),
               ListTile(
@@ -163,27 +160,32 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 },
               ),
               ListTile(
-              
                 contentPadding: EdgeInsets.zero,
                 leading: Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/moon.png" : "assets/images/moon-balck.png"), width: 35.w,height: 35.h,),
                 title: Text('Dark Mode', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600
                 ),),
-                trailing: Transform.scale(
-                  scale: 0.7,
-                  child: Switch(
-                    value: biometrics,
-                    activeColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xffEBEBEB) : AppColors
-                    .primaryColor,
-                    onChanged: (bool value) {
-                      if(mounted == false)return;
-                      setState(() {
-                        biometrics = value;
-                        Logger().d(value);
-                        context.read<AppChangeNotifier>().toggleTheme(value);
-                      });
-                    },
-                  ),
+                trailing: Consumer<AppChangeNotifier>(
+                   builder: (context, app, child) {
+                  return Transform.scale(
+                    scale: 0.7,
+                    child: Switch(
+                      value: app.isDarkMode,
+                      activeColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xffEBEBEB).withOpacity(0.5) : AppColors
+                      .primaryColor,
+                      activeTrackColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.06) : AppColors
+                      .primaryColor,
+                      onChanged: (bool value) {
+                        // if(mounted == false)return;
+                        // setState(() {
+                        //   biometrics = value;
+                          Logger().d(value);
+                          context.read<AppChangeNotifier>().toggleTheme(value);
+                        // });
+                      },
+                    ),
+                  );
+                   }
                 ),
                 // onTap: () {
                 // },

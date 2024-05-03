@@ -3,14 +3,14 @@ import 'package:analogue_shifts_mobile/modules/vetting/presentation/widgets/no_i
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class VettingSystemScreen extends StatefulWidget {
-  const VettingSystemScreen({super.key});
+class CreateVettingScreen extends StatefulWidget {
+  const CreateVettingScreen({super.key});
 
   @override
-  State<VettingSystemScreen> createState() => _VettingSystemScreenState();
+  State<CreateVettingScreen> createState() => _CreateVettingScreenState();
 }
 
-class _VettingSystemScreenState extends State<VettingSystemScreen> {
+class _CreateVettingScreenState extends State<CreateVettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -10,6 +10,7 @@ import 'package:analogue_shifts_mobile/modules/profile/presentation/views/deacti
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/help_center_screen.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/jobs_applied.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/settings_screen.drt.dart';
+import 'package:analogue_shifts_mobile/modules/vetting/presentation/view/vetting_system.screen.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -67,6 +68,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: const HelpCenterScreen()
+      );
+
+       case Routes.vetting:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: const VettingSystemScreen()
       );
       
     default:

@@ -194,6 +194,7 @@ class _JobViewState extends State<JobView> {
                 // Column(
                 //   children: job.job.map((e) => _recentJobCard(e.hiringOrganization?.logo ?? "", e.title ?? "", e.hiringOrganization?.name ?? "")).toList(),
                 // )
+                Gap(20),
                 _isPaginateButton ? BusyButton(title: "Load More...", onTap:() {
                   final _updateCurrentPage = job.currentPage + 1;
                   job.getJobs(context, _updateCurrentPage);
@@ -208,14 +209,16 @@ class _JobViewState extends State<JobView> {
   }
 
   Widget _recentJobCard(String image, String title, String organization) {
+    logger.d(image);
     return Container(
+      
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
       child: ListTile(
         contentPadding: EdgeInsets.zero,
         leading: CachedNetworkImage(
           imageUrl: image,
           placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
+          errorWidget: (context, url, error) => Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
         ),
         title: TextSemiBold(title, fontSize: 14,fontWeight: FontWeight.w600,), subtitle: TextSemiBold(organization, fontSize: 11,color: AppColors.grey, fontWeight: FontWeight.w400,),),
     );

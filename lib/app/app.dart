@@ -56,7 +56,7 @@ class _AnalogueAppState extends State<AnalogueApp> {
             // themeMode:  getIt<AppChangeNotifier>().isDarkMode != null && true ? ThemeMode.dark : ThemeMode.light,
             // darkTheme: darkTheme,
             
-            theme: appNotifier.isDarkMode == null ? getIt<AppChangeNotifier>().isDarkMode == true ? darkTheme : lightTheme : appNotifier.isDarkMode == true ? darkTheme : lightTheme
+            theme: getIt<AppChangeNotifier>().isDarkMode == true ? darkTheme : lightTheme
             // theme: appNotifier.isDarkMode == null || appNotifier.isDarkMode == false && getIt<AppChangeNotifier>().isDarkMode  == false  ? lightTheme : darkTheme
           );
            }
