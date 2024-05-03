@@ -121,8 +121,25 @@ class _JobViewState extends State<JobView> {
                         child: TextFormField(
                           controller: _search,
                           decoration: textInputDecoration.copyWith(
+                            fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
+                        hintText: "Search",
                               prefixIcon: _isLoading ? Container(margin: const EdgeInsets.only(left:
-                              5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: const CircularProgressIndicator(color: AppColors.primaryColor,),)  : const Icon(Icons.search)
+                              5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: const CircularProgressIndicator(color: AppColors.primaryColor,),)  : Icon(Icons.search, color: Theme.of(context).iconTheme.color,)
                           ),
                         ),
                       ),
@@ -163,7 +180,13 @@ class _JobViewState extends State<JobView> {
                     itemBuilder:(context, index) {
                       final e = job.job[index];
                       // logger.d(e);
-                      return _recentJobCard(e.hiringOrganization?.logo ?? "", e.title ?? "", e.hiringOrganization?.name ?? "");
+                      return Column(
+                        children: [
+                          _recentJobCard(e.hiringOrganization?.logo ?? "", e.title ?? "", e.hiringOrganization?.name ?? ""),
+                          Gap(10),
+                          Divider(color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xffE4E4E4) : Color(0xffFFFFF).withOpacity(0.24),)
+                        ],
+                      );
                       // return _recentJobCard(jobData.hiringOrganization?.logo, jobData.title.toString(), jobData.hiringOrganization?.name.toString() ?? "");
                     }
                 ),
@@ -186,12 +209,7 @@ class _JobViewState extends State<JobView> {
 
   Widget _recentJobCard(String image, String title, String organization) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: const Color(0xffFFBB0A).withOpacity(0.07)
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
       child: ListTile(
         contentPadding: EdgeInsets.zero,
         leading: CachedNetworkImage(

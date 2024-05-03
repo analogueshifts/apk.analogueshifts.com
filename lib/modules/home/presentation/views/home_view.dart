@@ -28,8 +28,8 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final List<JobPost> _jobpost = [
-    JobPost(image: "assets/images/jobPost1.png", text: "\$50 - \$75/hr", title: "Software Engineer"),
-    JobPost(image: "assets/images/jobPost1.png", text: "\$40 - \$65/hr", title: "Software Designer"),
+    JobPost(image: "assets/images/job-delete1.png", text: "\$50 - \$75/hr", title: "Software Engineer"),
+    JobPost(image: "assets/images/jobPost1.png", text: "\$40 - \$65/hr", title: "Creative Designer"),
     JobPost(image: "assets/images/jobPost1.png", text: "\$50 - \$75/hr", title: "Software Engineer"),
   ];
 
@@ -102,7 +102,7 @@ class _HomeViewState extends State<HomeView> {
         centerTitle: false,
         actions: [
           InkWell(
-            onTap: () => context.goNamed('notification'),
+            onTap: () => Navigator.pushNamed(context, Routes.notification),
             child: Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: Stack(

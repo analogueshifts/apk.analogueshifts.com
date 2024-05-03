@@ -4,11 +4,14 @@ import 'dart:io';
 import 'package:analogue_shifts_mobile/core/network/api_client.dart';
 import 'package:analogue_shifts_mobile/core/network/api_errors.dart';
 import 'package:analogue_shifts_mobile/core/network/network_info.dart';
+import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
+import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/nodata_model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/user_login.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/verify_password_otp.model.dart';
+import 'package:analogue_shifts_mobile/modules/auth/domain/entities/forgetpaasswordcreate.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/no_data.entity.dart';
@@ -16,6 +19,7 @@ import 'package:analogue_shifts_mobile/modules/auth/domain/entities/registration
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/verify_password.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/repositories/auth.repository.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -23,13 +27,14 @@ class UserRepositoryImpl implements UserRepository {
   late DioManager dioManager;
   final DeviceNetwork _deviceNetwork = GetIt.instance<DeviceNetwork>();
 
-
+final _db = getIt<DBService>();
   UserRepositoryImpl(this.dioManager);
 
   @override
   Future<Either<Exception, LoginResponse>> loginUser(LoginUser user) async {
     logger.d(user.email);
     try {
+      await _db.removeAuthToken();
       if (await _deviceNetwork.isConnected() == false) {
         throw const SocketException('Network Error');
       }
@@ -60,9 +65,11 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<Either<Exception, String>> registerUser(RegisterRequest payload) async {
     try {
+      await _db.removeAuthToken();
       if (await _deviceNetwork.isConnected() == false) {
         throw Exception("Network Error");
       }
+      
       final response = await dioManager.dio.post(
         'register',
         data: {
@@ -72,7 +79,13 @@ class UserRepositoryImpl implements UserRepository {
           'password_confirmation': payload.passwordConfirmation,
           'device_token': payload.deviceToken,
           'device_type': payload.deviceType
-        }
+        },
+         options: Options(
+            headers: {
+              HttpHeaders.acceptHeader: 'application/json',
+              HttpHeaders.authorizationHeader: HttpHeaders.authorizationHeader
+            },
+          ),
       );
       logger.d(response.data);
       logger.i(' from repo class:${response.data[0]['data']['token']}');
@@ -97,6 +110,7 @@ class UserRepositoryImpl implements UserRepository {
     @override
   Future<Either<Exception, bool>> forgotPassword(String email) async {
     try {
+      await _db.removeAuthToken();
       final response = await dioManager.dio.post(
         'forgot-password',
         data: {
@@ -205,25 +219,83 @@ class UserRepositoryImpl implements UserRepository {
       return Left(e as Exception);
     }
   }
+  
 
    @override
   Future<Either<Exception, User>> fetchUser() async {
     try {
-      logger.d("rujsknjwnwkej");
-      // if (await _deviceNetwork.isConnected() == false) {
-      //   throw const SocketException('Network Error');
-      // }  
-      final response = await dioManager.dio.get('https://api.analogueshifts.com/api/user');
+      final response = await dioManager.dio.get('user');
+
+      if (response.statusCode == 200) {
+        logger.i(response.data);
+        // logger.d(response.data);
+        final userModel = User.fromJson(response.data);
+        logger.d('fetching user ${userModel}');
+        return Right(userModel);
+      } else {
+        throw Exception('Failed to fetch user.');
+      }
+    } catch (e) {
+      logger.e(e);
+      return Left(e as Exception);
+    }
+  }
+
+  @override
+  Future<Either<Exception, NoDataResponse>> createNewPassword(CreateForgetNewPasswordEntity payload) async {
+    try {
+      if (await _deviceNetwork.isConnected() == false) {
+        throw const SocketException('Network Error');
+      }
+      
+      final response = await dioManager.dio.post(
+        'reset-password',
+         data: {
+          "email": payload.email,
+          "password": payload.password,
+          "password_confirmation": payload.passwordConfirmation
+         }
+      );
       logger.d(response.data);
       logger.d(response.statusCode);
 
       if (response.statusCode == 200) {
         logger.d(response.data);
+        logger.d(response.data[0]);
+        final results = NoDataResponse.fromJson(response.data);
+        return Right(results);
+      } else {
+        throw Exception('User update failed');
+      }
+    } catch (e) {
+      return Left(e as Exception);
+    }
+  }
+
+   @override
+  Future<Either<Exception, User>> verifyEmail(String otp) async {
+    logger.d('otp---<< ${otp}');
+    try {
+      if (await _deviceNetwork.isConnected() == false) {
+        throw const SocketException('Network Error');
+      }
+      
+      final response = await dioManager.dio.post(
+        'email/verification-otp',
+         data: {
+          "OTP": otp
+         }
+      );
+      logger.d(response.data);
+      logger.d(response.statusCode);
+
+      if (response.statusCode == 200) {
         logger.d(response.data);
-        final userModel = User.fromJson(response.data);
+        logger.d(response.data[0]);
+        final userModel = User.fromJson(response.data['data']['user']);
         return Right(userModel);
       } else {
-        throw Exception('Failed to fetch user.');
+        throw Exception('Verification failed');
       }
     } catch (e) {
       return Left(e as Exception);

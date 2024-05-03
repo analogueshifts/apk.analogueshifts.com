@@ -33,7 +33,7 @@ class _BlogViewState extends State<BlogView> {
             child: const Icon(Icons.menu)
           ),
         ),
-        title: TextBold("Blogs", fontSize: 20,),
+        title: TextBold("Blogs", fontSize: 20, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
         centerTitle: true,
         actions: [
           Padding(
@@ -58,6 +58,23 @@ class _BlogViewState extends State<BlogView> {
                       child: TextFormField(
                         // controller: _search,
                         decoration: textInputDecoration.copyWith(
+                          fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
+                        hintText: "Search",
                           prefixIcon: _isLoading ? Container(margin: EdgeInsets.only(left:
                           5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: CircularProgressIndicator(color: AppColors.primaryColor,),)  : Icon(Icons.search, color: Theme.of(context).iconTheme.color,)
                         ),
@@ -86,9 +103,10 @@ class _BlogViewState extends State<BlogView> {
               ),
             ),
             Gap(20),
-            _jobCard(),
+            _jobCard("assets/images/computer.png"),
+            Divider(color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xffE4E4E4) : Color(0xffFFFFF).withOpacity(0.24),),
             Gap(20),
-            _jobCard()
+            _jobCard("assets/images/IMG6 2.png")
           ],
         ),
       ),
@@ -96,20 +114,20 @@ class _BlogViewState extends State<BlogView> {
   }
 
 
-  Widget _jobCard(){
+  Widget _jobCard(String img){
     return Container(
         padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         width: double.infinity,
         // height: 170,
         decoration: BoxDecoration(
-          color: Color(0xffFFFAEE),
+          // color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xffFFFAEE) : AppColors.background,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image(image: AssetImage("assets/images/IMG6 2.png")),
+            Image(image: AssetImage(img)),
             Gap(15),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,

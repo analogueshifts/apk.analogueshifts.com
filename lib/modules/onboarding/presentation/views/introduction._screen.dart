@@ -10,6 +10,7 @@ import 'package:analogue_shifts_mobile/modules/auth/presentation/views/login_vie
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/illustrator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/svg.dart';
@@ -72,7 +73,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+  
       body: Column(
         children: [
           Expanded(
@@ -244,7 +245,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                                 child: InkWell(
                                   onTap: () {
                                     _db.save('onboard', "1");
-                                    context.replace(Routes.authenticate);
+                                      SchedulerBinding.instance.addPostFrameCallback((_) async {
+                                          Navigator.of(context).pushNamedAndRemoveUntil(
+                                              Routes.authenticate,
+                                              (Route<dynamic> route) => false);
+                                        });
                                   },
                                   child: Text(
                                     'Skip',
@@ -379,7 +384,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                     _handleTap();
                     if (currentIndex == 2) {
                       _db.save('onboard', "1");
-                      context.replace(Routes.authenticate);
+                      SchedulerBinding.instance.addPostFrameCallback((_) async {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              Routes.authenticate,
+                              (Route<dynamic> route) => false);
+                        });
                     } else {
                       _pageController.nextPage(
                         duration: const Duration(milliseconds: 10),

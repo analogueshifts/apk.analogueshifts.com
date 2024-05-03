@@ -4,80 +4,87 @@ import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
+import 'package:analogue_shifts_mobile/core/utils/functions.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 
 class DeactivateAccountScreen extends StatelessWidget {
   const DeactivateAccountScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const PaylonyAppBarTwo(title: "Deactivate Account"),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        child: Column(
-          children: [
-            const Gap(15),
-            Image.asset("assets/images/Avatar Image.png", width: 50.w,),
-            const Gap(5),
-            Text(
-              'John James',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const Gap(25),
-            Text(
-              'Temporarily  Deactivate your account instead of completely deleting it',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w800
+    return Consumer<UserViewModel>(
+      builder: (context, UserViewModel user, child) {
+      return Scaffold(
+        appBar: const PaylonyAppBarTwo(title: "Deactivate Account"),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          child: Column(
+            children: [
+              const Gap(15),
+              Image.asset("assets/images/Avatar Image.png", width: 50.w,),
+              const Gap(5),
+              Text(
+                Functions.capitalize(user.authState.user?.name.toString() ?? ""),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
-            ),
-            const Gap(15),
-            Text(
-              'Your Profile would be temporarily hidden until you activate it again by logging back in.',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontSize: 13
+              const Gap(25),
+              Text(
+                'Temporarily  Deactivate your account instead of completely deleting it',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w800
+                ),
               ),
-            ),
-            const Gap(20),
-            BusyButton(title: "Deactivate Account", onTap:() {
-             showDialog(context: context, builder:(context) {
-              return deactivateDialog();
-            },);
-              
-            },),
-            const Gap(15),
-            InkWell(
-              onTap: () {
-                showDialog(context: context, builder:(context) {
-              return deleteDialog();
-            },);
-              },
-              child: Container(
-                width: double.infinity,
-                child: Text("Delete Account",
-                textAlign: TextAlign.center,
+              const Gap(15),
+              Text(
+                'Your Profile would be temporarily hidden until you activate it again by logging back in.',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 15,
-                  color: const Color(0xff6D6D6D)
-                ),
+                  fontSize: 13
                 ),
               ),
-            )
-          ],
-        ),
-        ),
+              const Gap(20),
+              BusyButton(title: "Deactivate Account", onTap:() {
+               showDialog( barrierColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.transparent .withOpacity(0.6) : Color(0xff110C00).withOpacity(0.8),context: context, builder:(context) {
+                return deactivateDialog(context);
+              },);
+                
+              },),
+              const Gap(15),
+              InkWell(
+                onTap: () {
+                  showDialog( barrierColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.transparent .withOpacity(0.6) : Color(0xff110C00).withOpacity(0.8),context: context, builder:(context) {
+                return deleteDialog(context);
+              },);
+                },
+                child: Container(
+                  width: double.infinity,
+                  child: Text("Delete Account",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                    color: const Color(0xff6D6D6D)
+                  ),
+                  ),
+                ),
+              )
+            ],
+          ),
+          ),
+      );
+      }
     );
   }
 
-  Widget deactivateDialog() {
+  Widget deactivateDialog(BuildContext context) {
     return Dialog(
-      backgroundColor: Color(0xffFFFFFF).withOpacity(1),
       insetPadding: const EdgeInsets.all(10),
       child: Container(
+        
         width: double.infinity,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -89,7 +96,7 @@ class DeactivateAccountScreen extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: Theme.of(context).colorScheme.background,
                 borderRadius: BorderRadius.circular(8)
               ),
               padding:
@@ -199,7 +206,7 @@ class DeactivateAccountScreen extends StatelessWidget {
 
 
 
-  Widget deleteDialog() {
+  Widget deleteDialog(BuildContext context) {
     return Dialog(
       insetPadding: const EdgeInsets.all(10),
       child: Container(
@@ -214,7 +221,7 @@ class DeactivateAccountScreen extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: Theme.of(context).colorScheme.background,
                 borderRadius: BorderRadius.circular(8)
               ),
               padding:

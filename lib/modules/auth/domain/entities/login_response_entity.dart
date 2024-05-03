@@ -59,8 +59,8 @@ class User extends Equatable {
         required this.role,
         required this.profile,
         required this.otp,
-        required this.isVerified,
-        required this.googleToken,
+        this.isVerified,
+        this.googleToken,
         required this.emailVerifiedAt,
         required this.createdAt,
         required this.updatedAt,
@@ -71,12 +71,12 @@ class User extends Equatable {
     String? name;
     final String? username;
     final String? email;
-    String tel;
+    String? tel;
     final String? role;
     String? profile;
     final String? otp;
-    final dynamic isVerified;
-    final dynamic googleToken;
+    final dynamic? isVerified;
+    final dynamic? googleToken;
     final dynamic emailVerifiedAt;
     final DateTime? createdAt;
     final DateTime? updatedAt;

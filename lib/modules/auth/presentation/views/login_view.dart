@@ -11,7 +11,7 @@ import 'package:analogue_shifts_mobile/modules/auth/data/models/user_login.model
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
-import 'package:analogue_shifts_mobile/modules/auth/presentation/forgot_password_view.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/views/forgot_password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -128,7 +128,7 @@ class _LoginViewState extends State<LoginView> {
                               border: Border.all(
                                   color: AppColors.primaryGrey2, width: 1)),
                           child:
-                              Center(child: SvgPicture.asset(AppAsset.appleSvg))),
+                              Center(child:  SvgPicture.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? AppAsset.appleSvg : "assets/images/apple-white.svg"))),
                     ),
                   ],
                 ),
@@ -138,6 +138,22 @@ class _LoginViewState extends State<LoginView> {
                 TextFormField(
                   controller: _emailController,
                   decoration: textInputDecoration.copyWith(
+                     fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
                       hintText: 'Enter your email address'),
                   validator: (value) {
                     if (value == null) return ("Enter your email");
@@ -172,7 +188,22 @@ class _LoginViewState extends State<LoginView> {
                     obscuringCharacter: '*',
                     decoration: textInputDecoration.copyWith(
                       // contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      fillColor: AppColors.white,
+                       fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
                       hintText: "Enter your password",
                       suffixIcon: IconButton(
                           onPressed: () {
@@ -181,9 +212,10 @@ class _LoginViewState extends State<LoginView> {
                             });
                           },
                           icon: !_isPasswordVisible
-                              ? const Icon(Icons.visibility_outlined)
-                              : const Icon(Icons.visibility_off_outlined,
-                                  color: AppColors.background)),
+                              ? Icon(Icons.visibility_outlined, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : Color(0xff767676))
+                              : Icon(Icons.visibility_off_outlined,
+                                  color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : Color(0xff767676))
+                                  ),
                     )),
                 Gap(24),
                 Row(
@@ -192,7 +224,7 @@ class _LoginViewState extends State<LoginView> {
                     TouchableOpacity(
                         onTap: () {
                           Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => ForgotPasswordView()));
+                              MaterialPageRoute(builder: (context) => ForgotPasswordView(email: _emailController.text)));
                         },
                         child: TextSemiBold(
                           "Forgot Password",

@@ -1,6 +1,7 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/admob/v1.dart';
 
 final darkTheme = ThemeData(
    colorScheme: const ColorScheme(
@@ -90,5 +91,9 @@ final darkTheme = ThemeData(
   ),
   inputDecorationTheme: InputDecorationTheme(
    
-  )
+  ),
+  switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.all(AppColors.primaryColor),
+        trackColor: MaterialStateProperty.resolveWith((states) =>
+            states.contains(MaterialState.selected) ? Color(0xffEBEBEB).withOpacity(0.6) : null)),
 );

@@ -1,4 +1,5 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
+import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_widgets.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
@@ -26,14 +27,13 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _toOnboard() async {
     final db = _db.getToken();
     if(_db.get('onboard') == null){
-      context.replace(Routes.introduction);
+      Navigator.popAndPushNamed(context, Routes.introduction);
     }else{
       if (_db.getToken() != null){
         logger.d(_db.getToken());
-        context.replace(Routes.homeNavigation);
+        Navigator.popAndPushNamed(context, Routes.homeNavigation);
       }else{
-        // return Routes.startUp;
-        context.replace(Routes.authenticate);
+         Navigator.popAndPushNamed(context, Routes.authenticate);
       }
     }
     // logger.d(db);
@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(child:  SizedBox(
         width: 150,
         height: 150,
-        child: AppWidgets().logoIcon .animate(
+        child: Image.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? AppAsset.logo : "assets/images/logo-black.png").animate(
             onPlay: (controller) =>
                 controller.repeat(reverse: true))
             .shimmer(

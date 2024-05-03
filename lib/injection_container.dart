@@ -69,9 +69,17 @@ Future<void> setupDependencies() async{
         () => FetchUserUseCase(),
   );
 
+  getIt.registerLazySingleton<UpdatePasswordUseCase>(
+        () => UpdatePasswordUseCase(),
+  );
+
 
   getIt.registerLazySingleton<UploadImageUseCase>(
         () => UploadImageUseCase(),
+  );
+
+  getIt.registerLazySingleton<VerifyEmailUseCase>(
+        () => VerifyEmailUseCase()
   );
 
   getIt.registerLazySingleton<ErrorHandler>(
@@ -91,7 +99,6 @@ Future<void> setupDependencies() async{
         () => FirebaseHandler()
   );
 
-  getIt.registerSingleton<GoRouter>(AppRoutes().router);
   getIt.registerSingleton<DBService>(DBService());
   await getIt<DBService>().startHive();
 

@@ -1,5 +1,7 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 
 class AppBackButton extends StatelessWidget {
@@ -10,18 +12,11 @@ class AppBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 50.w,
+      height: 50.h,
       margin: EdgeInsets.only(left: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(color: AppColors.primaryGrey2, width: 1)
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-      child: Center(
-        child: Icon(
-          Icons.arrow_back_ios_outlined,
-          color:Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white
-      )
-      ),
+      padding: EdgeInsets.zero,
+      child: SvgPicture.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/back.svg" : "assets/images/back-black.svg", width: 50, height: 20,)
     );
   }
 }

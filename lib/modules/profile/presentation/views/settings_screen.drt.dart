@@ -24,11 +24,11 @@ class SettingsScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         children: [
           _navCard(context, const Image(image: AssetImage("assets/icons/lock_icon.png"), width: 45,height: 45,), "Change Password", () { 
-            context.goNamed('change-password');
+            Navigator.pushNamed(context, Routes.changePassword);
           }),
           _navCard(context, const Image(image: AssetImage("assets/icons/settings_icon.png"), width: 45,height: 45,), "Deactivate Account", () { 
             
-            context.goNamed('deactivate-account');
+            Navigator.pushNamed(context, Routes.deactivateAccount);
           }),
         ],
       ),

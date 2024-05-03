@@ -133,6 +133,22 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                       return null;
                     },
                     decoration: textInputDecoration.copyWith(
+                       fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
                       hintText: 'Full Name'
                     ),
                     onChanged: (value){
@@ -146,6 +162,22 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                   TextFormField(
                     controller: _emailController,
                     decoration: textInputDecoration.copyWith(
+                       fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
                         hintText: 'Enter your email address'
                     ),
           
@@ -178,7 +210,22 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                       obscuringCharacter: '*',
                       decoration: textInputDecoration.copyWith(
                         // contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                        fillColor: AppColors.white,
+                         fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
                         hintText: "Enter your password",
                         suffixIcon: IconButton(
                             onPressed: () {
@@ -186,11 +233,11 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                                 _isPasswordVisible = !_isPasswordVisible;
                               });
                             },
-                            icon: !_isPasswordVisible ? const Icon(Icons.visibility_outlined) : const Icon(
-                                Icons.visibility_off_outlined,
-                                color: AppColors.background
-                            )
-                        ),
+                             icon: !_isPasswordVisible
+                              ? Icon(Icons.visibility_outlined, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white)
+                              : Icon(Icons.visibility_off_outlined,
+                                  color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white)
+                                  ),
                       )
                   ),
                   Gap(4),
@@ -222,7 +269,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                           if(widget.toggleView == null)return;
                            widget.toggleView!(false);
                         },
-                        child: TextSemiBold("Login Now", fontWeight: FontWeight.w800, color: AppColors.background,))
+                        child: TextSemiBold("Login Now", fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.primaryColor,))
                     ],
                   )
           

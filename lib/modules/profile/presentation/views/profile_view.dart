@@ -5,6 +5,7 @@ import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
+import 'package:analogue_shifts_mobile/core/constants/app_widgets.dart';
 import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
@@ -62,10 +63,10 @@ class _ProfileViewState extends State<ProfileView> {
             const Gap(20),
             Row(
               children: [
-                user.authState.user?.profile == null ? Icon(Icons.verified_user) : CachedNetworkImage(
+                user.authState.user?.profile == null ? Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/avatar_image.png" : "assets/images/profile-black.png"), width: 45,height: 45,) : CachedNetworkImage(
                 imageUrl: user.authState.user?.profile ?? "",
-                placeholder: (context, url) => SizedBox(width: 40.w, height:30, child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
+                // placeholder: (context, url) => SizedBox(width: 40.w, height:30, child: Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/avatar_image.png" : "assets/images/profile-black.png"), width: 45,height: 45,)),
+                errorWidget: (context, url, error) => const Icon(Icons.error_outline_outlined, size: 40,),
               ),
                 const Gap(8),
                 Column(
@@ -81,7 +82,7 @@ class _ProfileViewState extends State<ProfileView> {
               ],
             ),
             const Gap(30),
-            _navCard(const Image(image: AssetImage("assets/images/avatar_image.png"), width: 45,height: 45,), "Edit Profile", () {
+            _navCard(Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/avatar_image.png" : "assets/images/profile-black.png"), width: 45,height: 45,), "Edit Profile", () {
                Navigator.push(
             context,
             MaterialPageRoute(
@@ -89,11 +90,11 @@ class _ProfileViewState extends State<ProfileView> {
             ),
           );
              }),
-            _navCard(const Image(image: AssetImage("assets/images/work.png"), width: 45,height: 45,), "Jobs Applied", () { 
-              context.goNamed('jobs-applied');
+            _navCard(Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/work.png" : "assets/images/work-black.png"), width: 45,height: 45,), "Jobs Applied", () { 
+              Navigator.pushNamed(context, Routes.jobsApplied);
             }),
-            _navCard(const Image(image: AssetImage("assets/images/settings.png"), width: 45,height: 45,), "Settings", () {
-              context.goNamed("settings");
+            _navCard(Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/settings.png" : "assets/images/settings-black.png"), width: 45,height: 45,), "Settings", () {
+              Navigator.pushNamed(context, Routes.settings);
         
             }),
           ],),

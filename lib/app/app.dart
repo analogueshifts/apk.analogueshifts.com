@@ -2,6 +2,8 @@ import 'package:analogue_shifts_mobile/app/notifier/app_notifier.dart';
 import 'package:analogue_shifts_mobile/app/theme/dark_theme.dart';
 import 'package:analogue_shifts_mobile/app/theme/light_theme.dart';
 import 'package:analogue_shifts_mobile/core/navigators/go_router.dart';
+import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
+import 'package:analogue_shifts_mobile/core/navigators/router.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/firebase_handler.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
@@ -42,12 +44,14 @@ class _AnalogueAppState extends State<AnalogueApp> {
            builder: (context, AppChangeNotifier appNotifier, child) {
             Logger().d(appNotifier.isDarkMode);
           Logger().i(getIt<AppChangeNotifier>().isDarkMode);
-          return MaterialApp.router(
-            routeInformationProvider:
-            getIt<GoRouter>().routeInformationProvider,
-            routeInformationParser: getIt<GoRouter>().routeInformationParser,
-            routerDelegate: getIt<GoRouter>().routerDelegate,
-            backButtonDispatcher: getIt<GoRouter>().backButtonDispatcher,
+          return MaterialApp(
+            // routeInformationProvider:
+             initialRoute: Routes.startUp,
+            onGenerateRoute: generateRoute,
+            // getIt<GoRouter>().routeInformationProvider,
+            // routeInformationParser: getIt<GoRouter>().routeInformationParser,
+            // routerDelegate: getIt<GoRouter>().routerDelegate,
+            // backButtonDispatcher: getIt<GoRouter>().backButtonDispatcher,
             debugShowCheckedModeBanner: false,
             // themeMode:  getIt<AppChangeNotifier>().isDarkMode != null && true ? ThemeMode.dark : ThemeMode.light,
             // darkTheme: darkTheme,

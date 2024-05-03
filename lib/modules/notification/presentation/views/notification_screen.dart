@@ -1,7 +1,10 @@
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
 import 'package:analogue_shifts_mobile/modules/home/data/model/job_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,7 +27,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PaylonyAppBarTwo(title: "Notification", backTap: () {
-        context.pop();
+        Navigator.pop(context);
       },),
       body: ListView(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -75,15 +78,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
    Widget _recentJobCard(String image, String title, String description) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: const Color(0xffFFBB0A).withOpacity(0.07)
-      ),
+      margin: EdgeInsets.only(top: 20),
+      height: 40.h,
+      width: double.infinity,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image(image: AssetImage(image), width: 60, height: 60,),
+          Image(image: AssetImage(image), width: 60, height: 40.h,),
           const Gap(12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -5,15 +5,18 @@ import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
+import 'package:analogue_shifts_mobile/modules/auth/domain/entities/forgetpaasswordcreate.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/registration_request_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/verify_password.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/usecases/register.usecase.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/authState.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/views/auth_success.screen.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/change_password.screen.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/user_verification.view.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/verify_user_otp_view.dart';
+import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -29,6 +32,8 @@ class UserViewModel extends ChangeNotifier {
   final ErrorHandler _errorHandler = GetIt.instance<ErrorHandler>();
    final UpdateUserUseCase _updateUserUseCase = GetIt.instance<UpdateUserUseCase>();
   final FetchUserUseCase _fetchUserUseCase = GetIt.instance<FetchUserUseCase>();
+  final UpdatePasswordUseCase _updatePasswordUserUseCase = GetIt.instance<UpdatePasswordUseCase>();
+  final VerifyEmailUseCase _verifyEmailUseCase = GetIt.instance<VerifyEmailUseCase>();
 
   final _db = getIt<DBService>();
   // final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -135,6 +140,7 @@ class UserViewModel extends ChangeNotifier {
     toggleGenerating(false);
     result.fold(
           (exception) {
+            toggleGenerating(false);
         var error = _errorHandler.handleError(exception);
         if(context.mounted){
           AppSnackbar.error(context, message: error);
@@ -142,6 +148,7 @@ class UserViewModel extends ChangeNotifier {
 
       },
           (user) async{
+            toggleGenerating(false);
             logger.i('from notifier $user');
             if(user == false) {
               AppSnackbar.error(context, message: "Unable to verify otp");
@@ -168,6 +175,7 @@ class UserViewModel extends ChangeNotifier {
     toggleGenerating(false);
     result.fold(
           (exception) {
+            toggleGenerating(false);
         var error = _errorHandler.handleError(exception);
         if(context.mounted){
           AppSnackbar.error(context, message: error);
@@ -175,6 +183,7 @@ class UserViewModel extends ChangeNotifier {
 
       },
           (user) async{
+            toggleGenerating(false);
             logger.i('Login successful: $user');
             if(user.data?.token == null) {
               AppSnackbar.error(context, message: "Login failed");
@@ -190,7 +199,12 @@ class UserViewModel extends ChangeNotifier {
             
             if(context.mounted){
               // await AppSnackbar.success(context, message: "Login Successful✅");
-              context.replace(Routes.homeNavigation);
+              Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      const HomeNavigation()),
+             (Route<dynamic> route) => false);
             }
               }
              
@@ -237,11 +251,9 @@ class UserViewModel extends ChangeNotifier {
     }, (r) async{
       toggleGenerating(false);
       logger.d(r);
-      if(context.mounted){
-         _db.clear();
-        context.replace(Routes.authenticate);
-        // context.pop(context);
-      }
+     
+        _db.removeAuthToken();
+        _db.removeUser(0);
       return true;
     });
     return false;
@@ -268,8 +280,10 @@ class UserViewModel extends ChangeNotifier {
     }, (r) async{
       toggleGenerating(false);
       logger.d(r);
-      AppSnackbar.success(context, message: r.message.toString());
-      context.replace(Routes.authenticate);
+      if (context.mounted) {
+        AppSnackbar.success(context, message: r.message.toString());
+      }
+      
     });
   }
 
@@ -290,6 +304,7 @@ class UserViewModel extends ChangeNotifier {
             logger.i('Update successful: $user');
             saveUser(user);
             _db.saveUser(user);
+            AppSnackbar.success(context, message: "Update Successful!");
             notifyListeners();
       },
     );
@@ -299,9 +314,12 @@ class UserViewModel extends ChangeNotifier {
 
   Future<void> fetchUser(BuildContext context) async {
     logger.d('<<<<!!!>>>>>');
+
     final result = await _fetchUserUseCase.call();
+   
     result.fold(
           (exception) {
+        
         var error = _errorHandler.handleError(exception);
         if(context.mounted){
           AppSnackbar.error(context, message: error);
@@ -312,6 +330,70 @@ class UserViewModel extends ChangeNotifier {
             logger.i('Update successful: $user');
             await _db.saveUser(user);
             saveUser(user);  
+            notifyListeners();
+      },
+    );
+    notifyListeners();
+  }
+
+    Future<void> verifyUser(BuildContext context, String otp) async {
+      logger.d(otp);
+          toggleGenerating(true);
+    final result = await _verifyEmailUseCase.call(otp);
+     
+
+    result.fold(
+      
+          (exception) {
+            toggleGenerating(false);
+            logger.d(exception);
+        var error = _errorHandler.handleError(exception);
+        if(context.mounted){
+          AppSnackbar.error(context, message: error);
+        }
+
+      },
+          (user) async{
+            toggleGenerating(false);
+            logger.i('Verified successful: $user');
+            await _db.saveUser(user);
+            saveUser(user);  
+            if(context.mounted){
+                 Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      const AuthSuccessScreen(title: "Verified!", subtTitle: "Your account has been verified successfully")),
+             (Route<dynamic> route) => false);
+            }
+            notifyListeners();
+      },
+    );
+    notifyListeners();
+  }
+
+   Future<void> updatePassword(CreateForgetNewPasswordEntity payload, BuildContext context) async {
+    toggleGenerating(true);
+    notifyListeners();
+    final result = await _updatePasswordUserUseCase.call(payload);
+    toggleGenerating(false);
+    result.fold(
+      
+          (exception) {
+            toggleGenerating(false);
+        var error = _errorHandler.handleError(exception);
+        if(context.mounted){
+          AppSnackbar.error(context, message: error);
+        }
+
+      },
+          (r) async{
+            toggleGenerating(false);
+            logger.i('Update successful: $r');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AuthSuccessScreen(title: "Password Changed", subtTitle: "Your password has been changed successfully",)),
+            );
             notifyListeners();
       },
     );

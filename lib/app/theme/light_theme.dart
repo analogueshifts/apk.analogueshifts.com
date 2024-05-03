@@ -104,6 +104,10 @@ final lightTheme = ThemeData(
   textSelectionTheme: const TextSelectionThemeData(
     selectionColor: AppColors.textPrimaryColor,
   ),
-  unselectedWidgetColor: const Color(0xffDEDEDE)
+  unselectedWidgetColor: const Color(0xffDEDEDE),
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.all(Color(0xffEBEBEB)),
+        trackColor: MaterialStateProperty.resolveWith((states) =>
+            states.contains(MaterialState.selected) ? Color(0xffEBEBEB).withOpacity(0.6) : null)),
 );
 

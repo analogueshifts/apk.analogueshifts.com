@@ -41,7 +41,7 @@ class _VerifyUserOtpScreenState extends State<VerifyUserOtpScreen> {
       body: Consumer<UserViewModel>(
         builder: (_, auth, __) {
         return SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -49,13 +49,13 @@ class _VerifyUserOtpScreenState extends State<VerifyUserOtpScreen> {
                     20,
                   ),
                   TextBold(
-                    'Forgot Password?',
+                    'OTP Verification',
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
                   ),
                   const Gap(5),
                   TextSemiBold(
-                      'Don’t worry! It occurs. Please enter the email address linked with your account.'),
+                      'Enter the verification code we just sent on your email address.'),
                   const Gap(30),
                   OTPTextField(
                     length: 5,
@@ -64,7 +64,7 @@ class _VerifyUserOtpScreenState extends State<VerifyUserOtpScreen> {
                     otpFieldStyle: OtpFieldStyle(
                       backgroundColor: Color(0xff000000).withOpacity(0.02),
                       borderColor: AppColors.primaryColor,
-        
+                      enabledBorderColor: AppColors.primaryColor
                     ),
                     style: TextStyle(
                       fontSize: 17
@@ -86,6 +86,10 @@ class _VerifyUserOtpScreenState extends State<VerifyUserOtpScreen> {
                       onTap: () {
                         if(_isOtpCompleted){
                           if(widget.email == null && _otp == null)return;
+                           FocusScopeNode currentFocus = FocusScope.of(context);
+                          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                            currentFocus.focusedChild?.unfocus();
+                          }
                            auth.verifyPasswordOtp(VerifyPasswordEntity(otp: _otp?.trim(), email: widget.email), context);
                         }
          

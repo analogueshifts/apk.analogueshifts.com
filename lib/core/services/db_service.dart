@@ -83,7 +83,7 @@ class DBService {
   }
 
 
-  Future<void> removeAuthToken(String key) async {
+  Future<void> removeAuthToken() async {
     final box = getBox();
     await box.delete('_db-token');
   }

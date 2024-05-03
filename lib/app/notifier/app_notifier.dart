@@ -12,7 +12,6 @@ class AppChangeNotifier extends ChangeNotifier {
   void toggleTheme(bool value){
     Logger().d(value);
     _isDarkMode = value;
-    notifyListeners();
     _db.saveTheme(value);
      notifyListeners();
    

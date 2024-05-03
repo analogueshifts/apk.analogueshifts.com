@@ -14,6 +14,7 @@ class DioManager {
   BuildContext? context;
 
   DioManager(this.tokenProvider) {
+    
     _dio = Dio(
         BaseOptions(
           baseUrl: 'https://api.analogueshifts.com/api/',

@@ -40,8 +40,9 @@ class _HomeNavigationState extends State<HomeNavigation> {
     _onItemTapped(_selectedIndex);
      WidgetsBinding.instance.addPostFrameCallback((_){
       if(mounted){
-        context.read<JobProvider>().getJobs(context);
         context.read<UserViewModel>().fetchUser(context);
+        context.read<JobProvider>().getJobs(context);
+        
       }
     });
   }
@@ -57,7 +58,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
     ];
     return  Consumer<UserViewModel>(
       builder: (context, UserViewModel user, child) {
-        logger.d(user.authState.user?.email);
+        logger.d('from dashbaord ===->>> ${user.authState.user?.email}');
       return user.authState.user == null ? Scaffold(body: Center(child: AppWidgets().logoSpinner)) : Scaffold(
         drawer: Drawer(
       

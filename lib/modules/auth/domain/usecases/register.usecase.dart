@@ -1,4 +1,5 @@
 import 'package:analogue_shifts_mobile/modules/auth/data/models/user_login.model.dart';
+import 'package:analogue_shifts_mobile/modules/auth/domain/entities/forgetpaasswordcreate.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/no_data.entity.dart';
@@ -76,6 +77,24 @@ class FetchUserUseCase {
 
   Future<Either<Exception, User>> call() async {
     return await _userRepository.fetchUser();
+  }
+
+}
+
+class UpdatePasswordUseCase {
+  final UserRepository _userRepository = GetIt.instance<UserRepository>();
+
+  Future<Either<Exception, NoDataResponse>> call(CreateForgetNewPasswordEntity payload) async {
+    return await _userRepository.createNewPassword(payload);
+  }
+
+}
+
+class VerifyEmailUseCase {
+  final UserRepository _userRepository = GetIt.instance<UserRepository>();
+
+  Future<Either<Exception, User>> call(String otp) async {
+    return await _userRepository.verifyEmail(otp);
   }
 
 }

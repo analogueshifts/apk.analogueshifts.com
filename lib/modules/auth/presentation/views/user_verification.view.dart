@@ -50,18 +50,19 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
       body: Consumer<UserViewModel>(
         builder: (_, auth, __) {
         return AbsorbPointer(
-          absorbing: auth.authState.isGenerating,
+          absorbing: false,
+          // absorbing: auth.authState.isGenerating,
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Gap(
-                      20,
+                      30,
                     ),
-                    const Gap(5),
+                    // const Gap(5),
                     TextSemiBold(
-                        'Enter the verification code we just sent on your email address.'),
+                        'Enter the verification code we just sent on your email address.', fontSize: 14,color: Color(0xff000000).withOpacity(0.6),),
                     const Gap(30),
                     OTPTextField(
                       length: 5,
@@ -70,6 +71,7 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
                       otpFieldStyle: OtpFieldStyle(
                         backgroundColor: Color(0xff000000).withOpacity(0.02),
                         borderColor: AppColors.primaryColor,
+                        enabledBorderColor: AppColors.primaryColor,
           
                       ),
                       style: TextStyle(
@@ -90,10 +92,9 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
                         // disabled: _isOtpCompleted == true ? false : true,
                         height: 58,
                         onTap: () {
-                          // if(_isOtpCompleted){
-                          //   if(widget.email == null && _otp == null)return;
-                          //    auth.verifyPasswordOtp(VerifyPasswordEntity(otp: _otp?.trim(), email: widget.email), context);
-                          // }
+                          if(_isOtpCompleted && _otp != null){
+                            auth.verifyUser(context, _otp!.trim());
+                          }
            
                         }
                         ),
@@ -107,7 +108,7 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
                       onTap: () {
                         auth.initateUserVerification(context);
                       },
-                      child: TextSemiBold("Resend", fontWeight: FontWeight.w800, color: AppColors.background,))
+                      child: TextSemiBold("Resend", fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.brightness == Brightness.light ?  AppColors.background : AppColors.white,))
                   ],
                 )
               ],

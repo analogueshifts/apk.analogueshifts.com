@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
@@ -5,6 +7,7 @@ import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
+import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
 import 'package:analogue_shifts_mobile/core/utils/validator.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
@@ -35,7 +38,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _nameController.text = user?.name ?? "";
     _emailController.text = user?.email ?? "";
     _phoneController.text = user?.tel ?? "";
-    upload.setUploadedImage(user?.profile ?? "");
+    // if (mounted) {
+    //    upload.setUploadedImage(user?.profile ?? "");
+    // }
+   
     super.initState();
   }
 
@@ -54,10 +60,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               children: [
                 user.authState.user?.profile == null && upload.uploadedImage == null ? const Icon(Icons.verified_user) : CachedNetworkImage(
                   imageUrl: upload.uploadedImage ?? user.authState.user?.profile ?? "",
-                  placeholder: (context, url) => const CircleAvatar(
+                  placeholder: (context, url) => CircleAvatar(
+                    backgroundColor: Theme.of(context).colorScheme.background,
                     minRadius: 50,
                     child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error, size: 50,),
                 ),
                 const Gap(8),
                 TouchableOpacity(
@@ -84,6 +91,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   TextFormField(
                     controller: _nameController,
                     decoration: textInputDecoration.copyWith(
+                      fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
                         hintText: user.authState.user?.name ?? 'John James'),
                     validator: (value) {
                       if (value == null) return ("Enter your name");
@@ -103,6 +126,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     enabled: false,
                     controller: _emailController,
                     decoration: textInputDecoration.copyWith(
+                      fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
                         hintText: user.authState.user?.email ?? ''),
                     validator: (value) {
                       if (value == null) return ("Enter your email");
@@ -121,6 +160,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   TextFormField(
                     controller: _phoneController,
                     decoration: textInputDecoration.copyWith(
+                      fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
                         hintText: user.authState.user?.tel ?? "Update Phone Number"),
                     validator: (value) {
                       if (value == null) return ("Enter your email");
@@ -135,8 +190,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   const Gap(35),
                   BusyButton(title: "Save", isLoading: user.authState.isGenerating, onTap:() {
+                    FocusScopeNode currentFocus = FocusScope.of(context);
+                        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                          currentFocus.focusedChild?.unfocus();
+                        }
                     final savedUser = user.authState.user;
-                    user.updateUser(User(id: savedUser?.id, uuid: savedUser?.uuid, name: _nameController.text, username: "Achufam24", email: savedUser?.email, tel: _phoneController.text, role: savedUser?.role, profile: upload.uploadedImage ?? savedUser?.profile, otp: "", isVerified: savedUser?.isVerified, googleToken: "", emailVerifiedAt: "", createdAt: savedUser?.createdAt, updatedAt: savedUser?.updatedAt), context);
+                    if(savedUser?.profile == null && upload.uploadedImage == null){
+                      if(!mounted)return;
+                       AppSnackbar.error(context, message: "Update your profile image");
+                    }else{
+                       user.updateUser(User(id: savedUser?.id, uuid: savedUser?.uuid, name: _nameController.text, username: savedUser?.username ?? Random().nextInt(100).toString(), email: savedUser?.email, tel: _phoneController.text, role: savedUser?.role, profile: upload.uploadedImage ?? savedUser?.profile, otp: "", isVerified: savedUser?.isVerified, googleToken: "", emailVerifiedAt: "", createdAt: savedUser?.createdAt, updatedAt: savedUser?.updatedAt), context);
+                    }
+                   
                   },)
               ],
             ),
