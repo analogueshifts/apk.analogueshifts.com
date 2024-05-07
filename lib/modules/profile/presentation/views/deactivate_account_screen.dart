@@ -6,6 +6,7 @@ import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/utils/functions.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,7 +27,21 @@ class DeactivateAccountScreen extends StatelessWidget {
           child: Column(
             children: [
               const Gap(15),
-              Image.asset("assets/images/Avatar Image.png", width: 50.w,),
+              user.authState.user?.profile == null  ? const Icon(Icons.verified_user) : CircleAvatar(
+                  radius: 30.w,
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      imageUrl: user.authState.user?.profile ?? "",
+                      width: 60.w,
+                      height: 60.h,
+                      placeholder: (context, url) => CircleAvatar(
+                        backgroundColor: Theme.of(context).colorScheme.background,
+                        minRadius: 50,
+                        child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => const Icon(Icons.error, size: 50,),
+                    ),
+                  ),
+                ),
               const Gap(5),
               Text(
                 Functions.capitalize(user.authState.user?.name.toString() ?? ""),

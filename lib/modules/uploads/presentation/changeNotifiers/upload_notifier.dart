@@ -50,7 +50,8 @@ class FileUploadNotifier extends DisposableProvider {
         }
         },
         (result) async {
-          _uploadedImage = result.baseUrl! + result.path!;
+          if (result.baseUrl == null && result.path == null)return;
+          _uploadedImage = '${result.baseUrl!}/${result.path!}';
           logger.d(_uploadedImage);
           notifyListeners();
         }

@@ -10,6 +10,7 @@ import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/data/model/job_model.dart';
+import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -108,32 +109,7 @@ class _HomeViewState extends State<HomeView> {
         ),
         centerTitle: false,
         actions: [
-          InkWell(
-            onTap: () => Navigator.pushNamed(context, Routes.notification),
-            child: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Stack(
-                children: [
-                  Positioned(
-                    right: 4,
-                    top: 2,
-                    child: Container(
-                      alignment: Alignment.topRight,
-                      height: 7,
-                      width: 7,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(18)
-                      ),
-                    ),
-                  ),
-                  const Icon(Icons.notifications_none_outlined
-                )
-                ]
-                
-                )
-            ),
-          )
+         NotificationIcon()
         ],
       ),
       body: SingleChildScrollView(
@@ -200,14 +176,13 @@ class _HomeViewState extends State<HomeView> {
             const Gap(30),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-              child: TextSemiBold("Reconmended", fontSize: 20, fontWeight: FontWeight.w700,),
+              child: TextSemiBold("Reconmended", fontSize: 20, fontWeight: FontWeight.w600,),
             ),
             const Gap(8),
             SizedBox(
               height: 160.h,
               width: double.infinity,
               child: ListView.builder(
-                padding: const EdgeInsets.only(left: 15),
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 itemCount: _jobpost.length,
@@ -220,7 +195,7 @@ class _HomeViewState extends State<HomeView> {
             Gap(20),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-              child: TextSemiBold("Recently Posted", fontSize: 20, fontWeight: FontWeight.w700, style: Theme.of(context).textTheme.titleLarge,),
+              child: TextSemiBold("Recently Posted", fontSize: 20, fontWeight: FontWeight.w600, style: Theme.of(context).textTheme.titleLarge,),
             ),
            Consumer<JobProvider>(
               builder: (context, job, child) {
@@ -253,8 +228,8 @@ class _HomeViewState extends State<HomeView> {
     return Container(
       height: 160.h,
       width: 170.w,
-      margin: const EdgeInsets.only(right: 15),
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      // margin: const EdgeInsets.only(right: 5),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

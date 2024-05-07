@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:async';
+import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -209,5 +210,28 @@ class Functions {
         }
     );
   }
+
+ static String dateConverter(DateTime myDate) {
+  logger.d(myDate);
+  String date;
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final yesterday = DateTime(now.year, now.month, now.day - 1);
+  final tomorrow = DateTime(now.year, now.month, now.day + 1);
+  final dateToCheck = myDate;
+  final checkDate = DateTime(dateToCheck.year, dateToCheck.month, dateToCheck.day);
+
+  if (checkDate == today) {
+    date = "Today";
+  } else if (checkDate == yesterday) {
+    date = "Yesterday";
+  } else if (checkDate == tomorrow) {
+    date = "Tomorrow";
+  } else {
+    date = DateFormat('yyyy-MM-dd').format(myDate);
+  }
+
+  return date;
+}
 
 }

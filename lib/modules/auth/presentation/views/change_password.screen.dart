@@ -50,10 +50,11 @@ final TextEditingController _confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme.brightness;
     return Consumer<UserViewModel>(
       builder: (_, auth, __) {
       return Scaffold(
-        backgroundColor: AppColors.white,
+        // backgroundColor: AppColors.white,
         appBar: const PaylonyAppBarTwo(title: ""),
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 15),
@@ -63,9 +64,9 @@ final TextEditingController _confirmPassword = TextEditingController();
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Gap(15),
-                TextSemiBold("Create New Password", color: AppColors.background,fontWeight: FontWeight.w700, fontSize: 20,),
+                TextSemiBold("Create New Password", color: theme == Brightness.light ? AppColors.background : AppColors.white,fontWeight: FontWeight.w700, fontSize: 20,),
                  TextSemiBold(
-                      'Your new password must be unique from those previously used.', fontSize: 14,),
+                      'Your new password must be unique from those previously used.', color: theme == Brightness.light ? AppColors.background : AppColors.white, fontSize: 14,),
                 Gap(15),
                 TextFormField(
                     controller: _newPassword,
@@ -81,7 +82,16 @@ final TextEditingController _confirmPassword = TextEditingController();
                     },
                     obscuringCharacter: '*',
                     decoration: textInputDecoration.copyWith(
-                      fillColor: AppColors.white,
+                      fillColor: theme == Brightness.light ? AppColors.white : AppColors.background,
+                       focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
                       hintText: "Enter your password",
                       suffixIcon: IconButton(
                           onPressed: () {
@@ -97,7 +107,7 @@ final TextEditingController _confirmPassword = TextEditingController();
                     )
                 ),
                 Gap(20),
-                TextSemiBold("Re-type Password", color: AppColors.background,fontWeight: FontWeight.w700,),
+                TextSemiBold("Re-type Password", color: theme == Brightness.light ? AppColors.background : AppColors.white,fontWeight: FontWeight.w700,),
                 Gap(6),
                 TextFormField(
                     controller: _confirmPassword,
@@ -113,7 +123,16 @@ final TextEditingController _confirmPassword = TextEditingController();
                     },
                     obscuringCharacter: '*',
                     decoration: textInputDecoration.copyWith(
-                      fillColor: AppColors.white,
+                      fillColor: theme == Brightness.light ? AppColors.white : AppColors.background,
+                       focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
                       hintText: "Enter your password",
                       suffixIcon: IconButton(
                           onPressed: () {

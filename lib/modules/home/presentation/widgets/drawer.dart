@@ -78,10 +78,22 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        user.authState.user?.profile == null ? const Icon(Icons.verified_user) : CachedNetworkImage(
-                          imageUrl: user.authState.user?.profile ?? "",
-                          placeholder: (context, url) => SizedBox(width: 40.w, height:30, child: const CircularProgressIndicator()),
-                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                        user.authState.user?.profile == null ? const Icon(Icons.verified_user) : 
+                        CircleAvatar(
+                          radius: 30.w,
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              imageUrl: user.authState.user?.profile ?? "",
+                              width: 60.w,
+                              height: 60.h,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => CircleAvatar(
+                                backgroundColor: Theme.of(context).colorScheme.background,
+                                minRadius: 50,
+                                child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) => const Icon(Icons.error, size: 50,),
+                            ),
+                          ),
                         ),
                         // Image.asset("assets/images/Avatar Image.png", width: 40.w,),
                         const Gap(5),

@@ -34,6 +34,8 @@ class PaylonyAppBarTwo extends StatelessWidget implements PreferredSizeWidget {
       title: TextBold(
         title,
         style: Theme.of(context).textTheme.titleLarge,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
       ),
       actions: actions,
       elevation: elevation ?? 0,

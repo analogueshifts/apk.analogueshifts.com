@@ -16,6 +16,7 @@ import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
+import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/edit_profile_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -39,18 +40,28 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme.brightness;
     return Scaffold(
       key: _scaffoldkey,
       appBar: AppBar(
-        leading: TouchableOpacity(
-          onTap:(){
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const HomeNavigation()),
-                    (Route<dynamic> route) => true);
+        elevation: 0,
+        scrolledUnderElevation: 0,
+          leading: TouchableOpacity(
+          onTap: () {
+             Scaffold.of(context).openDrawer();
           },
-          child: const AppBackButton(),
+          child: Container(
+              width: 20, height: 20,
+            margin: EdgeInsets.zero,
+            padding: EdgeInsets.zero,
+            child: const Icon(Icons.menu)
+          ),
         ),
-        title: TextBold(""),
+        centerTitle: true,
+        title: TextSemiBold("Profile", fontSize: 20, color: theme == Brightness.light ? AppColors.background : AppColors.white,),
+        actions: const [
+          NotificationIcon()
+        ],
       ),
       body: Consumer<UserViewModel>(
         builder: (context, UserViewModel user, child) {
@@ -63,11 +74,20 @@ class _ProfileViewState extends State<ProfileView> {
             const Gap(20),
             Row(
               children: [
-                user.authState.user?.profile == null ? Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/avatar_image.png" : "assets/images/profile-black.png"), width: 45,height: 45,) : CachedNetworkImage(
-                imageUrl: user.authState.user?.profile ?? "",
-                // placeholder: (context, url) => SizedBox(width: 40.w, height:30, child: Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/avatar_image.png" : "assets/images/profile-black.png"), width: 45,height: 45,)),
-                errorWidget: (context, url, error) => const Icon(Icons.error_outline_outlined, size: 40,),
-              ),
+                user.authState.user?.profile == null ? Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/avatar_image.png" : "assets/images/profile-black.png"), width: 45,height: 45,) : 
+                ClipOval(
+                  child: CachedNetworkImage(
+                  imageUrl: user.authState.user?.profile ?? "",
+                  width: 60.w,
+                    height: 60.h,
+                    placeholder: (context, url) => CircleAvatar(
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      minRadius: 50,
+                      child: const CircularProgressIndicator()),
+                    errorWidget: (context, url, error) => const Icon(Icons.error, size: 50,),
+                  // placeholder: (context, url) => SizedBox(width: 40.w, height:30, child: Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/avatar_image.png" : "assets/images/profile-black.png"), width: 45,height: 45,)),
+                                ),
+                ),
                 const Gap(8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +106,7 @@ class _ProfileViewState extends State<ProfileView> {
                Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EditProfileScreen()
+              builder: (context) => const EditProfileScreen()
             ),
           );
              }),

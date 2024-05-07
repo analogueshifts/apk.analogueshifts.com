@@ -1,12 +1,22 @@
+import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
+import 'package:analogue_shifts_mobile/core/utils/extensions.dart';
+import 'package:analogue_shifts_mobile/core/utils/functions.dart';
+import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/home/data/model/job_model.dart';
+import 'package:analogue_shifts_mobile/modules/notification/domain/entities/notification.entity.dart';
+import 'package:analogue_shifts_mobile/modules/notification/presentation/notifiers/notification_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -29,73 +39,78 @@ class _NotificationScreenState extends State<NotificationScreen> {
       appBar: PaylonyAppBarTwo(title: "Notification", backTap: () {
         Navigator.pop(context);
       },),
-      body: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      body: Consumer<NotificationProvider>(
+         builder: (context, NotificationProvider notification, child) {
+          logger.d(notification.notifications);
+          if(notification.notifications.isEmpty)return const Text("No Notification");
+              Map<String, List<Datum>> groupedNotifications =
+      groupBy(notification.notifications.toList(), (Datum notification) {
+        String createdAtDate = DateFormat('yyyy-MM-dd').format(notification.createdAt!);
+        return createdAtDate;
+      });
+        return ListView.builder(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+    itemCount: groupedNotifications.length,
+    itemBuilder: (BuildContext context, int index) {
+      String date = groupedNotifications.keys.elementAt(index);
+      List<Datum> notificationsForDate = groupedNotifications[date]!;
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Gap(15),
-          TextSemiBold("NEW JOB ALERT",style:  Theme.of(context).textTheme.bodySmall?.copyWith(
-            fontSize: 13,
-            fontWeight: FontWeight.w600
-          )),
-          const Gap(7),
-          Column(
-            children: [
-              Column(
-                children: _recentJob.map((e) => _recentJobCard(e.image, e.title, e.description)).toList(),
-              )
-            ],
+          TextSemiBold(Functions.dateConverter(DateTime.parse(date)), color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : const Color(0xffFFFFFF).withOpacity(0.7),),
+          const Gap(10),
+          
+          ...notificationsForDate.mapIndexed(
+            (index, notification) => 
+           _notificationCard(notification, index == notificationsForDate.length - 1)
           ),
-          const Gap(20),
-          TextSemiBold("YESTERDAY",style:  Theme.of(context).textTheme.bodySmall?.copyWith(
-            fontSize: 13,
-            fontWeight: FontWeight.w600
-          )),
-          const Gap(7),
-          Column(
-            children: [
-              Column(
-                children: _recentJob.map((e) => _recentJobCard(e.image, e.title, e.description)).toList(),
-              )
-            ],
-          ),
-          const Gap(20),
-          TextSemiBold("2/2/2024",style:  Theme.of(context).textTheme.bodySmall?.copyWith(
-            fontSize: 13,
-            fontWeight: FontWeight.w600
-          )),
-          const Gap(7),
-          Column(
-            children: [
-              Column(
-                children: _recentJob.map((e) => _recentJobCard(e.image, e.title, e.description)).toList(),
-              )
-            ],
-          )
         ],
+      );
+    },
+  );
+         }
       ),
     );
   }
 
-   Widget _recentJobCard(String image, String title, String description) {
-    return Container(
-      margin: EdgeInsets.only(top: 20),
-      height: 40.h,
-      width: double.infinity,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image(image: AssetImage(image), width: 60, height: 40.h,),
-          const Gap(12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+   Widget _notificationCard(Datum data, bool isLast) {
+    logger.d(isLast);
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextSemiBold(title, fontSize: 14,fontWeight: FontWeight.w600, style: Theme.of(context).textTheme.bodyLarge,),
-              TextSemiBold(description, style: Theme.of(context).textTheme.bodySmall,)
+              data.image == null ? const Icon(Icons.notifications_active, size: 20,) : ClipOval(
+                 child: CachedNetworkImage(
+                   imageUrl: data.image,
+                  //  width: 40.w,
+                  //  height: 40.h,
+                   fit: BoxFit.cover,
+                   placeholder: (context, url) => const CircularProgressIndicator(),
+                   errorWidget: (context, url, error) => const Icon(Icons.error, size: 20,),
+                 ),
+               ),
+              const Gap(12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextSemiBold(data.title.toString(), fontSize: 14,fontWeight: FontWeight.w600, style: Theme.of(context).textTheme.bodyLarge,),
+            
+                  TextSemiBold(data.message.toString(), style: Theme.of(context).textTheme.bodySmall, overflow: TextOverflow.ellipsis,)
+                ],
+              )
             ],
-          )
-        ],
-      ),
+          ),
+        ),
+        const Gap(10),
+       isLast ? const Text("") :  Divider(color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xffE4E4E4) : const Color(0xffFFFFFF).withOpacity(0.24), )
+      ],
     );
   }
 }

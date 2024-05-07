@@ -7,6 +7,8 @@ import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/home/data/model/job_model.dart';
+import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -99,10 +101,7 @@ class _JobViewState extends State<JobView> {
         title: TextBold("Jobs", fontSize: 20, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
         centerTitle: true,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: SvgPicture.asset(AppAsset.notificationIicon),
-          )
+          NotificationIcon()
         ],
       ),
       body: Consumer<JobProvider>(
@@ -182,18 +181,13 @@ class _JobViewState extends State<JobView> {
                       // logger.d(e);
                       return Column(
                         children: [
-                          _recentJobCard(e.hiringOrganization?.logo ?? "", e.title ?? "", e.hiringOrganization?.name ?? ""),
+                          _recentJobCard(e),
                           Gap(10),
                           Divider(color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xffE4E4E4) : Color(0xffFFFFF).withOpacity(0.24),)
                         ],
                       );
-                      // return _recentJobCard(jobData.hiringOrganization?.logo, jobData.title.toString(), jobData.hiringOrganization?.name.toString() ?? "");
                     }
                 ),
-                // job == null ? CircularProgressIndicator() :
-                // Column(
-                //   children: job.job.map((e) => _recentJobCard(e.hiringOrganization?.logo ?? "", e.title ?? "", e.hiringOrganization?.name ?? "")).toList(),
-                // )
                 Gap(20),
                 _isPaginateButton ? BusyButton(title: "Load More...", onTap:() {
                   final _updateCurrentPage = job.currentPage + 1;
@@ -208,19 +202,20 @@ class _JobViewState extends State<JobView> {
     );
   }
 
-  Widget _recentJobCard(String image, String title, String organization) {
-    logger.d(image);
+  Widget _recentJobCard(Datum data) {
+   final image = data.hiringOrganization == null ? null : data.hiringOrganization;
+    // logger.d(data.hiringOrganization?.logo);
     return Container(
-      
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
       child: ListTile(
         contentPadding: EdgeInsets.zero,
-        leading: CachedNetworkImage(
-          imageUrl: image,
+        leading: image == null ? SvgPicture.asset("assets/images/work-image.svg") : image.logo == null ?  SvgPicture.asset("assets/images/work-image.svg") :
+         CachedNetworkImage(
+          imageUrl: "",
           placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
           errorWidget: (context, url, error) => Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
         ),
-        title: TextSemiBold(title, fontSize: 14,fontWeight: FontWeight.w600,), subtitle: TextSemiBold(organization, fontSize: 11,color: AppColors.grey, fontWeight: FontWeight.w400,),),
+        title: TextSemiBold(data.title.toString(), fontSize: 14,fontWeight: FontWeight.w600,), subtitle: TextSemiBold(data.hiringOrganization?.name.toString() ?? "Unknown Company", fontSize: 11,color: AppColors.grey, fontWeight: FontWeight.w400,),),
     );
   }
 }

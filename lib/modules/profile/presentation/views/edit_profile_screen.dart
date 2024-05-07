@@ -58,13 +58,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             child: ListView(
               children: [
-                user.authState.user?.profile == null && upload.uploadedImage == null ? const Icon(Icons.verified_user) : CachedNetworkImage(
-                  imageUrl: upload.uploadedImage ?? user.authState.user?.profile ?? "",
-                  placeholder: (context, url) => CircleAvatar(
-                    backgroundColor: Theme.of(context).colorScheme.background,
-                    minRadius: 50,
-                    child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) => const Icon(Icons.error, size: 50,),
+                user.authState.user?.profile == null && upload.uploadedImage == null ? const Icon(Icons.verified_user) : CircleAvatar(
+                  radius: 30.w,
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      imageUrl: upload.uploadedImage ?? user.authState.user?.profile ?? "",
+                      width: 60.w,
+                      height: 60.h,
+                      placeholder: (context, url) => CircleAvatar(
+                        backgroundColor: Theme.of(context).colorScheme.background,
+                        minRadius: 50,
+                        child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => const Icon(Icons.error, size: 50,),
+                    ),
+                  ),
                 ),
                 const Gap(8),
                 TouchableOpacity(

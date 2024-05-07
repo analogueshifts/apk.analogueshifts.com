@@ -9,6 +9,7 @@ import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_view
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/drawer.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/job_view.dart';
+import 'package:analogue_shifts_mobile/modules/notification/presentation/notifiers/notification_provider.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -42,7 +43,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
       if(mounted){
         context.read<UserViewModel>().fetchUser(context);
         context.read<JobProvider>().getJobs(context);
-        
+        context.read<NotificationProvider>().getNotifications(context);
       }
     });
   }
