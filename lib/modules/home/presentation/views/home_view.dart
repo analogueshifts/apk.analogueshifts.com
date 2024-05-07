@@ -2,18 +2,28 @@ import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
+import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
+import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
+import 'package:analogue_shifts_mobile/core/utils/functions.dart';
+import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/data/model/job_model.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({super.key,});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -21,15 +31,15 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final List<JobPost> _jobpost = [
-    JobPost(image: "assets/images/jobPost1.png", text: "\$50 - \$75/hr", title: "Software Engineer"),
-    JobPost(image: "assets/images/jobPost1.png", text: "\$40 - \$65/hr", title: "Software Designer"),
+    JobPost(image: "assets/images/job-delete1.png", text: "\$50 - \$75/hr", title: "Software Engineer"),
+    JobPost(image: "assets/images/jobPost1.png", text: "\$40 - \$65/hr", title: "Creative Designer"),
     JobPost(image: "assets/images/jobPost1.png", text: "\$50 - \$75/hr", title: "Software Engineer"),
   ];
 
   final List<RecentJob> _recentJob = [
     RecentJob(image: "assets/images/youtube.png", title: "Mid-level Security Analyst", description: "Youtube"),
-    RecentJob(image: "assets/images/youtube.png", title: "Mid-level Security Analyst", description: "Youtube"),
-    RecentJob(image: "assets/images/youtube.png", title: "Mid-level Security Analyst", description: "Youtube"),
+    RecentJob(image: "assets/images/moniepoint.png", title: "Software Engineer", description: "Moniepoint"),
+    RecentJob(image: "assets/images/work-hotshift.png", title: "Data Analyst", description: "Hostshifts"),
   ];
 
   final TextEditingController _search = TextEditingController();
@@ -40,6 +50,10 @@ class _HomeViewState extends State<HomeView> {
     setState(() {
       _isLoading = true;
     });
+    FocusScopeNode currentFocus = FocusScope.of(context);
+                        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                          currentFocus.focusedChild?.unfocus();
+                        }
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         if(mounted){
@@ -53,6 +67,11 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
 
   @override
   void dispose() {
@@ -61,23 +80,59 @@ class _HomeViewState extends State<HomeView> {
   }
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<UserViewModel>();
+    final name = Functions.capitalize(user.authState.user?.name ?? "");
+    final splitName = name.split(' ');
+    final firstName = splitName[0];
     return Scaffold(
-      backgroundColor: AppColors.white,
-
+      
       appBar: AppBar(
         elevation: 0,
-        systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark, statusBarColor: Colors.transparent),
-        // backgroundColor: Colors.white,
-        leading: Container(
-            width: 20, height: 20,
-          margin: const EdgeInsets.only(left: 8.0),
-          child: Image.asset("assets/images/Avatar Image.png",),
+        leading: TouchableOpacity(
+          onTap: () {
+             Scaffold.of(context).openDrawer();
+          },
+          child: Container(
+              width: 20, height: 20,
+            margin: EdgeInsets.zero,
+            padding: EdgeInsets.zero,
+            child: const Icon(Icons.menu)
+          ),
         ),
-        title: TextBold("Hi, John", fontSize: 20,),
+        title: Text(
+          'Hi, ${firstName}',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            fontSize: 16,
+            fontFamily: AppFonts.manRope
+          )
+        ),
+        centerTitle: false,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: SvgPicture.asset(AppAsset.notificationIicon),
+          InkWell(
+            onTap: () => Navigator.pushNamed(context, Routes.notification),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Stack(
+                children: [
+                  Positioned(
+                    right: 4,
+                    top: 2,
+                    child: Container(
+                      alignment: Alignment.topRight,
+                      height: 7,
+                      width: 7,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(18)
+                      ),
+                    ),
+                  ),
+                  const Icon(Icons.notifications_none_outlined
+                )
+                ]
+                
+                )
+            ),
           )
         ],
       ),
@@ -86,9 +141,9 @@ class _HomeViewState extends State<HomeView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Gap(10),
+            const Gap(10),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               child: Row(
                 children: [
                   Expanded(
@@ -97,14 +152,31 @@ class _HomeViewState extends State<HomeView> {
                       height: 60,
                       child: TextFormField(
                         controller: _search,
-                        decoration: textInputDecoration.copyWith(
-                          prefixIcon: _isLoading ? Container(margin: EdgeInsets.only(left:
-                          5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: CircularProgressIndicator(color: AppColors.primaryColor,),)  : Icon(Icons.search)
+                         decoration: textInputDecoration.copyWith(
+                            fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
                         ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                        ),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
+                        hintText: "Search",
+                              prefixIcon: _isLoading ? Container(margin: const EdgeInsets.only(left:
+                              5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: const CircularProgressIndicator(color: AppColors.primaryColor,),)  : Icon(Icons.search, color: Theme.of(context).iconTheme.color,)
+                          ),
                       ),
                     ),
                   ),
-                  Gap(10),
+                  const Gap(10),
                   Expanded(
                     flex: 1,
                     child: TouchableOpacity(
@@ -118,24 +190,24 @@ class _HomeViewState extends State<HomeView> {
                           color: AppColors.primaryColor,
                           borderRadius: BorderRadius.circular(10)
                         ),
-                        child:Icon(Icons.tune_outlined, color: Colors.white,),
+                        child:const Icon(Icons.tune_outlined, color: Colors.white,),
                       ),
                     ),
                   )
                 ],
               ),
             ),
-            Gap(30),
+            const Gap(30),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
               child: TextSemiBold("Reconmended", fontSize: 20, fontWeight: FontWeight.w700,),
             ),
-            Gap(10),
+            const Gap(8),
             SizedBox(
-              height: screenHeight(context) * 0.25,
-
+              height: 160.h,
+              width: double.infinity,
               child: ListView.builder(
-                padding: EdgeInsets.only(left: 15),
+                padding: const EdgeInsets.only(left: 15),
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 itemCount: _jobpost.length,
@@ -145,17 +217,33 @@ class _HomeViewState extends State<HomeView> {
                   }
               ),
             ),
-            Gap(50),
+            Gap(20),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-              child: TextSemiBold("Recently Posted", fontSize: 20, fontWeight: FontWeight.w700,),
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+              child: TextSemiBold("Recently Posted", fontSize: 20, fontWeight: FontWeight.w700, style: Theme.of(context).textTheme.titleLarge,),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              child: Column(
-                children: _recentJob.map((e) => _recentJobCard(e.image, e.title, e.description)).toList(),
-              ),
-            )
+           Consumer<JobProvider>(
+              builder: (context, job, child) {
+              return  job.job.isEmpty && job.jobhState.isGenerating ? Center(child: CircularProgressIndicator()) : ListView.builder( 
+                physics: const NeverScrollableScrollPhysics(),
+                
+                shrinkWrap: true,
+                itemCount: job.job.length > 3 ? 3 : job.job.length,
+                itemBuilder:(context, index) {
+                  final e = job.job[index];
+                  // logger.d(e);
+                  return _recentJobCard(e.hiringOrganization?.logo ?? "", e.title ?? "", e.hiringOrganization?.name ?? "");
+                  // return _recentJobCard(jobData.hiringOrganization?.logo, jobData.title.toString(), jobData.hiringOrganization?.name.toString() ?? "");
+                }
+             );
+              }
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            //   child: Column(
+            //     children: _recentJob.map((e) => _recentJobCard(e.image, e.title, e.description)).toList(),
+            //   ),
+            // )
           ],
         ),
       ),
@@ -163,45 +251,42 @@ class _HomeViewState extends State<HomeView> {
   }
   Widget _jobCard(String image, String title, String text){
     return Container(
-      margin: EdgeInsets.only(right: 15),
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Color(0xffFFBB0A).withOpacity(0.07)
-      ),
+      height: 160.h,
+      width: 170.w,
+      margin: const EdgeInsets.only(right: 15),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image(image:AssetImage(image), height: screenHeight(context) * 0.15,),
-          Gap(15),
-          TextBold(title, fontSize: 14,),
-          Gap(8),
+          SizedBox(
+            width: 150.w,
+            height: 80.h,
+            child: Image(image:AssetImage(image), fit: BoxFit.fill,)),
+          const Gap(15),
+          TextBold(title, fontSize: 14, style: Theme.of(context).textTheme.bodyMedium,),
+          const Gap(8),
           TextSemiBold(text, fontSize: 11, color: AppColors.grey,)
         ],
       ),
     );
   }
 
-  Widget _recentJobCard(String image, String title, String description) {
+   Widget _recentJobCard(String image, String title, String organization) {
+    logger.d(image);
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Color(0xffFFBB0A).withOpacity(0.07)
-      ),
-      child: Row(
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+      child: Column(
         children: [
-          Image(image: AssetImage(image), width: 60, height: 60,),
-          Gap(6),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextSemiBold(title, fontSize: 14,fontWeight: FontWeight.w600,),
-              TextSemiBold(description, fontSize: 11,color: AppColors.grey, fontWeight: FontWeight.w400,)
-            ],
-          )
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: CachedNetworkImage(
+              imageUrl: image,
+              placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
+              errorWidget: (context, url, error) => Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
+            ),
+            title: TextSemiBold(title, fontSize: 14,fontWeight: FontWeight.w600,), subtitle: TextSemiBold(organization, fontSize: 11,color: AppColors.grey, fontWeight: FontWeight.w400,),),
+            // Gap(10),
+            Divider(color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xffE4E4E4) : Color(0xffFFFFF).withOpacity(0.24),)
         ],
       ),
     );

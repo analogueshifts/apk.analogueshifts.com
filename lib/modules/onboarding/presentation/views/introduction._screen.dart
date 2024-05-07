@@ -1,13 +1,16 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/core/constants/constants.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
+import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
+import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/create_account_view.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/login_view.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/illustrator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,6 +26,8 @@ class IntroductionScreen extends StatefulWidget {
 
 class _IntroductionScreenState extends State<IntroductionScreen> {
   int currentIndex = 0;
+  dynamic data = '';
+
 
   late PageController _pageController;
 
@@ -43,7 +48,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
       _isAnimated = true;
     });
     // Reset the animation after 5 seconds
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
+      if(!mounted)return;
       setState(() {
         _isAnimated = false;
       });
@@ -62,94 +68,213 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     super.dispose();
   }
 
+  final _db = getIt<DBService>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+  
       body: Column(
         children: [
           Expanded(
-            child: Container(
-              // height: screenHeight(context) * 0.5,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(50),
-                  bottomLeft: Radius.circular(50),
-                ),
-                color: currentIndex == 0 ? AppColors.secondaryYellow.withOpacity(0.33) : currentIndex == 1 ? Color(0xff690A3F).withOpacity(0.11) : Color(0xffB73F39).withOpacity(0.18),
-              ),
-              child: SafeArea(
-                child: Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(right: 20, left: 20),
-                      // alignment: Alignment.topRight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Visibility(
-                            visible: currentIndex < 1 ? false : true,
-                            child: InkWell(
-                              onTap: () {
-                                if (currentIndex == 0) {
-                                } else {
-                                  _pageController.previousPage(
-                                    duration: Duration(milliseconds: 400),
-                                    curve: Curves.linearToEaseOut,
-                                  );
-                                }
-                              },
-                              child: Icon(Icons.keyboard_arrow_left_outlined)
-                            ),
-                          ),
-                          Visibility(
-                            visible: currentIndex > 1 ? false : true,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(builder: (context) => Authenticate()),
-                                        (Route<dynamic> route) => true);
-                              },
-                              child: Text(
-                                'Skip',
-                                style: TextStyle(
-                                  color: AppColors.primaryGrey.withOpacity(0.33),
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: AppFonts.manRope,
-                                ),
-                              ).animate().slide(),
-                            ),
-                          ),
-                        ],
-                      ),
+            child: PageView(
+                  scrollDirection: Axis.horizontal,
+                  controller: _pageController,
+                  onPageChanged: (int index) {
+                    print(index);
+                    setState(() {
+                      currentIndex = index;
+                    });
+                  },
+              children: [
+                Container(
+                  width: double.infinity,
+                  // height: screenHeight(context) * 0.5,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      bottomRight: Radius.circular(50),
+                      bottomLeft: Radius.circular(50),
                     ),
-                    SizedBox(
-                      // width: double.infinity,
-                      height: screenHeight(context) * 0.4,
-                      child: PageView(
-                        scrollDirection: Axis.horizontal,
-                        controller: _pageController,
-                        onPageChanged: (int index) {
-                          setState(() {
-                            currentIndex = index;
-                          });
-                        },
-                        children: [
-                          Image.asset(AppAsset.onboard1),
-                          Image.asset(AppAsset.onboard2),
-                          Image.asset(AppAsset.onboard3),
-                        ],
-                      ),
-                    )
-                  ],
+                    image: DecorationImage(image: AssetImage(currentIndex == 0 ? AppAsset.onboard1: currentIndex == 1 ? AppAsset.onboard2 : AppAsset.onboard3), fit: BoxFit.fill)
+                    // color: currentIndex == 0 ? AppColors.secondaryYellow.withOpacity(0.33) : currentIndex == 1 ? const Color(0xff690A3F).withOpacity(0.11) : const Color(0xffB73F39).withOpacity(0.18),
+                  ),
+                  child: SafeArea(
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(right: 20, left: 20),
+                          // alignment: Alignment.topRight,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Visibility(
+                                visible: currentIndex < 1 ? false : true,
+                                child: InkWell(
+                                  onTap: () {
+                                    if (currentIndex == 0) {
+                                    } else {
+                                      _pageController.previousPage(
+                                        duration: const Duration(milliseconds: 400),
+                                        curve: Curves.linearToEaseOut,
+                                      );
+                                    }
+                                  },
+                                  child: const Icon(Icons.keyboard_arrow_left_outlined)
+                                ),
+                              ),
+                              Visibility(
+                                visible: currentIndex > 1 ? false : true,
+                                child: InkWell(
+                                  onTap: () {
+                                    _db.save('onboard', "1");
+                                    context.replace(Routes.authenticate);
+                                  },
+                                  child: Text(
+                                    'Skip',
+                                    style: TextStyle(
+                                      color: AppColors.primaryGrey.withOpacity(0.33),
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: AppFonts.manRope,
+                                    ),
+                                  ).animate().slide(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+                Container(
+                  width: double.infinity,
+                  // height: screenHeight(context) * 0.5,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      bottomRight: Radius.circular(50),
+                      bottomLeft: Radius.circular(50),
+                    ),
+                    image: DecorationImage(image: AssetImage(currentIndex == 0 ? AppAsset.onboard1: currentIndex == 1 ? AppAsset.onboard2 : AppAsset.onboard3), fit: BoxFit.fill)
+                    // color: currentIndex == 0 ? AppColors.secondaryYellow.withOpacity(0.33) : currentIndex == 1 ? const Color(0xff690A3F).withOpacity(0.11) : const Color(0xffB73F39).withOpacity(0.18),
+                  ),
+                  child: SafeArea(
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(right: 20, left: 20),
+                          // alignment: Alignment.topRight,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Visibility(
+                                visible: currentIndex < 1 ? false : true,
+                                child: InkWell(
+                                  onTap: () {
+                                    if (currentIndex == 0) {
+                                    } else {
+                                      _pageController.previousPage(
+                                        duration: const Duration(milliseconds: 400),
+                                        curve: Curves.linearToEaseOut,
+                                      );
+                                    }
+                                  },
+                                  child: const Icon(Icons.keyboard_arrow_left_outlined)
+                                ),
+                              ),
+                              Visibility(
+                                visible: currentIndex > 1 ? false : true,
+                                child: InkWell(
+                                  onTap: () {
+                                    _db.save('onboard', "1");
+                                    context.replace(Routes.authenticate);
+                                  },
+                                  child: Text(
+                                    'Skip',
+                                    style: TextStyle(
+                                      color: AppColors.primaryGrey.withOpacity(0.33),
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: AppFonts.manRope,
+                                    ),
+                                  ).animate().slide(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  // height: screenHeight(context) * 0.5,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      bottomRight: Radius.circular(50),
+                      bottomLeft: Radius.circular(50),
+                    ),
+                    image: DecorationImage(image: AssetImage(currentIndex == 0 ? AppAsset.onboard1: currentIndex == 1 ? AppAsset.onboard2 : AppAsset.onboard3), fit: BoxFit.fill)
+                    // color: currentIndex == 0 ? AppColors.secondaryYellow.withOpacity(0.33) : currentIndex == 1 ? const Color(0xff690A3F).withOpacity(0.11) : const Color(0xffB73F39).withOpacity(0.18),
+                  ),
+                  child: SafeArea(
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(right: 20, left: 20),
+                          // alignment: Alignment.topRight,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Visibility(
+                                visible: currentIndex < 1 ? false : true,
+                                child: InkWell(
+                                  onTap: () {
+                                    if (currentIndex == 0) {
+                                    } else {
+                                      _pageController.previousPage(
+                                        duration: const Duration(milliseconds: 400),
+                                        curve: Curves.linearToEaseOut,
+                                      );
+                                    }
+                                  },
+                                  child: const Icon(Icons.keyboard_arrow_left_outlined)
+                                ),
+                              ),
+                              Visibility(
+                                visible: currentIndex > 1 ? false : true,
+                                child: InkWell(
+                                  onTap: () {
+                                    _db.save('onboard', "1");
+                                      SchedulerBinding.instance.addPostFrameCallback((_) async {
+                                          Navigator.of(context).pushNamedAndRemoveUntil(
+                                              Routes.authenticate,
+                                              (Route<dynamic> route) => false);
+                                        });
+                                  },
+                                  child: Text(
+                                    'Skip',
+                                    style: TextStyle(
+                                      color: AppColors.primaryGrey.withOpacity(0.33),
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: AppFonts.manRope,
+                                    ),
+                                  ).animate().slide(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
 
           Expanded(
             child: Container(
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 30),
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 30),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -170,16 +295,16 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: AppColors.background,
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,
                             fontSize: 26.0,
                             fontFamily: AppFonts.manRope,
                             height: 1.2,
                           ),
                         ).animate().slideY(),
                       ),
-                      SizedBox(height: 15),
-                      Text(
-                        'Lorem ipsum dolor sit amet consectetur. Tristique ullamcorper lacus risus ac dui sed at ac sed. ',
+                      const SizedBox(height: 15),
+                      const Text(
+                        'Welcome to Analogue Shifts, where tailored jobs meet talented individuals - your gateway to fulfilling careers.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
@@ -200,7 +325,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: AppColors.background,
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,
                             fontSize: 26.0,
                             fontFamily: AppFonts.manRope,
                             height: 1.2,
@@ -209,7 +334,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                       ),
                       SizedBox(height: 15),
                       Text(
-                        'Lorem ipsum dolor sit amet consectetur. Tristique ullamcorper lacus risus ac dui sed at ac sed. ',
+                        'Explore endless possibilities and discover your next career move with our comprehensive job search feature',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
@@ -230,16 +355,16 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                           maxLines: 1,
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: AppColors.background,
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,
                             fontSize: 26.0,
                             fontFamily: AppFonts.manRope,
                             height: 1.2,
                           ),
                         ).animate().slideY(),
                       ),
-                      SizedBox(height: 15),
-                      Text(
-                        'Lorem ipsum dolor sit amet consectetur. Tristique ullamcorper lacus risus ac dui sed at ac sed. ',
+                      const SizedBox(height: 15),
+                      const Text(
+                        'Ready to embark on your career journey? Let\'s find the perfect job for you together!',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
@@ -258,9 +383,12 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   onTap: () {
                     _handleTap();
                     if (currentIndex == 2) {
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (context) => Authenticate()),
-                              (Route<dynamic> route) => true);
+                      _db.save('onboard', "1");
+                      SchedulerBinding.instance.addPostFrameCallback((_) async {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              Routes.authenticate,
+                              (Route<dynamic> route) => false);
+                        });
                     } else {
                       _pageController.nextPage(
                         duration: const Duration(milliseconds: 10),
@@ -268,25 +396,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                       );
                     }
                   },
-                  child:currentIndex == 2 ?  Container(
-                    width: screenWidth(context) * 0.5,
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                    height: 55,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: currentIndex != 2 ? Icon(Icons.arrow_forward_outlined, color: Colors.white,) : Text(
-                        currentIndex == 2 ? 'Get Started' : 'Next',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimaryColor,
-                          fontFamily: AppFonts.manRope,
-                        ),
-                      ), 
-                    ),
-                  ) : AnimatedContainer(
+                  child: AnimatedContainer(
                     width: 70,
                     // margin: const EdgeInsets.symmetric(horizontal: 20),
                     height: 70,
@@ -295,18 +405,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                       // color: AppColors.primaryColor,
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    duration: Duration(seconds: 1),
+                    duration: const Duration(seconds: 1),
 
 
                     child: Center(
-                      child: currentIndex != 2 ? Icon(Icons.arrow_forward_outlined, color: Colors.white,size: 30,) : Text(
-                        currentIndex == 2 ? 'Proceed' : 'Next',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimaryColor,
-                          fontFamily: AppFonts.manRope,
-                        ),
-                      ),
+                      child: const Icon(Icons.arrow_forward_outlined, color: Colors.white,size: 30,)
                     ),
                   ),
                 )

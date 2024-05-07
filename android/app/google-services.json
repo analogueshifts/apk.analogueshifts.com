@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "40068646233",
+    "project_id": "analogue-shifts",
+    "storage_bucket": "analogue-shifts.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:40068646233:android:7db1ba5d7739e4e899f848",
+        "android_client_info": {
+          "package_name": "com.example.analogue_shifts_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "40068646233-353skg8bdn8nhuqsaq0o1ner51thqr0e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi4ARPy9EQLZ4h22ysmz4LiqxWo5i3t2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "40068646233-353skg8bdn8nhuqsaq0o1ner51thqr0e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

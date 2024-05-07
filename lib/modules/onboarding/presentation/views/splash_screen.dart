@@ -1,5 +1,11 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
+import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_widgets.dart';
+import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
+import 'package:analogue_shifts_mobile/core/services/db_service.dart';
+import 'package:analogue_shifts_mobile/core/utils/logger.dart';
+import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
+import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/introduction._screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,12 +23,21 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final _db = getIt<DBService>();
   Future<void> _toOnboard() async {
-    // context.goNamed(Routes.authenticate);
-    // MaterialApp.router
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => IntroductionScreen()),
-            (Route<dynamic> route) => true);
+    final db = _db.getToken();
+    if(_db.get('onboard') == null){
+      Navigator.popAndPushNamed(context, Routes.introduction);
+    }else{
+      if (_db.getToken() != null){
+        logger.d(_db.getToken());
+        Navigator.popAndPushNamed(context, Routes.homeNavigation);
+      }else{
+         Navigator.popAndPushNamed(context, Routes.authenticate);
+      }
+    }
+    // logger.d(db);
+
   }
 
   @override
@@ -33,15 +48,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    screenHeight(context);
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark, statusBarColor: Colors.transparent),
-      ),
       body: Center(child:  SizedBox(
         width: 150,
         height: 150,
-        child: AppWidgets().logoIcon .animate(
+        child: Image.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? AppAsset.logo : "assets/images/logo-black.png").animate(
             onPlay: (controller) =>
                 controller.repeat(reverse: true))
             .shimmer(
