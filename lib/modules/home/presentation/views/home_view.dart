@@ -224,7 +224,7 @@ class _HomeViewState extends State<HomeView> {
             ),
            Consumer<JobProvider>(
               builder: (context, job, child) {
-              return  job.job.isEmpty && job.jobhState.isGenerating ? CircularProgressIndicator() : ListView.builder( 
+              return  job.job.isEmpty && job.jobhState.isGenerating ? Center(child: CircularProgressIndicator()) : ListView.builder( 
                 physics: const NeverScrollableScrollPhysics(),
                 
                 shrinkWrap: true,

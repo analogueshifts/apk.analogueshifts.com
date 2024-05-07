@@ -100,10 +100,9 @@ Future<void> setupDependencies() async{
   );
 
   getIt.registerSingleton<DBService>(DBService());
-  await getIt<DBService>().startHive();
-
   getIt.registerSingleton<AppChangeNotifier>(AppChangeNotifier());
   getIt.registerSingleton<UserViewModel>(UserViewModel());
+  await getIt<DBService>().startHive();
   await getIt<AppChangeNotifier>().initAppTheme();
     await getIt<FirebaseHandler>().init();
     await getIt<UserViewModel>().init();

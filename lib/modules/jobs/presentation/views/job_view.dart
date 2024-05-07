@@ -165,7 +165,7 @@ class _JobViewState extends State<JobView> {
                   ],
                 ),
                 const Gap(30),
-                job == null ? Center(
+                job.job.isEmpty ? Center(
                   child: Column(
                     children: [
                       TextSemiBold("No job available")

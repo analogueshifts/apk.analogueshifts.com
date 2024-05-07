@@ -35,9 +35,9 @@ final _db = getIt<DBService>();
     logger.d(user.email);
     try {
       await _db.removeAuthToken();
-      if (await _deviceNetwork.isConnected() == false) {
-        throw const SocketException('Network Error');
-      }
+      // if (await _deviceNetwork.isConnected() == false) {
+      //   throw const SocketException('Network Error');
+      // }
       
       final response = await dioManager.dio.post(
         'login',
@@ -66,9 +66,9 @@ final _db = getIt<DBService>();
   Future<Either<Exception, String>> registerUser(RegisterRequest payload) async {
     try {
       await _db.removeAuthToken();
-      if (await _deviceNetwork.isConnected() == false) {
-        throw Exception("Network Error");
-      }
+      // if (await _deviceNetwork.isConnected() == false) {
+      //   throw Exception("Network Error");
+      // }
       
       final response = await dioManager.dio.post(
         'register',
@@ -196,9 +196,9 @@ final _db = getIt<DBService>();
   Future<Either<Exception, User>> updateUser(User user) async {
     logger.d(user.email);
     try {
-      if (await _deviceNetwork.isConnected() == false) {
-        throw const SocketException('Network Error');
-      }
+      // if (await _deviceNetwork.isConnected() == false) {
+      //   throw const SocketException('Network Error');
+      // }
       
       final response = await dioManager.dio.post(
         'profile',
@@ -244,9 +244,9 @@ final _db = getIt<DBService>();
   @override
   Future<Either<Exception, NoDataResponse>> createNewPassword(CreateForgetNewPasswordEntity payload) async {
     try {
-      if (await _deviceNetwork.isConnected() == false) {
-        throw const SocketException('Network Error');
-      }
+      // if (await _deviceNetwork.isConnected() == false) {
+      //   throw const SocketException('Network Error');
+      // }
       
       final response = await dioManager.dio.post(
         'reset-password',
@@ -276,9 +276,9 @@ final _db = getIt<DBService>();
   Future<Either<Exception, User>> verifyEmail(String otp) async {
     logger.d('otp---<< ${otp}');
     try {
-      if (await _deviceNetwork.isConnected() == false) {
-        throw const SocketException('Network Error');
-      }
+      // if (await _deviceNetwork.isConnected() == false) {
+      //   throw const SocketException('Network Error');
+      // }
       
       final response = await dioManager.dio.post(
         'email/verification-otp',

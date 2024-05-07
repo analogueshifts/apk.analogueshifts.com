@@ -26,8 +26,20 @@ class AnalogueApp extends StatefulWidget {
 class _AnalogueAppState extends State<AnalogueApp> {
   final messagingService = PushNotificationService();
 
+  bool _isLoading = false;
+
+void updateState(bool value){
+  if(!mounted)return;
+  setState(() {
+    _isLoading = value;
+  });
+}
+
+
   @override
   void initState() {
+   if(!mounted)return;
+   
     messagingService.initialize();
     super.initState();
   }
@@ -42,12 +54,13 @@ class _AnalogueAppState extends State<AnalogueApp> {
       splitScreenMode: true,
         child: Consumer<AppChangeNotifier>(
            builder: (context, AppChangeNotifier appNotifier, child) {
-            Logger().d(appNotifier.isDarkMode);
-          Logger().i(getIt<AppChangeNotifier>().isDarkMode);
           return MaterialApp(
             // routeInformationProvider:
              initialRoute: Routes.startUp,
             onGenerateRoute: generateRoute,
+            //  theme: appNotifier.themeMode == ThemeMode.light ? lightTheme : darkTheme,
+          darkTheme: darkTheme,
+          themeMode: appNotifier.themeMode,
             // getIt<GoRouter>().routeInformationProvider,
             // routeInformationParser: getIt<GoRouter>().routeInformationParser,
             // routerDelegate: getIt<GoRouter>().routerDelegate,
@@ -56,7 +69,7 @@ class _AnalogueAppState extends State<AnalogueApp> {
             // themeMode:  getIt<AppChangeNotifier>().isDarkMode != null && true ? ThemeMode.dark : ThemeMode.light,
             // darkTheme: darkTheme,
             
-            theme: getIt<AppChangeNotifier>().isDarkMode == true ? darkTheme : lightTheme
+            // theme: appNotifier.isDarkMode == true ? darkTheme : lightTheme
             // theme: appNotifier.isDarkMode == null || appNotifier.isDarkMode == false && getIt<AppChangeNotifier>().isDarkMode  == false  ? lightTheme : darkTheme
           );
            }

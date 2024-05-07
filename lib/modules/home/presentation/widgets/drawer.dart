@@ -32,6 +32,7 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
 
   final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+    final _db = getIt<DBService>();
 
 @override
   void initState() {
@@ -170,17 +171,25 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   return Transform.scale(
                     scale: 0.7,
                     child: Switch(
-                      value: app.isDarkMode,
+                      value: app.themeMode == ThemeMode.dark ? true : false,
                       activeColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xffEBEBEB).withOpacity(0.5) : AppColors
                       .primaryColor,
-                      activeTrackColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.06) : AppColors
-                      .primaryColor,
+                      activeTrackColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.06) : Color(0xffEBEBEB),
                       onChanged: (bool value) {
+                        if(value == true){
+
+                          _db.saveTheme(value);
+                          app.changeTheme(ThemeMode.dark);
+                        }else{
+                           _db.saveTheme(value);
+                          app.changeTheme(ThemeMode.light);
+                        }
+                        
                         // if(mounted == false)return;
                         // setState(() {
                         //   biometrics = value;
                           Logger().d(value);
-                          context.read<AppChangeNotifier>().toggleTheme(value);
+                          // context.read<AppChangeNotifier>().toggleTheme(value);
                         // });
                       },
                     ),

@@ -42,7 +42,7 @@ class _LoginViewState extends State<LoginView> {
   bool _isPasswordVisible = true;
   bool _isFormValid = false;
 
-  bool _isLoading = false;
+  // bool _isLoading = false;
 
   void setLoader() {
     setState(() {
@@ -253,5 +253,16 @@ class _LoginViewState extends State<LoginView> {
         ),
       ),
     );
+  }
+
+  bool _isLoading = false;
+
+  void updateLoader(bool value){
+
+    if(!mounted)return;
+
+    setState(() {
+      _isLoading = value;
+    });
   }
 }
