@@ -7,6 +7,7 @@ import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/home/data/model/job_model.dart';
 import 'package:analogue_shifts_mobile/modules/notification/domain/entities/notification.entity.dart';
 import 'package:analogue_shifts_mobile/modules/notification/presentation/notifiers/notification_provider.dart';
+import 'package:analogue_shifts_mobile/modules/notification/presentation/widgets/no_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       body: Consumer<NotificationProvider>(
          builder: (context, NotificationProvider notification, child) {
           logger.d(notification.notifications);
-          if(notification.notifications.isEmpty)return const Text("No Notification");
+          if(notification.notifications.isEmpty)return const NoNotification();
               Map<String, List<Datum>> groupedNotifications =
       groupBy(notification.notifications.toList(), (Datum notification) {
         String createdAtDate = DateFormat('yyyy-MM-dd').format(notification.createdAt!);

@@ -2,17 +2,14 @@ import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
-import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
-import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
-import 'package:analogue_shifts_mobile/modules/home/data/model/job_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/single_job.screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
@@ -208,6 +205,14 @@ class _JobViewState extends State<JobView> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
       child: ListTile(
+        onTap: () {
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SingleJobScreen(data: data)
+          ),
+        );
+        },
         contentPadding: EdgeInsets.zero,
         leading: image == null ? SvgPicture.asset("assets/images/work-image.svg") : image.logo == null ?  SvgPicture.asset("assets/images/work-image.svg") :
          CachedNetworkImage(
