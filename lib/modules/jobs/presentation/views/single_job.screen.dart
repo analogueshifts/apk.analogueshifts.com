@@ -3,14 +3,20 @@ import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/custom_single_chile_scroll_view.dart';
+import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/utils/functions.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:gap/gap.dart';
+ import 'package:html/parser.dart' as htmlparser;
+import 'package:html/dom.dart' as dom;
+import 'package:url_launcher/url_launcher.dart';
 
 class SingleJobScreen extends StatefulWidget {
 final Datum data;
@@ -24,12 +30,20 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme.brightness;
+   
+  dom.Document document = htmlparser.parse(widget.data.description);
+  Widget html = Html(
+    shrinkWrap: true,
+    data: widget.data.description,
+  // document: document,
+);
     return Scaffold(
       appBar: const PaylonyAppBarTwo(title: "Job Details"),
       body: CustomSingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
@@ -41,7 +55,7 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
                     placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
                     errorWidget: (context, url, error) => Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
                   ),
-                  Gap(20),
+                  const Gap(20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -51,31 +65,44 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
                   )
                 ],
               ),
-              Gap(15),
+              const Gap(15),
               Row(
                 children: [
-                  Icon(Icons.location_on_outlined, color: Color(0xff7B7B7B),),
-                  Gap(6),
-                  TextSemiBold(widget.data.jobLocation?.address == null ? "N/A" : widget.data.jobLocation?.address?.addressRegion == null && widget.data.jobLocation?.address?.addressCountry == null ? "N/A" : "${widget.data.jobLocation?.address?.addressRegion}, ${widget.data.jobLocation?.address?.addressCountry}",  fontSize: 14,fontWeight: FontWeight.w600,color: Color(0xff7B7B7B),),
+                  const Icon(Icons.location_on_outlined, color: Color(0xff7B7B7B),),
+                  const Gap(6),
+                  TextSemiBold(widget.data.jobLocation?.address == null ? "N/A" : widget.data.jobLocation?.address?.addressRegion == null && widget.data.jobLocation?.address?.addressCountry == null ? "N/A" : "${widget.data.jobLocation?.address?.addressRegion}, ${widget.data.jobLocation?.address?.addressCountry}",  fontSize: 14,fontWeight: FontWeight.w600,color: const Color(0xff7B7B7B),),
                 ],
               ),
-              Gap(7),
+              const Gap(7),
               Row(
                 children: [
-                  Icon(Icons.work_outline_outlined, color: Color(0xff7B7B7B),),
-                  Gap(6),
-                  Text(widget.data.baseSalary == null ? "N/A" : widget.data.baseSalary?.value == null && widget.data.baseSalary?.value?.value == null ? "N/A" : Functions.money(double.parse("${widget.data.baseSalary?.value?.value.toString() ?? "0"}"), '\$'),  style: TextStyle(
+                  const Icon(Icons.work_outline_outlined, color: Color(0xff7B7B7B),),
+                  const Gap(6),
+                  Text(widget.data.baseSalary == null ? "N/A" : widget.data.baseSalary?.value == null && widget.data.baseSalary?.value?.value == null ? "N/A" : Functions.money(double.parse("${widget.data.baseSalary?.value?.value.toString() ?? "0"}"), '\$'),  style: const TextStyle(
                     fontSize: 14,fontWeight: FontWeight.w600,color: Color(0xff7B7B7B),
                   ),),
                 ],
               ),
-              Text(widget.data.toString()),
-              Gap(15),
-              Spacer(),
+              const Gap(20),
+              TextSemiBold("Job description", fontSize: 15, fontWeight:FontWeight.w500, color: theme == Brightness.light ? AppColors.background : AppColors.white,),
+              Gap(
+                12
+              ),
+              HtmlWidget(
+
+                widget.data.description.toString(),
+                renderMode: RenderMode.column,
+                textStyle: TextStyle(fontSize: 14, color: Color(0xff7B7B7B), fontFamily: AppFonts.manRope),
+              
+              ),
+
+              // Text(widget.data.description.toString()),
+              const Gap(35),
+              const Spacer(),
               BusyButton(title: "Apply", onTap:() {
-                
+                launchUrl(Uri(scheme: 'https', path: widget.data.apply ?? widget.data.directApply));
               },),
-              Gap(20)
+              const Gap(20)
             ],
           ),
         ),
