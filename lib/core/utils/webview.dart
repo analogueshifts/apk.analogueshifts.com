@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -66,9 +67,11 @@ class _CustomWebViewState extends State<CustomWebView> {
           onNavigationRequest: (NavigationRequest request) {
 
         if(request.url.contains('https://api.analogueshifts.com/api/auth/google/callback')){
+            logger.d(request.url);
             Navigator.pop(context, 'success'); //close webview
           }
           if(request.url.contains('https://api.analogueshifts.com/api/auth/google/callback')){
+            logger.d(request.url);
             Navigator.pop(context, 'success'); //close webview
           }
           return NavigationDecision.navigate;
