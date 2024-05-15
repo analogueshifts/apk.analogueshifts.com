@@ -43,9 +43,11 @@ void updateState(bool value){
     messagingService.initialize();
     super.initState();
   }
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
+    
     return MultiProvider(
       providers:providers,
       child: ScreenUtilInit(
@@ -58,6 +60,7 @@ void updateState(bool value){
             // routeInformationProvider:
              initialRoute: Routes.startUp,
             onGenerateRoute: generateRoute,
+            navigatorKey: navigatorKey,
             //  theme: appNotifier.themeMode == ThemeMode.light ? lightTheme : darkTheme,
           darkTheme: darkTheme,
           themeMode: appNotifier.themeMode,

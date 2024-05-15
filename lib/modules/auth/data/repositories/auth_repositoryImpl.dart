@@ -225,6 +225,7 @@ final _db = getIt<DBService>();
   Future<Either<Exception, User>> fetchUser() async {
     try {
       final response = await dioManager.dio.get('user');
+      logger.wtf(response);
 
       if (response.statusCode == 200) {
         logger.i(response.data);
@@ -232,7 +233,8 @@ final _db = getIt<DBService>();
         final userModel = User.fromJson(response.data);
         logger.d('fetching user ${userModel}');
         return Right(userModel);
-      } else {
+      }
+       else {
         throw Exception('Failed to fetch user.');
       }
     } catch (e) {

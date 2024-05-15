@@ -72,7 +72,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       children: [
                         TouchableOpacity(
                           onTap:() => Navigator.pop(context),
-                          child: SvgPicture.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/icons/close_icon.svg" : "assets/images/close-icon-white.png"))
+                          child: SvgPicture.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/icons/close_icon.svg" : "assets/images/close-icon-white.svg"))
                       ],
                     ),
                     Column(

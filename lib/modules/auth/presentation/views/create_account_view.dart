@@ -13,6 +13,7 @@ import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/device_info.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/validator.dart';
+import 'package:analogue_shifts_mobile/core/utils/webview.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/registration_request_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
@@ -112,13 +113,23 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                   Gap(20),
                   TextSemiBold("Sign up with one of the following", color: AppColors.grey,),
                   Gap(15),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: AppColors.primaryGrey2, width: 1)
-                      ),
-                      child: Center(child: SvgPicture.asset(AppAsset.google))),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CustomWebView(authorizationUrl: "https://thepoolapp.site/api/v1/auth/register/google")
+                        ),
+                      );
+                       },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(color: AppColors.primaryGrey2, width: 1)
+                        ),
+                        child: Center(child: SvgPicture.asset(AppAsset.google))),
+                  ),
                   Gap(20),
                   TextSemiBold("Name", color: AppColors.background,fontWeight: FontWeight.w700,),
                   Gap(6),

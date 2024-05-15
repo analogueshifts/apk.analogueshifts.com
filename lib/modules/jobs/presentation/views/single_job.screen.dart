@@ -37,6 +37,7 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
     data: widget.data.description,
   // document: document,
 );
+print(widget.data.employmentType);
     return Scaffold(
       appBar: const PaylonyAppBarTwo(title: "Job Details"),
       body: CustomSingleChildScrollView(
@@ -81,6 +82,35 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
                   Text(widget.data.baseSalary == null ? "N/A" : widget.data.baseSalary?.value == null && widget.data.baseSalary?.value?.value == null ? "N/A" : Functions.money(double.parse("${widget.data.baseSalary?.value?.value.toString() ?? "0"}"), '\$'),  style: const TextStyle(
                     fontSize: 14,fontWeight: FontWeight.w600,color: Color(0xff7B7B7B),
                   ),),
+                ],
+              ),
+              Gap(20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 2, horizontal: 13),
+                        decoration: BoxDecoration(
+                          color: Color(0xffB0B0B0).withOpacity(0.17),
+                          borderRadius: BorderRadius.circular(25)
+                        ),
+                        child: TextSemiBold(widget.data.employmentType.toString().toLowerCase(), fontSize: 12,),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 2, horizontal: 13),
+                        decoration: BoxDecoration(
+                          color: Color(0xffB0B0B0).withOpacity(0.17),
+                          borderRadius: BorderRadius.circular(25)
+                        ),
+                        child: TextSemiBold(widget.data.jobLocationType.toString().toLowerCase(), fontSize: 12,),
+                      )
+                    ],
+                  ),
+                  widget.data.createdAt == null ? Text("") : TextSemiBold(Functions.getFormattedDate(widget.data.createdAt!), color: theme == Brightness.light ? Color(0xff7B7B7B) : Color(
+                  0xff7B7B7B
+                  ), fontSize: 12,)
                 ],
               ),
               const Gap(20),
