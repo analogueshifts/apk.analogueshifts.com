@@ -118,7 +118,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CustomWebView(authorizationUrl: "https://thepoolapp.site/api/v1/auth/register/google")
+                          builder: (context) => CustomWebView(authorizationUrl: "https://accounts.google.com/o/oauth2/auth?client_id=40068646233-353skg8bdn8nhuqsaq0o1ner51thqr0e.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fapi.analogueshifts.com%2Fauth%2Fgoogle%2Fcallback&scope=openid+profile+email&response_type=code")
                         ),
                       );
                        },

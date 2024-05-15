@@ -65,10 +65,10 @@ class _CustomWebViewState extends State<CustomWebView> {
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
 
-        if(request.url.contains('https://www.lawyerpp.com')){
+        if(request.url.contains('https://api.analogueshifts.com/api/auth/google/callback')){
             Navigator.pop(context, 'success'); //close webview
           }
-          if(request.url.contains('https://standard.paystack.co/close')){
+          if(request.url.contains('https://api.analogueshifts.com/api/auth/google/callback')){
             Navigator.pop(context, 'success'); //close webview
           }
           return NavigationDecision.navigate;
