@@ -75,7 +75,9 @@ class _CustomWebViewState extends State<CustomWebView> {
       
       },
         )
-      )..loadRequest(Uri.parse(widget.authorizationUrl.toString()))
+      )
+      ..setUserAgent('Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Mobile Safari/537.36')
+      ..loadRequest(Uri.parse(widget.authorizationUrl.toString()))
     ),
     );
   }
