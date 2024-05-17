@@ -201,7 +201,7 @@ final _db = getIt<DBService>();
       // }
       
       final response = await dioManager.dio.post(
-        'profile',
+        'update/profile',
          data: json.encode(UpdateUser(name: user.name, username: user.username, tel: user.tel, profile: user.profile)),
       );
       logger.d(response.data);

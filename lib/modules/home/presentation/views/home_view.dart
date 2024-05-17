@@ -1,28 +1,21 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
-import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
-import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/utils/functions.dart';
-import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
-import 'package:analogue_shifts_mobile/modules/home/data/model/job_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/reconmende_job.entity.dart' as REconmendedJobs;
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/single_job.screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
@@ -33,18 +26,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final List<JobPost> _jobpost = [
-    JobPost(image: "assets/images/job-delete1.png", text: "\$50 - \$75/hr", title: "Software Engineer"),
-    JobPost(image: "assets/images/jobPost1.png", text: "\$40 - \$65/hr", title: "Creative Designer"),
-    JobPost(image: "assets/images/jobPost1.png", text: "\$50 - \$75/hr", title: "Software Engineer"),
-  ];
-
-  final List<RecentJob> _recentJob = [
-    RecentJob(image: "assets/images/youtube.png", title: "Mid-level Security Analyst", description: "Youtube"),
-    RecentJob(image: "assets/images/moniepoint.png", title: "Software Engineer", description: "Moniepoint"),
-    RecentJob(image: "assets/images/work-hotshift.png", title: "Data Analyst", description: "Hostshifts"),
-  ];
-
   final TextEditingController _search = TextEditingController();
 
   bool _isLoading = false;
@@ -111,11 +92,10 @@ class _HomeViewState extends State<HomeView> {
         ),
         centerTitle: false,
         actions: [
-         NotificationIcon()
+         const NotificationIcon()
         ],
       ),
       body: SingleChildScrollView(
-        // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -135,17 +115,17 @@ class _HomeViewState extends State<HomeView> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                         hintText: "Search",
                               prefixIcon: _isLoading ? Container(margin: const EdgeInsets.only(left:
@@ -181,27 +161,31 @@ class _HomeViewState extends State<HomeView> {
               child: TextSemiBold("Reconmended", fontSize: 20, fontWeight: FontWeight.w600,),
             ),
             const Gap(8),
-            SizedBox(
-              height: 160.h,
-              width: double.infinity,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemCount: _jobpost.length,
-                  itemBuilder:(context, index){
-                  final data = _jobpost[index];
-                    return _jobCard(data.image, data.title, data.text);
-                  }
-              ),
+            Consumer<JobProvider>(
+              builder: (context, _reconmended, child) {
+                return SizedBox(
+                  height: 160.h,
+                  width: double.infinity,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: _reconmended.reconmendedjobs.length,
+                      itemBuilder:(context, index){
+                      final data = _reconmended.reconmendedjobs[index];
+                        return _jobCard(data);
+                      }
+                  ),
+                );
+              }
             ),
-            Gap(20),
+            const Gap(20),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
               child: TextSemiBold("Recently Posted", fontSize: 20, fontWeight: FontWeight.w600, style: Theme.of(context).textTheme.titleLarge,),
             ),
            Consumer<JobProvider>(
               builder: (context, job, child) {
-              return  job.job.isEmpty && job.jobhState.isGenerating ? Center(child: CircularProgressIndicator()) : ListView.builder( 
+              return  job.job.isEmpty && job.jobhState.isGenerating ? const Center(child: CircularProgressIndicator()) : ListView.builder( 
                 physics: const NeverScrollableScrollPhysics(),
                 
                 shrinkWrap: true,
@@ -210,40 +194,56 @@ class _HomeViewState extends State<HomeView> {
                   final e = job.job[index];
                   // logger.d(e);
                   return _recentJobCard(e);
-                  // return _recentJobCard(jobData.hiringOrganization?.logo, jobData.title.toString(), jobData.hiringOrganization?.name.toString() ?? "");
                 }
              );
               }
             ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            //   child: Column(
-            //     children: _recentJob.map((e) => _recentJobCard(e.image, e.title, e.description)).toList(),
-            //   ),
-            // )
           ],
         ),
       ),
     );
   }
-  Widget _jobCard(String image, String title, String text){
-    return Container(
-      height: 160.h,
-      width: 170.w,
-      // margin: const EdgeInsets.only(right: 5),
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 150.w,
-            height: 80.h,
-            child: Image(image:AssetImage(image), fit: BoxFit.fill,)),
-          const Gap(15),
-          TextBold(title, fontSize: 14, style: Theme.of(context).textTheme.bodyMedium,),
-          const Gap(8),
-          TextSemiBold(text, fontSize: 11, color: AppColors.grey,)
-        ],
+  Widget _jobCard(REconmendedJobs.Recommendation data){
+     final image = data.hiringOrganization;
+    return GestureDetector(
+       onTap: () {
+          Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SingleJobScreen(data: Datum(baseSalary: BaseSalary(type: data.baseSalary?.type, value: Value(type: data.baseSalary?.value?.type , value: data.baseSalary?.value?.value) ), employmentType: data.employmentType, validThrough: data.validThrough, status: data.status, identifier: Identifier(value: data.identifier?.value, type: data.identifier?.type, name: data.identifier?.name), jobLocation: JobLocation(type: data.jobLocation?.type, 
+            address: Address(type: 
+            data.jobLocation?.address?.type, streetAddress: data.jobLocation?.address?.streetAddress, addressLocality: data.jobLocation?.address?.addressLocality, addressRegion:data.jobLocation?.address?.addressRegion, postalCode: data.jobLocation?.address?.postalCode, addressCountry: data.jobLocation?.address?.addressCountry)), 
+            jobLocationType: data.jobLocationType, createdAt: data.createdAt, updatedAt: data.updatedAt, slug: data.slug,title: data.title, uuid: data.uuid,userUuid: data.userUuid, 
+            hiringOrganization: HiringOrganization(type: data.hiringOrganization?.type, name: data.hiringOrganization?.name, sameAs: data.hiringOrganization?.sameAs, logo: data.hiringOrganization?.logo), applicantLocationRequirements: data.applicantLocationRequirements, alts: data.alts, apply: data.apply, description: data.description, directApply: data.directApply, id: data.id, ))
+          ),
+        );
+        },
+      child: Container(
+        height: 160.h,
+        width: 170.w,
+        // margin: const EdgeInsets.only(right: 5),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 150.w,
+              height: 80.h,
+              child: image == null ? SvgPicture.asset("assets/images/work-image.svg", fit: BoxFit.cover,) : image.logo == null ?  SvgPicture.asset("assets/images/work-image.svg", fit: BoxFit.cover,) :
+           CachedNetworkImage(
+            imageUrl: "",
+            placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
+            errorWidget: (context, url, error) => Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
+          ),
+              ),
+            const Gap(15),
+            Flexible(child: TextBold(data.title.toString(), fontSize: 14, style: Theme.of(context).textTheme.bodyMedium, overflow: TextOverflow.ellipsis,)),
+            const Gap(8),
+             Text(data.baseSalary == null ? "N/A" : data.baseSalary?.value == null && data.baseSalary?.value?.value == null ? "N/A" : Functions.money(double.parse("${data.baseSalary?.value?.value.toString() ?? "0"}"), '\$'),  style: const TextStyle(
+                fontSize: 14,fontWeight: FontWeight.w600,color: Color(0xff7B7B7B),
+              ),),
+          ],
+        ),
       ),
     );
   }

@@ -93,6 +93,9 @@ Future<void> setupDependencies() async{
    getIt.registerLazySingleton<FetchNotificationUseCase>(
         () => FetchNotificationUseCase()
   );
+  getIt.registerLazySingleton<FetchReconmendedJobsUseCase>(
+        () => FetchReconmendedJobsUseCase()
+  );
 
   getIt.registerLazySingleton<ErrorHandler>(
         () => ErrorHandler(),
