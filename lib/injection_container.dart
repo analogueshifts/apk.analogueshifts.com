@@ -114,6 +114,10 @@ Future<void> setupDependencies() async{
         () => FirebaseHandler()
   );
 
+  getIt.registerLazySingleton<DeleteAccountUseCase>(
+        () => DeleteAccountUseCase()
+  );
+
   getIt.registerSingleton<DBService>(DBService());
   getIt.registerSingleton<AppChangeNotifier>(AppChangeNotifier());
   getIt.registerSingleton<UserViewModel>(UserViewModel());

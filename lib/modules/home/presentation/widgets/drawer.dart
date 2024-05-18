@@ -190,10 +190,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       onChanged: (bool value) {
                         if(value == true){
 
-                          _db.saveTheme(value);
+                          _db.saveTheme(ThemeMode.dark);
                           app.changeTheme(ThemeMode.dark);
                         }else{
-                           _db.saveTheme(value);
+                           _db.saveTheme(ThemeMode.light);
                           app.changeTheme(ThemeMode.light);
                         }
                         
@@ -382,7 +382,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   child: _isProcessing ?  SizedBox(
                                     height: 25.h,
                                     width: 25.w,
-                                    child: const CircularProgressIndicator()) : const Text(
+                                    child: const CircularProgressIndicator(color: AppColors.primaryColor,)) : const Text(
                                     "Yes, log me out",
                                     style: TextStyle(
                                       fontFamily: AppFonts.manRope,

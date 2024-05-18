@@ -7,6 +7,7 @@ import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_respon
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -30,21 +31,11 @@ class _CustomWebViewState extends State<CustomWebView> {
 
    late WebViewController _controller;
 
-   void signout() async{
-
-      final GoogleSignIn googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-    ],
-  );
-  logger.d('jnknklermklerm');
-     await googleSignIn.signOut();
-   }
 
   @override
   void initState() {
     super.initState();
-    signout();
+    // await DefaultCacheManager().emptyCache();
     _initializeWebViewController();
   }
 
@@ -55,10 +46,6 @@ class _CustomWebViewState extends State<CustomWebView> {
       ..setBackgroundColor(const Color(0x00000000))
       ..setNavigationDelegate(
         NavigationDelegate(
-          // onHttpAuthRequest: (request) {},
-          // onPageStarted: (String url) {
-          //   // ...
-          // },
           onPageFinished: (String url) {
               _handleJsonData();
           },
@@ -118,14 +105,7 @@ class _CustomWebViewState extends State<CustomWebView> {
                       const HomeNavigation()),
              (Route<dynamic> route) => false);
         }
-        
-        // logger.d(cv);
-        // Navigator.pushAndRemoveUntil(
-        //       context,
-        //       MaterialPageRoute(
-        //           builder: (BuildContext context) =>
-        //               const HomeNavigation()),
-        //      (Route<dynamic> route) => false);
+      
     }).catchError((error) {
       logger.e(error);
     });

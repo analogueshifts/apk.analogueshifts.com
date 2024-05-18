@@ -104,35 +104,35 @@ class _CreateAccountViewState extends State<CreateAccountView> {
         body: Consumer<UserViewModel>(
           builder: (_, auth, __) {
            return  SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Gap(20),
+                  const Gap(20),
                   TextSemiBold("Sign up with one of the following", color: AppColors.grey,),
-                  Gap(15),
+                  const Gap(15),
                   InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CustomWebView(authorizationUrl: "https://accounts.google.com/o/oauth2/auth?client_id=40068646233-353skg8bdn8nhuqsaq0o1ner51thqr0e.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fapi.analogueshifts.com%2Fauth%2Fgoogle%2Fcallback&scope=openid+profile+email&response_type=code")
+                          builder: (context) => const CustomWebView(authorizationUrl: "https://accounts.google.com/o/oauth2/auth?client_id=40068646233-353skg8bdn8nhuqsaq0o1ner51thqr0e.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fapi.analogueshifts.com%2Fauth%2Fgoogle%2Fcallback&scope=openid+profile+email&response_type=code")
                         ),
                       );
                        },
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 15),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
-                            border: Border.all(color: AppColors.primaryGrey2, width: 1)
+                            border: Border.all(color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.4), width: 1)
                         ),
                         child: Center(child: SvgPicture.asset(AppAsset.google))),
                   ),
-                  Gap(20),
+                  const Gap(20),
                   TextSemiBold("Name", color: AppColors.background,fontWeight: FontWeight.w700,),
-                  Gap(6),
+                  const Gap(6),
                   TextFormField(
                     controller: _nameController,
                     validator: (value){
@@ -148,17 +148,17 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                       hintText: 'Full Name'
                     ),
@@ -167,9 +167,9 @@ class _CreateAccountViewState extends State<CreateAccountView> {
           
                     },
                   ),
-                  Gap(15),
+                  const Gap(15),
                   TextSemiBold("Email", color: AppColors.background,fontWeight: FontWeight.w700,),
-                  Gap(6),
+                  const Gap(6),
                   TextFormField(
                     controller: _emailController,
                     decoration: textInputDecoration.copyWith(
@@ -177,17 +177,17 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                         hintText: 'Enter your email address'
                     ),
@@ -203,9 +203,9 @@ class _CreateAccountViewState extends State<CreateAccountView> {
           
                     },
                   ),
-                  Gap(15),
+                  const Gap(15),
                   TextSemiBold("Password", color: AppColors.background,fontWeight: FontWeight.w700,),
-                  Gap(6),
+                  const Gap(6),
                   TextFormField(
                       controller: _passwordController,
                       obscureText: _isPasswordVisible,
@@ -225,17 +225,17 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                         hintText: "Enter your password",
                         suffixIcon: IconButton(
@@ -245,15 +245,15 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                               });
                             },
                              icon: !_isPasswordVisible
-                              ? Icon(Icons.visibility_outlined, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white)
+                              ? Icon(Icons.visibility_outlined, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : const Color(0xff767676))
                               : Icon(Icons.visibility_off_outlined,
-                                  color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white)
+                                  color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : const Color(0xff767676))
                                   ),
                       )
                   ),
-                  Gap(4),
+                  const Gap(4),
                   TextSemiBold(_passwordController.text.length < 8 ? "Must be at least 8 characters" : "", color: AppColors.grey, fontSize: 12,),
-                  Gap(40),
+                  const Gap(40),
                   BusyButton(disabled: _isFormValid, title: "Create Account", isLoading: auth.authState.isGenerating, textColor: Colors.white, height: 58,
                       onTap:() async {
                     if(_formKey.currentState == null)return;
@@ -269,12 +269,12 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                     }
           
                   }),
-                  Gap(40),
+                  const Gap(40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextSemiBold("Already have an account?",color: AppColors.textPrimaryColor2,),
-                      Gap(5),
+                      const Gap(5),
                       TouchableOpacity(
                         onTap: () {
                           if(widget.toggleView == null)return;

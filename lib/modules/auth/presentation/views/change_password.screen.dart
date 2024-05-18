@@ -57,17 +57,17 @@ final TextEditingController _confirmPassword = TextEditingController();
         // backgroundColor: AppColors.white,
         appBar: const PaylonyAppBarTwo(title: ""),
         body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Gap(15),
+                const Gap(15),
                 TextSemiBold("Create New Password", color: theme == Brightness.light ? AppColors.background : AppColors.white,fontWeight: FontWeight.w700, fontSize: 20,),
                  TextSemiBold(
                       'Your new password must be unique from those previously used.', color: theme == Brightness.light ? AppColors.background : AppColors.white, fontSize: 14,),
-                Gap(15),
+                const Gap(15),
                 TextFormField(
                     controller: _newPassword,
                     obscureText: _isPasswordVisible,
@@ -86,11 +86,11 @@ final TextEditingController _confirmPassword = TextEditingController();
                        focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.2) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                       hintText: "Enter your password",
                       suffixIcon: IconButton(
@@ -106,9 +106,9 @@ final TextEditingController _confirmPassword = TextEditingController();
                       ),
                     )
                 ),
-                Gap(20),
+                const Gap(20),
                 TextSemiBold("Re-type Password", color: theme == Brightness.light ? AppColors.background : AppColors.white,fontWeight: FontWeight.w700,),
-                Gap(6),
+                const Gap(6),
                 TextFormField(
                     controller: _confirmPassword,
                     obscureText: _isPasswordVisible2,
@@ -127,11 +127,11 @@ final TextEditingController _confirmPassword = TextEditingController();
                        focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.2) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                       hintText: "Enter your password",
                       suffixIcon: IconButton(
@@ -147,8 +147,12 @@ final TextEditingController _confirmPassword = TextEditingController();
                       ),
                     )
                 ),
-                Gap(30),
+                const Gap(30),
                 BusyButton(title: "Save", isLoading: auth.authState.isGenerating, onTap:(){
+                   FocusScopeNode currentFocus = FocusScope.of(context);
+                        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                          currentFocus.focusedChild?.unfocus();
+                        }
                   auth.updatePassword(CreateForgetNewPasswordEntity(email: widget.email, password: _newPassword.text.trim(), passwordConfirmation:_confirmPassword.text.trim()), context);
                 })
               ],

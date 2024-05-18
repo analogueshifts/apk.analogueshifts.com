@@ -1,12 +1,11 @@
 import 'dart:math';
-
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
+import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
-import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
 import 'package:analogue_shifts_mobile/core/utils/validator.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
@@ -17,8 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -38,9 +35,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _nameController.text = user?.name ?? "";
     _emailController.text = user?.email ?? "";
     _phoneController.text = user?.tel ?? "";
-    // if (mounted) {
-    //    upload.setUploadedImage(user?.profile ?? "");
-    // }
    
     super.initState();
   }
@@ -65,10 +59,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       imageUrl: upload.uploadedImage ?? user.authState.user?.profile ?? "",
                       width: 60.w,
                       height: 60.h,
+                      fit: BoxFit.cover,
                       placeholder: (context, url) => CircleAvatar(
                         backgroundColor: Theme.of(context).colorScheme.background,
                         minRadius: 50,
-                        child: CircularProgressIndicator()),
+                        child: const CircularProgressIndicator()),
                       errorWidget: (context, url, error) => const Icon(Icons.error, size: 50,),
                     ),
                   ),
@@ -82,7 +77,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     width: 10.w,
                     height: 5.h,
                     child: const LinearProgressIndicator(
-                      minHeight: 5,
+                      minHeight: 3,
                     )) : const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -102,17 +97,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          fontWeight: FontWeight.w400,
+                          fontFamily: AppFonts.manRope,
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                         hintText: user.authState.user?.name ?? 'John James'),
                     validator: (value) {
@@ -137,25 +135,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          fontWeight: FontWeight.w400,
+                          fontFamily: AppFonts.manRope,
+                          // fontSize: 12,
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
-                        hintText: user.authState.user?.email ?? ''),
+                        ),
                     validator: (value) {
                       if (value == null) return ("Enter your email");
                       if (CustomValidator.validEmail(value.trim()) == false) {
@@ -177,17 +178,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          fontWeight: FontWeight.w400,
+                          fontFamily: AppFonts.manRope,
+                          // fontSize: 12,
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                         hintText: user.authState.user?.tel ?? "Update Phone Number"),
                     validator: (value) {

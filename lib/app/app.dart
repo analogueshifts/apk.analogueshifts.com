@@ -39,11 +39,12 @@ void updateState(bool value){
   @override
   void initState() {
    if(!mounted)return;
-   
+  
     messagingService.initialize();
     super.initState();
   }
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final _db = getIt<DBService>();
 
   @override
   Widget build(BuildContext context) {
@@ -57,23 +58,12 @@ void updateState(bool value){
         child: Consumer<AppChangeNotifier>(
            builder: (context, AppChangeNotifier appNotifier, child) {
           return MaterialApp(
-            // routeInformationProvider:
              initialRoute: Routes.startUp,
             onGenerateRoute: generateRoute,
             navigatorKey: navigatorKey,
-            //  theme: appNotifier.themeMode == ThemeMode.light ? lightTheme : darkTheme,
-          darkTheme: darkTheme,
-          themeMode: appNotifier.themeMode,
-            // getIt<GoRouter>().routeInformationProvider,
-            // routeInformationParser: getIt<GoRouter>().routeInformationParser,
-            // routerDelegate: getIt<GoRouter>().routerDelegate,
-            // backButtonDispatcher: getIt<GoRouter>().backButtonDispatcher,
+          themeMode:  _db.getTheme() ?? ThemeMode.system,
+          darkTheme: _db.getTheme() == null? ThemeData.dark() : (_db.getTheme() == ThemeMode.light? lightTheme : darkTheme),
             debugShowCheckedModeBanner: false,
-            // themeMode:  getIt<AppChangeNotifier>().isDarkMode != null && true ? ThemeMode.dark : ThemeMode.light,
-            // darkTheme: darkTheme,
-            
-            // theme: appNotifier.isDarkMode == true ? darkTheme : lightTheme
-            // theme: appNotifier.isDarkMode == null || appNotifier.isDarkMode == false && getIt<AppChangeNotifier>().isDarkMode  == false  ? lightTheme : darkTheme
           );
            }
         ),

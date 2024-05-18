@@ -96,5 +96,16 @@ class VerifyEmailUseCase {
   Future<Either<Exception, User>> call(String otp) async {
     return await _userRepository.verifyEmail(otp);
   }
+  
 
+}
+
+
+class DeleteAccountUseCase {
+  final UserRepository _userRepository = GetIt.instance<UserRepository>();
+
+  Future<Either<Exception, bool>> call(bool isDelete, String password, [String? reason]) async {
+    return await _userRepository.deleteAccount(isDelete, password, reason);
+  }
+  
 }

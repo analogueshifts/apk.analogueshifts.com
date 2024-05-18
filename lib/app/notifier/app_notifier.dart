@@ -9,56 +9,23 @@ class AppChangeNotifier extends ChangeNotifier {
   final _db = getIt<DBService>();
 
 
-  ThemeMode _themeMode = ThemeMode.dark;
+  ThemeMode _themeMode = ThemeMode.system;
 
-  // Allow Widgets to read the user's preferred ThemeMode.
   ThemeMode get themeMode => _themeMode;
 
 
   changeTheme(ThemeMode value){
     _themeMode = value;
+    _db.saveTheme(value);
     notifyListeners();
   }
-  // void toggleTheme(bool value){
-  //   Logger().d(value);
-  //   if (_isDarkMode == null) {
-  //     _isDarkMode = _db.getTheme();
-  //   }
-  //   _isDarkMode = !_isDarkMode!;
-  //   logger
-  //   .d('from toggle theme${_isDarkMode}');
-  //   _db.saveTheme(_isDarkMode!);
-  //    notifyListeners();
-   
-  // }
-
 
 
   initAppTheme() async {
-  _themeMode = ThemeMode.system;
-  notifyListeners();
-   bool? theme = await _db.getTheme();
-   logger.e(
-    theme
-   );
-   if(theme == null){
-    logger.d('running no theme ${theme}');
-    _themeMode = ThemeMode.system;
+  _themeMode = _db.getTheme() ?? ThemeMode.system;
     notifyListeners();
-    //  toggleTheme(ThemeMode.system == ThemeMode.dark ? true : false);
-   }else{
-    if (theme == true) {
-      _themeMode = ThemeMode.dark;
-    }else{
-        _themeMode = ThemeMode.light;
-    }
-    //  _themeMode = theme == true ? ThemeMode.dark : ThemeMode.light;
-    notifyListeners();
-  //  toggleTheme(theme);
-  //  notifyListeners();
    }
 } 
-}
 
 
 class SettingsController with ChangeNotifier {

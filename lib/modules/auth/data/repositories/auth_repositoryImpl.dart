@@ -66,9 +66,9 @@ final _db = getIt<DBService>();
   Future<Either<Exception, String>> registerUser(RegisterRequest payload) async {
     try {
       await _db.removeAuthToken();
-      // if (await _deviceNetwork.isConnected() == false) {
-      //   throw Exception("Network Error");
-      // }
+      if (await _deviceNetwork.isConnected() == false) {
+        throw Exception("Network Error");
+      }
       
       final response = await dioManager.dio.post(
         'register',
@@ -196,9 +196,9 @@ final _db = getIt<DBService>();
   Future<Either<Exception, User>> updateUser(User user) async {
     logger.d(user.email);
     try {
-      // if (await _deviceNetwork.isConnected() == false) {
-      //   throw const SocketException('Network Error');
-      // }
+      if (await _deviceNetwork.isConnected() == false) {
+        throw const SocketException('Network Error');
+      }
       
       final response = await dioManager.dio.post(
         'update/profile',
@@ -300,6 +300,30 @@ final _db = getIt<DBService>();
         throw Exception('Verification failed');
       }
     } catch (e) {
+      return Left(e as Exception);
+    }
+  }
+
+
+   @override
+  Future<Either<Exception, bool>> deleteAccount(bool isDelete, String password, [String? reason]) async {
+    try {
+      final response = await dioManager.dio.post(
+       isDelete ?  'user/account/delete' : 'user/account/disable',
+        data: {
+          'password': password.trim(),
+          reason == null ? null : 'reason': reason
+        }
+      );
+      logger.d(response.data);
+
+      if (response.statusCode == 200) {
+        return const Right(true);
+      } else {
+        return Left(Exception(response.data));
+      }
+    } catch (e) {
+      logger.e(e);
       return Left(e as Exception);
     }
   }

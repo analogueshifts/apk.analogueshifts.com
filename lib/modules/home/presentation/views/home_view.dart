@@ -115,17 +115,17 @@ class _HomeViewState extends State<HomeView> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.1) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                         hintText: "Search",
                               prefixIcon: _isLoading ? Container(margin: const EdgeInsets.only(left:
@@ -231,13 +231,15 @@ class _HomeViewState extends State<HomeView> {
               height: 80.h,
               child: image == null ? SvgPicture.asset("assets/images/work-image.svg", fit: BoxFit.cover,) : image.logo == null ?  SvgPicture.asset("assets/images/work-image.svg", fit: BoxFit.cover,) :
            CachedNetworkImage(
-            imageUrl: "",
+            
+            imageUrl: image.logo,
+            fit: BoxFit.cover,
             placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
             errorWidget: (context, url, error) => Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
           ),
               ),
-            const Gap(15),
-            Flexible(child: TextBold(data.title.toString(), fontSize: 14, style: Theme.of(context).textTheme.bodyMedium, overflow: TextOverflow.ellipsis,)),
+            const Gap(12),
+            Text(data.title.toString(),  style: Theme.of(context).textTheme.bodyMedium, overflow: TextOverflow.ellipsis,),
             const Gap(8),
              Text(data.baseSalary == null ? "N/A" : data.baseSalary?.value == null && data.baseSalary?.value?.value == null ? "N/A" : Functions.money(double.parse("${data.baseSalary?.value?.value.toString() ?? "0"}"), '\$'),  style: const TextStyle(
                 fontSize: 14,fontWeight: FontWeight.w600,color: Color(0xff7B7B7B),
@@ -263,7 +265,7 @@ class _HomeViewState extends State<HomeView> {
         );
         },
         contentPadding: EdgeInsets.zero,
-        leading: image == null ? SvgPicture.asset("assets/images/work-image.svg") : image.logo == null ?  SvgPicture.asset("assets/images/work-image.svg") :
+        leading: image == null ? SvgPicture.asset("assets/images/work-image.svg",) : image.logo == null ?  SvgPicture.asset("assets/images/work-image.svg") :
          CachedNetworkImage(
           imageUrl: "",
           placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
