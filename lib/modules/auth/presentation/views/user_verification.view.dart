@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
@@ -32,6 +34,10 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
   }
   String? _otp;
 
+  Timer _startTime = Timer(Duration.zero, () { });
+
+
+  
   @override
   void initState() {  
     super.initState();

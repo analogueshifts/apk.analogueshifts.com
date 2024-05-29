@@ -6,6 +6,7 @@ import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/validator.dart';
+import 'package:analogue_shifts_mobile/core/utils/webview.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
@@ -104,7 +105,15 @@ class _LoginViewState extends State<LoginView> {
                   children: [
                     Expanded(
                       child: TouchableOpacity(
-                        onTap: () => read.continueWithGoogle(context),
+                        onTap: () {
+                          Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CustomWebView(authorizationUrl: "https://accounts.google.com/o/oauth2/auth?client_id=40068646233-353skg8bdn8nhuqsaq0o1ner51thqr0e.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fapi.analogueshifts.com%2Fauth%2Fgoogle%2Fcallback&scope=openid+profile+email&response_type=code")
+                        ),
+                      );
+                       
+                        },
                         child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 15),
                             decoration: BoxDecoration(
@@ -232,7 +241,8 @@ class _LoginViewState extends State<LoginView> {
                   ],
                 ),
                 const Gap(40),
-                BusyButton(disabled: _isFormValid, title: "Login", isLoading: context.watch<UserViewModel>().authState.isGenerating == false ? false : true, textColor: Colors.white, height: 58, onTap:(){
+                BusyButton(
+                  disabled: _isFormValid, title: "Login", isLoading: context.watch<UserViewModel>().authState.isGenerating == false ? false : true, textColor: Colors.white, height: 58, onTap:(){
                   // setLoader();
                   if(_formKey.currentState == null)return;
                   if(_formKey.currentState!.validate()){

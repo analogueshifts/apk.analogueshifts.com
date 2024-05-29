@@ -82,17 +82,27 @@ class _CustomWebViewState extends State<CustomWebView> {
         .then((value) async{
          
      final decodedData = Uri.decodeFull(value.toString());
+     
         final parsedData = jsonDecode(decodedData);
+        logger.d('data from sh${parsedData}');
         var data = parsedData;
+        logger.d(data);
         final startIndex = data.indexOf('{');
+        logger.d(startIndex);
         final endIndex = data.lastIndexOf('}');
         final jsonString = data.substring(startIndex, endIndex + 1);
+        logger.wtf(jsonString);
         final cv = jsonDecode(jsonString);
         final _db = getIt<DBService>();
+        logger.w(cv);
         UserViewModel auth_read = context.read<UserViewModel>();
         String? token = cv['data']['token'];
+        logger.d(token);
           Map<String, dynamic>? userMap = cv['data']['user']; // E
-      //  logger.d(token);
+       logger.d(token);
+      if (token != null) {
+         await _db.saveToken(token);
+      }
         
         if (token!= null && userMap != null) {
            User user = User.fromJson(userMap); 
@@ -107,7 +117,7 @@ class _CustomWebViewState extends State<CustomWebView> {
         }
       
     }).catchError((error) {
-      logger.e(error);
+      logger.wtf(error);
     });
   }
 
