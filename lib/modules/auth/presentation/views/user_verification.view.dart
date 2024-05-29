@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
@@ -32,6 +34,10 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
   }
   String? _otp;
 
+  Timer _startTime = Timer(Duration.zero, () { });
+
+
+  
   @override
   void initState() {  
     super.initState();
@@ -43,7 +49,7 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PaylonyAppBarTwo(
+      appBar: const PaylonyAppBarTwo(
         title: "OTP Verification",
         centerTitle: false,
       ),
@@ -53,7 +59,7 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
           absorbing: false,
           // absorbing: auth.authState.isGenerating,
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -62,19 +68,19 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
                     ),
                     // const Gap(5),
                     TextSemiBold(
-                        'Enter the verification code we just sent on your email address.', fontSize: 14,color: Color(0xff000000).withOpacity(0.6),),
+                        'Enter the verification code we just sent on your email address.', fontSize: 14,color: Theme.of(context).colorScheme.brightness == Brightness.light ?  const Color(0xff000000).withOpacity(0.6) : Color(0xff909090),),
                     const Gap(30),
                     OTPTextField(
                       length: 5,
                       width: MediaQuery.of(context).size.width,
                       fieldWidth: 60,
                       otpFieldStyle: OtpFieldStyle(
-                        backgroundColor: Color(0xff000000).withOpacity(0.02),
+                        backgroundColor: const Color(0xff000000).withOpacity(0.02),
                         borderColor: AppColors.primaryColor,
                         enabledBorderColor: AppColors.primaryColor,
-          
+                        focusBorderColor: AppColors.primaryColor,
                       ),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 17
                       ),
                       textFieldAlignment: MainAxisAlignment.spaceAround,
@@ -98,14 +104,18 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
            
                         }
                         ),
-                   Gap(40),
+                   const Gap(40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextSemiBold("Didn’t received code?",color: AppColors.textPrimaryColor2,),
-                    Gap(5),
+                    const Gap(5),
                     TouchableOpacity(
                       onTap: () {
+                         FocusScopeNode currentFocus = FocusScope.of(context);
+                        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                          currentFocus.focusedChild?.unfocus();
+                        }
                         auth.initateUserVerification(context);
                       },
                       child: TextSemiBold("Resend", fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.brightness == Brightness.light ?  AppColors.background : AppColors.white,))

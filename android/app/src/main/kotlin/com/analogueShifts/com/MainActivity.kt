@@ -1,4 +1,4 @@
-package com.example.analogue_shifts_mobile
+package com.analogueShifts.com
 
 import io.flutter.embedding.android.FlutterActivity
 

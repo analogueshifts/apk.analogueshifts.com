@@ -13,6 +13,7 @@ import 'package:analogue_shifts_mobile/modules/auth/domain/entities/verify_passw
 import 'package:analogue_shifts_mobile/modules/auth/domain/usecases/register.usecase.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/authState.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/auth_success.screen.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/change_password.screen.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/user_verification.view.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/verify_user_otp_view.dart';
@@ -34,6 +35,7 @@ class UserViewModel extends ChangeNotifier {
   final FetchUserUseCase _fetchUserUseCase = GetIt.instance<FetchUserUseCase>();
   final UpdatePasswordUseCase _updatePasswordUserUseCase = GetIt.instance<UpdatePasswordUseCase>();
   final VerifyEmailUseCase _verifyEmailUseCase = GetIt.instance<VerifyEmailUseCase>();
+    final DeleteAccountUseCase _deleteJobUseCase = GetIt.instance<DeleteAccountUseCase>();
 
   final _db = getIt<DBService>();
   // final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -399,4 +401,47 @@ class UserViewModel extends ChangeNotifier {
     );
     notifyListeners();
   }
+
+
+  Future<bool> deleteorDisableUser(BuildContext context, bool isDelete, String password, String reason) async{
+    toggleGenerating(true);
+    final response = await _deleteJobUseCase.call(isDelete, password, reason);
+    response.fold((l) {
+      toggleGenerating(false);
+      var error = _errorHandler.handleError(l);
+      if(error == 'Unauthenticated.'){
+        _db.clear();
+        if(context.mounted){
+           Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      const HomeNavigation()),
+             (Route<dynamic> route) => false);
+          
+          AppSnackbar.error(context, message: error);
+          // context.pop(context);
+          return false;
+        }
+      }
+      if(context.mounted){
+        AppSnackbar.error(context, message: error);
+      }
+
+    }, (r) async{
+      toggleGenerating(false); 
+      Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      const Authenticate()),
+             (Route<dynamic> route) => false);
+        _db.removeAuthToken();
+        _db.removeUser(0);
+        
+      return true;
+    });
+    return false;
+  }
+
 }

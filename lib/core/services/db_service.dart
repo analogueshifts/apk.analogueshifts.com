@@ -1,6 +1,7 @@
 import 'package:analogue_shifts_mobile/core/services/hive_user_adapter.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
 
@@ -14,6 +15,7 @@ class DBService {
     
     await Hive.initFlutter();
     Hive.registerAdapter(UserAdapter());
+    Hive.registerAdapter(ThemeModeAdapter());
     await Hive.openBox<User>(boxName); 
     await Hive.openBox(box);
     
@@ -44,13 +46,13 @@ class DBService {
     await box.put("_db-token", value);
   }
 
-   Future<void> saveTheme(bool value) async {
+   Future<void> saveTheme(ThemeMode value) async {
     final box = getBox();
     Logger().d('saved themed ${value}');
     await box.put("_theme", value);
   }
 
-  bool? getTheme() {
+  ThemeMode? getTheme() {
     final box = getBox();
     var value = box.get("_theme");
     return value;

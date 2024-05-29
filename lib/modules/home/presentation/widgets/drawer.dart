@@ -72,16 +72,28 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       children: [
                         TouchableOpacity(
                           onTap:() => Navigator.pop(context),
-                          child: SvgPicture.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/icons/close_icon.svg" : "assets/images/close-icon-white.png"))
+                          child: SvgPicture.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/icons/close_icon.svg" : "assets/images/close-icon-white.svg"))
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        user.authState.user?.profile == null ? const Icon(Icons.verified_user) : CachedNetworkImage(
-                          imageUrl: user.authState.user?.profile ?? "",
-                          placeholder: (context, url) => SizedBox(width: 40.w, height:30, child: const CircularProgressIndicator()),
-                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                        user.authState.user?.profile == null ? const Icon(Icons.verified_user) : 
+                        CircleAvatar(
+                          radius: 30.w,
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              imageUrl: user.authState.user?.profile ?? "",
+                              width: 60.w,
+                              height: 60.h,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => CircleAvatar(
+                                backgroundColor: Theme.of(context).colorScheme.background,
+                                minRadius: 50,
+                                child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) => const Icon(Icons.error, size: 50,),
+                            ),
+                          ),
                         ),
                         // Image.asset("assets/images/Avatar Image.png", width: 40.w,),
                         const Gap(5),
@@ -178,10 +190,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       onChanged: (bool value) {
                         if(value == true){
 
-                          _db.saveTheme(value);
+                          _db.saveTheme(ThemeMode.dark);
                           app.changeTheme(ThemeMode.dark);
                         }else{
-                           _db.saveTheme(value);
+                           _db.saveTheme(ThemeMode.light);
                           app.changeTheme(ThemeMode.light);
                         }
                         
@@ -370,7 +382,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   child: _isProcessing ?  SizedBox(
                                     height: 25.h,
                                     width: 25.w,
-                                    child: const CircularProgressIndicator()) : const Text(
+                                    child: const CircularProgressIndicator(color: AppColors.primaryColor,)) : const Text(
                                     "Yes, log me out",
                                     style: TextStyle(
                                       fontFamily: AppFonts.manRope,

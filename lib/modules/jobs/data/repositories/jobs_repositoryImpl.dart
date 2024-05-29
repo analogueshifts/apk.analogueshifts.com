@@ -7,6 +7,7 @@ import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.e
 import 'package:analogue_shifts_mobile/modules/auth/domain/repositories/auth.repository.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/data/model/jobsResponseModel.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/reconmende_job.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/repositories/jobs_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:get_it/get_it.dart';
@@ -28,6 +29,26 @@ class JobsRepositoryImpl implements JobsRepository {
         return Right(jobModel);
       } else {
         return Left(Exception('Unable to fetch jobs'));
+      }
+    } catch (e) {
+      logger.e(e);
+      // var error = _errorHandler.handleError(e);
+      return Left(e as Exception);
+    }
+  }
+
+  @override
+  Future<Either<Exception, REconmendedJobs>> fetchReconmendedJobs() async {
+    try {
+      final response = await dioManager.dio.get('jobs/recommend');
+      // logger.d(response.data);
+
+      if (response.statusCode == 200) {
+        // logger.d(response.data);
+        final jobModel = REconmendedJobs.fromJson(response.data);
+        return Right(jobModel);
+      } else {
+        return Left(Exception('Unable to fetch reconmended jobs'));
       }
     } catch (e) {
       logger.e(e);

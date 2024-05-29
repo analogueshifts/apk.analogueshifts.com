@@ -18,4 +18,5 @@ abstract class UserRepository {
   Future<Either<Exception, User>> fetchUser();
    Future<Either<Exception, NoDataResponse>> createNewPassword(CreateForgetNewPasswordEntity payload);
    Future<Either<Exception, User>> verifyEmail(String otp);
+   Future<Either<Exception, bool>> deleteAccount(bool isDelehte, String password, [String? reason]);
 }

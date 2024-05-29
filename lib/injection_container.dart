@@ -14,6 +14,9 @@ import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier
 import 'package:analogue_shifts_mobile/modules/jobs/data/repositories/jobs_repositoryImpl.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/repositories/jobs_repository.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/usecases/fetch_job.usecase.dart';
+import 'package:analogue_shifts_mobile/modules/notification/data/repositories/notification_repositoryimpl.dart';
+import 'package:analogue_shifts_mobile/modules/notification/domain/repositories/notification_repository.dart';
+import 'package:analogue_shifts_mobile/modules/notification/domain/usecases/get_notification_use_cases.dart';
 import 'package:analogue_shifts_mobile/modules/uploads/data/repositories/file_repository_impl.dart';
 import 'package:analogue_shifts_mobile/modules/uploads/domain/repositories/file_repository.dart';
 import 'package:analogue_shifts_mobile/modules/uploads/domain/usecases/file_upload_usecase.dart';
@@ -32,6 +35,11 @@ Future<void> setupDependencies() async{
 
    getIt.registerLazySingleton<UploadRepository>(
         () => UploadRepositoryImpl(getIt<DioManager>()),
+  );
+
+
+   getIt.registerLazySingleton<NotificationRepository>(
+        () => NotificationRepositoryImpl(getIt<DioManager>()),
   );
 
   getIt.registerLazySingleton<LoginUseCase>(
@@ -82,6 +90,13 @@ Future<void> setupDependencies() async{
         () => VerifyEmailUseCase()
   );
 
+   getIt.registerLazySingleton<FetchNotificationUseCase>(
+        () => FetchNotificationUseCase()
+  );
+  getIt.registerLazySingleton<FetchReconmendedJobsUseCase>(
+        () => FetchReconmendedJobsUseCase()
+  );
+
   getIt.registerLazySingleton<ErrorHandler>(
         () => ErrorHandler(),
   );
@@ -97,6 +112,10 @@ Future<void> setupDependencies() async{
   );
    getIt.registerLazySingleton<FirebaseHandler>(
         () => FirebaseHandler()
+  );
+
+  getIt.registerLazySingleton<DeleteAccountUseCase>(
+        () => DeleteAccountUseCase()
   );
 
   getIt.registerSingleton<DBService>(DBService());

@@ -5,15 +5,13 @@ import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
-import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/validator.dart';
-import 'package:analogue_shifts_mobile/modules/auth/data/models/user_login.model.dart';
+import 'package:analogue_shifts_mobile/core/utils/webview.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/forgot_password_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
@@ -62,7 +60,6 @@ class _LoginViewState extends State<LoginView> {
     });
   }
 
-  String? _errorText;
   void _setFormValidState() {
     setState(() {
       if (_formKey.currentState == null) return;
@@ -92,29 +89,37 @@ class _LoginViewState extends State<LoginView> {
           widget.toggleView!(true);
         },),
          body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Gap(20),
+                const Gap(20),
                 TextSemiBold(
                   "Sign up with one of the following",
                   color: AppColors.grey,
                 ),
-                Gap(15),
+                const Gap(15),
                 Row(
                   children: [
                     Expanded(
                       child: TouchableOpacity(
-                        onTap: () => read.continueWithGoogle(context),
+                        onTap: () {
+                          Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CustomWebView(authorizationUrl: "https://accounts.google.com/o/oauth2/auth?client_id=40068646233-353skg8bdn8nhuqsaq0o1ner51thqr0e.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fapi.analogueshifts.com%2Fauth%2Fgoogle%2Fcallback&scope=openid+profile+email&response_type=code")
+                        ),
+                      );
+                       
+                        },
                         child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 15),
+                            padding: const EdgeInsets.symmetric(vertical: 15),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 border: Border.all(
-                                    color: AppColors.primaryGrey2, width: 1)),
+                                    color: Theme.of(context).colorScheme.brightness == Brightness.dark ? const Color(0xffFFFFFF).withOpacity(0.6) : AppColors.primaryGrey2 , width: 1)),
                             child:
                                 Center(child: SvgPicture.asset(AppAsset.google))),
                       ),
@@ -122,19 +127,19 @@ class _LoginViewState extends State<LoginView> {
                     const Gap(10),
                     Expanded(
                       child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 15),
+                          padding: const EdgeInsets.symmetric(vertical: 15),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
                               border: Border.all(
-                                  color: AppColors.primaryGrey2, width: 1)),
+                                  color: Theme.of(context).colorScheme.brightness == Brightness.dark ? const Color(0xffFFFFFF).withOpacity(0.6) : AppColors.primaryGrey2, width: 1)),
                           child:
                               Center(child:  SvgPicture.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? AppAsset.appleSvg : "assets/images/apple-white.svg"))),
                     ),
                   ],
                 ),
-                Gap(20),
+                const Gap(20),
                 TextSemiBold("Email", color: AppColors.background,fontWeight: FontWeight.w700,),
-                Gap(6),
+                const Gap(6),
                 TextFormField(
                   controller: _emailController,
                   decoration: textInputDecoration.copyWith(
@@ -142,23 +147,24 @@ class _LoginViewState extends State<LoginView> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                       hintText: 'Enter your email address'),
                   validator: (value) {
                     if (value == null) return ("Enter your email");
-                    if (CustomValidator.validEmail(value.trim()) == false)
+                    if (CustomValidator.validEmail(value.trim()) == false) {
                       return ("Invalid email");
+                    }
       
                     return null;
                   },
@@ -166,20 +172,21 @@ class _LoginViewState extends State<LoginView> {
                     _setFormValidState();
                   },
                 ),
-                Gap(15),
+                const Gap(15),
                 TextSemiBold(
                   "Password",
                   color: AppColors.background,
                   fontWeight: FontWeight.w700,
                 ),
-                Gap(6),
+                const Gap(6),
                 TextFormField(
                     controller: _passwordController,
                     obscureText: _isPasswordVisible,
                     validator: (value) {
                       if (value == null) return "Input password";
-                      if (value.length < 6)
+                      if (value.length < 6) {
                         return "Password must contain 6 characters ";
+                      }
                       return null;
                     },
                     onChanged: (value) {
@@ -192,17 +199,17 @@ class _LoginViewState extends State<LoginView> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.7) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                       hintText: "Enter your password",
                       suffixIcon: IconButton(
@@ -212,12 +219,12 @@ class _LoginViewState extends State<LoginView> {
                             });
                           },
                           icon: !_isPasswordVisible
-                              ? Icon(Icons.visibility_outlined, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : Color(0xff767676))
+                              ? Icon(Icons.visibility_outlined, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : const Color(0xff767676))
                               : Icon(Icons.visibility_off_outlined,
-                                  color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : Color(0xff767676))
+                                  color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : const Color(0xff767676))
                                   ),
                     )),
-                Gap(24),
+                const Gap(24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -233,8 +240,9 @@ class _LoginViewState extends State<LoginView> {
                         )),
                   ],
                 ),
-                Gap(40),
-                BusyButton(disabled: _isFormValid, title: "Login", isLoading: context.watch<UserViewModel>().authState.isGenerating == false ? false : true, textColor: Colors.white, height: 58, onTap:(){
+                const Gap(40),
+                BusyButton(
+                  disabled: _isFormValid, title: "Login", isLoading: context.watch<UserViewModel>().authState.isGenerating == false ? false : true, textColor: Colors.white, height: 58, onTap:(){
                   // setLoader();
                   if(_formKey.currentState == null)return;
                   if(_formKey.currentState!.validate()){
