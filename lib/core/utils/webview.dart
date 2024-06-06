@@ -56,7 +56,7 @@ class _CustomWebViewState extends State<CustomWebView> {
             if (uri.path == '/api/auth/google/callback') {
               //  Navigator.pop(context);
               Uri.dataFromString(request.url, mimeType: 'text/html', encoding: utf8).toString();
-              // _handleJsonData();
+              _handleJsonData();
             }
             return NavigationDecision.navigate;
           },

@@ -10,9 +10,9 @@ class FaqScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PaylonyAppBarTwo(title: "FAQ"),
+      appBar: const PaylonyAppBarTwo(title: "FAQ"),
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10,
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10,
         ),
         child: ListView(
           children: [
@@ -25,10 +25,10 @@ class FaqScreen extends StatelessWidget {
             ),
 
             Container(
-              margin: EdgeInsets.symmetric(vertical: 20),
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xffFFFCF3): Color(0xff000000).withOpacity(0.6),
+                color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xffFFFCF3): const Color(0xff000000).withOpacity(0.6),
                 borderRadius: BorderRadius.circular(10)
               ),
               child: Column(
@@ -39,7 +39,7 @@ class FaqScreen extends StatelessWidget {
                   ),), children: [
                     Text("Analog shifts entail transitioning from manual recruitment methods to digital solutions, optimizing processes for efficiency. This transition involves adopting online job boards & so much more. It aims to streamline hiring, enhance candidate experience, and improve overall recruitment outcomes.",
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.6) : AppColors.white.withOpacity(0.6)
+                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.6) : AppColors.white.withOpacity(0.6)
                     )
                     )
                   ]),
@@ -49,7 +49,7 @@ class FaqScreen extends StatelessWidget {
                   ),), children: [
                     Text("Analog shifts entail transitioning from manual recruitment methods to digital solutions, optimizing processes for efficiency. This transition involves adopting online job boards & so much more. It aims to streamline hiring, enhance candidate experience, and improve overall recruitment outcomes.",
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.6) : AppColors.white.withOpacity(0.6)
+                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.6) : AppColors.white.withOpacity(0.6)
                     )
                     )
                   ]),
@@ -59,7 +59,7 @@ class FaqScreen extends StatelessWidget {
                   ),), children: [
                     Text("Analog shifts entail transitioning from manual recruitment methods to digital solutions, optimizing processes for efficiency. This transition involves adopting online job boards & so much more. It aims to streamline hiring, enhance candidate experience, and improve overall recruitment outcomes.",
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.6) : AppColors.white.withOpacity(0.6)
+                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.6) : AppColors.white.withOpacity(0.6)
                     )
                     )
                   ]),
@@ -69,7 +69,7 @@ class FaqScreen extends StatelessWidget {
                   ),), children: [
                     Text("Analog shifts entail transitioning from manual recruitment methods to digital solutions, optimizing processes for efficiency. This transition involves adopting online job boards & so much more. It aims to streamline hiring, enhance candidate experience, and improve overall recruitment outcomes.",
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.6) : AppColors.white.withOpacity(0.6)
+                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.6) : AppColors.white.withOpacity(0.6)
                     )
                     )
                   ]),
@@ -79,7 +79,7 @@ class FaqScreen extends StatelessWidget {
                   ),), children: [
                     Text("Analog shifts entail transitioning from manual recruitment methods to digital solutions, optimizing processes for efficiency. This transition involves adopting online job boards & so much more. It aims to streamline hiring, enhance candidate experience, and improve overall recruitment outcomes.",
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.6) : AppColors.white.withOpacity(0.6)
+                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.6) : AppColors.white.withOpacity(0.6)
                     )
                     )
                   ]),
@@ -89,7 +89,7 @@ class FaqScreen extends StatelessWidget {
                   ),), children: [
                     Text("Analog shifts entail transitioning from manual recruitment methods to digital solutions, optimizing processes for efficiency. This transition involves adopting online job boards & so much more. It aims to streamline hiring, enhance candidate experience, and improve overall recruitment outcomes.",
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.6) : AppColors.white.withOpacity(0.6)
+                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.6) : AppColors.white.withOpacity(0.6)
                     )
                     )
                   ]),
