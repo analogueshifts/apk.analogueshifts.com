@@ -1,7 +1,6 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/admob/v1.dart';
 
 final darkTheme = ThemeData(
    colorScheme: const ColorScheme(
@@ -35,33 +34,33 @@ final darkTheme = ThemeData(
   ),
   useMaterial3: true,
   textTheme: TextTheme(
-  labelMedium: TextStyle(
+  labelMedium: const TextStyle(
     fontFamily: AppFonts.manRope,
     color: Color(0xff000000),
   ),
   titleSmall: TextStyle(
     fontFamily: AppFonts.manRope,
-    color: Color(0xff000000).withOpacity(0.36),
+    color: const Color(0xff000000).withOpacity(0.36),
   ),
-  bodyLarge: TextStyle(
+  bodyLarge: const TextStyle(
     fontFamily: AppFonts.manRope,
     color: AppColors.white,
   ),
-  bodyMedium: TextStyle(
+  bodyMedium: const TextStyle(
     fontFamily: AppFonts.manRope,
     color: AppColors.white,
   ),
-   bodySmall: TextStyle(
+   bodySmall: const TextStyle(
     fontFamily: AppFonts.manRope,
     color: AppColors.white,
     fontWeight: FontWeight.w400,
     fontSize: 11
   ),
-  titleMedium: TextStyle(
+  titleMedium: const TextStyle(
     fontFamily: AppFonts.manRope,
     color: AppColors.white,
   ),
-  titleLarge: TextStyle(
+  titleLarge: const TextStyle(
     fontFamily: AppFonts.manRope,
     color: AppColors.white,
   )
@@ -89,11 +88,11 @@ final darkTheme = ThemeData(
   textSelectionTheme: const TextSelectionThemeData(
     selectionColor: AppColors.textPrimaryColor,
   ),
-  inputDecorationTheme: InputDecorationTheme(
+  inputDecorationTheme: const InputDecorationTheme(
    
   ),
   switchTheme: SwitchThemeData(
         thumbColor: MaterialStateProperty.all(AppColors.primaryColor),
         trackColor: MaterialStateProperty.resolveWith((states) =>
-            states.contains(MaterialState.selected) ? Color(0xffEBEBEB).withOpacity(0.6) : null)),
+            states.contains(MaterialState.selected) ? const Color(0xffEBEBEB).withOpacity(0.6) : null)),
 );

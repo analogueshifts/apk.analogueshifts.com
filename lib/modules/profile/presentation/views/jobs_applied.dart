@@ -83,12 +83,12 @@ class _JobsAppliedScreenState extends State<JobsAppliedScreen> {
           )
         ],),
       body: CustomSingleChildScrollView(child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Column(
           children: [
-            Gap(10),
+            const Gap(10),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               child: Row(
                 children: [
                   Expanded(
@@ -98,13 +98,13 @@ class _JobsAppliedScreenState extends State<JobsAppliedScreen> {
                       child: TextFormField(
                         controller: _search,
                         decoration: textInputDecoration.copyWith(
-                          prefixIcon: _isLoading ? Container(margin: EdgeInsets.only(left:
-                          5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: CircularProgressIndicator(color: AppColors.primaryColor,),)  : Icon(Icons.search, color: Theme.of(context).iconTheme.color,)
+                          prefixIcon: _isLoading ? Container(margin: const EdgeInsets.only(left:
+                          5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: const CircularProgressIndicator(color: AppColors.primaryColor,),)  : Icon(Icons.search, color: Theme.of(context).iconTheme.color,)
                         ),
                       ),
                     ),
                   ),
-                  Gap(10),
+                  const Gap(10),
                   Expanded(
                     flex: 1,
                     child: TouchableOpacity(
@@ -118,7 +118,7 @@ class _JobsAppliedScreenState extends State<JobsAppliedScreen> {
                           color: AppColors.primaryColor,
                           borderRadius: BorderRadius.circular(10)
                         ),
-                        child:Icon(Icons.tune_outlined, color: Colors.white,),
+                        child:const Icon(Icons.tune_outlined, color: Colors.white,),
                       ),
                     ),
                   )

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class LoginResponse extends Equatable {
-    LoginResponse({
+    const LoginResponse({
         required this.status,
         required this.success,
         required this.message,
@@ -28,7 +28,7 @@ class LoginResponse extends Equatable {
 }
 
 class Data extends Equatable {
-    Data({
+    const Data({
         required this.token,
         required this.user,
     });
@@ -48,6 +48,7 @@ class Data extends Equatable {
     token, user, ];
 }
 
+// ignore: must_be_immutable
 class User extends Equatable {
     User({
         required this.id,
@@ -75,8 +76,8 @@ class User extends Equatable {
     final String? role;
     String? profile;
     final String? otp;
-    final dynamic? isVerified;
-    final dynamic? googleToken;
+    final dynamic isVerified;
+    final dynamic googleToken;
     final dynamic emailVerifiedAt;
     final DateTime? createdAt;
     final DateTime? updatedAt;

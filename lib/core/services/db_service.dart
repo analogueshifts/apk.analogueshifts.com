@@ -48,7 +48,7 @@ class DBService {
 
    Future<void> saveTheme(ThemeMode value) async {
     final box = getBox();
-    Logger().d('saved themed ${value}');
+    Logger().d('saved themed $value');
     await box.put("_theme", value);
   }
 

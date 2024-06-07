@@ -14,8 +14,8 @@ class BusyButton extends StatelessWidget {
     this.width,
     this.height,
     this.borderRadius,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final String title;
   final Color? color;
   final Color? textColor;

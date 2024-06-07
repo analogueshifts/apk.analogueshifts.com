@@ -1,6 +1,5 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/core/constants/constants.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
@@ -17,8 +16,8 @@ class AppSnackbar {
         Overlay.of(context),
         Stack(
           children: [
-            CustomSnackBar.success(
-              backgroundColor: const Color.fromARGB(255, 45, 128, 91),
+            const CustomSnackBar.success(
+              backgroundColor: Color.fromARGB(255, 45, 128, 91),
               messagePadding: EdgeInsets.zero,
               message: "",
               textAlign: TextAlign.left,
@@ -40,7 +39,7 @@ class AppSnackbar {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Success!",
                         style: TextStyle(
                             color: AppColors.white,
@@ -53,7 +52,7 @@ class AppSnackbar {
                       const Gap(3),
                       Text(
                         message,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: AppColors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -79,8 +78,8 @@ class AppSnackbar {
         Overlay.of(context),
         Stack(
           children: [
-            CustomSnackBar.success(
-              backgroundColor: const Color(0xffFCA652),
+            const CustomSnackBar.success(
+              backgroundColor: Color(0xffFCA652),
               messagePadding: EdgeInsets.zero,
               message: "",
               textAlign: TextAlign.left,
@@ -101,7 +100,7 @@ class AppSnackbar {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Warning!",
                         style: TextStyle(
                             color: AppColors.white,
@@ -115,7 +114,7 @@ class AppSnackbar {
                       Expanded(
                         child: Text(
                           message,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: AppColors.white,
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -142,8 +141,8 @@ class AppSnackbar {
         Overlay.of(context),
         Stack(
           children: [
-            CustomSnackBar.success(
-              backgroundColor: const Color(0xffff5252),
+            const CustomSnackBar.success(
+              backgroundColor: Color(0xffff5252),
               messagePadding: EdgeInsets.zero,
               message: "",
               textAlign: TextAlign.left,
@@ -166,7 +165,7 @@ class AppSnackbar {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "Error!",
                         style: TextStyle(
                             color: Colors.white,
@@ -179,7 +178,7 @@ class AppSnackbar {
                       const Gap(3),
                       Text(
                         message,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,

@@ -1,5 +1,4 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
-import 'package:analogue_shifts_mobile/app/widgets/app_bar.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/widgets/faq_item.dart';
 import 'package:flutter/material.dart';

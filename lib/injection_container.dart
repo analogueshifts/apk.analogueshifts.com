@@ -1,5 +1,4 @@
 import 'package:analogue_shifts_mobile/app/notifier/app_notifier.dart';
-import 'package:analogue_shifts_mobile/core/navigators/go_router.dart';
 import 'package:analogue_shifts_mobile/core/network/api_client.dart';
 import 'package:analogue_shifts_mobile/core/network/api_errors.dart';
 import 'package:analogue_shifts_mobile/core/network/network_info.dart';
@@ -21,7 +20,6 @@ import 'package:analogue_shifts_mobile/modules/uploads/data/repositories/file_re
 import 'package:analogue_shifts_mobile/modules/uploads/domain/repositories/file_repository.dart';
 import 'package:analogue_shifts_mobile/modules/uploads/domain/usecases/file_upload_usecase.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 final getIt = GetIt.instance;
 
 Future<void> setupDependencies() async{

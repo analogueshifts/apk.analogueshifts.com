@@ -1,11 +1,7 @@
-
-
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
-import 'package:analogue_shifts_mobile/app/widgets/app_bar.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
-import 'package:analogue_shifts_mobile/app/widgets/loading_dailog.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
@@ -40,11 +36,8 @@ class _CreateAccountViewState extends State<CreateAccountView> {
 
   // bool _isValid = true;
 
-  bool _isEmail = true;
-  final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _countryController = TextEditingController();
   final DeviceInfo _deviceInfo = GetIt.instance<DeviceInfo>();
 
   // PhoneNumber _number = PhoneNumber(isoCode: 'NG');
@@ -52,17 +45,14 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   bool _isPasswordVisible = true;
   bool _isFormValid = false;
 
-  bool _isLoading = false;
 
   void setLoader(){
     setState(() {
-      _isLoading = true;
     });
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         if(mounted){
           setState(() {
-            _isLoading = false;
           });
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => const HomeNavigation()),
@@ -73,7 +63,6 @@ class _CreateAccountViewState extends State<CreateAccountView> {
     });
   }
 
-  String? _errorText;
   void _setFormValidState(){
     setState(() {
       if (_formKey.currentState == null)return;
@@ -265,7 +254,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
                           currentFocus.focusedChild?.unfocus();
                         }
-                      auth.registerUser(RegisterRequest(name: _nameController.text.trim(), email: _emailController.text.trim(), password: _passwordController.text.trim(), passwordConfirmation: _passwordController.text.trim(), deviceToken: firebaseToken.toString() ?? "", deviceType: deviceType.toString()), context);
+                      auth.registerUser(RegisterRequest(name: _nameController.text.trim(), email: _emailController.text.trim(), password: _passwordController.text.trim(), passwordConfirmation: _passwordController.text.trim(), deviceToken: firebaseToken.toString(), deviceType: deviceType.toString()), context);
                     }
           
                   }),

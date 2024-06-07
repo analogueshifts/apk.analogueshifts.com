@@ -7,7 +7,6 @@ import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/faq_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class HelpCenterScreen extends StatefulWidget {
   const HelpCenterScreen({super.key});
@@ -21,15 +20,15 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PaylonyAppBarTwo(title: "Help Center"),
+      appBar: const PaylonyAppBarTwo(title: "Help Center"),
       body: ListView(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         children: [
           _navCard(const Image(image: AssetImage("assets/icons/lock_icon.png"), width: 45,height: 45,), "FAQ", 'Find intelligent answers instantly', () { 
             Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FaqScreen()
+            builder: (context) => const FaqScreen()
           ),
         );
           }, context),

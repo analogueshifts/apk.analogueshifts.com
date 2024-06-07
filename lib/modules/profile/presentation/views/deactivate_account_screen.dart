@@ -32,7 +32,6 @@ class _DeactivateAccountScreenState extends State<DeactivateAccountScreen> {
   // PhoneNumber _number = PhoneNumber(isoCode: 'NG');
 
   bool _isPasswordVisible = true;
-  bool _isFormValid = false;
 
   @override
   Widget build(BuildContext context) {
@@ -161,6 +160,7 @@ class _DeactivateAccountScreenState extends State<DeactivateAccountScreen> {
                         validator: (value) {
                           if (value == null) return "Input a reason";
                           if (value.isEmpty) return "Input a reason";
+                          return null;
                         },
                        
                         decoration: textInputDecoration.copyWith(

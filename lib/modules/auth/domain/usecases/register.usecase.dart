@@ -1,4 +1,3 @@
-import 'package:analogue_shifts_mobile/modules/auth/data/models/user_login.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/forgetpaasswordcreate.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';

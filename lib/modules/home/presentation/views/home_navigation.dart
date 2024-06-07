@@ -1,4 +1,3 @@
-import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_widgets.dart';
 import 'package:analogue_shifts_mobile/core/constants/constants.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
@@ -16,14 +15,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class HomeNavigation extends StatefulWidget {
-  const HomeNavigation({Key? key}) : super(key: key);
+  const HomeNavigation({super.key});
 
   @override
   State<HomeNavigation> createState() => _HomeNavigationState();
 }
 
 class _HomeNavigationState extends State<HomeNavigation> {
-  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {

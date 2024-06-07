@@ -1,9 +1,7 @@
 import 'package:analogue_shifts_mobile/app/notifier/app_settings.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
-import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
 class AppChangeNotifier extends ChangeNotifier {
   final _db = getIt<DBService>();

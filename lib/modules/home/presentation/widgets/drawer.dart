@@ -18,7 +18,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
@@ -90,14 +89,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               placeholder: (context, url) => CircleAvatar(
                                 backgroundColor: Theme.of(context).colorScheme.background,
                                 minRadius: 50,
-                                child: CircularProgressIndicator()),
+                                child: const CircularProgressIndicator()),
                               errorWidget: (context, url, error) => const Icon(Icons.error, size: 50,),
                             ),
                           ),
                         ),
                         // Image.asset("assets/images/Avatar Image.png", width: 40.w,),
                         const Gap(5),
-                        TextBold("Hello, ${firstName}", style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        TextBold("Hello, $firstName", style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.w600
                         )),
@@ -184,9 +183,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     scale: 0.7,
                     child: Switch(
                       value: app.themeMode == ThemeMode.dark ? true : false,
-                      activeColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xffEBEBEB).withOpacity(0.5) : AppColors
+                      activeColor: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xffEBEBEB).withOpacity(0.5) : AppColors
                       .primaryColor,
-                      activeTrackColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.06) : Color(0xffEBEBEB),
+                      activeTrackColor: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffEBEBEB),
                       onChanged: (bool value) {
                         if(value == true){
 
@@ -238,7 +237,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 onTap: () {
                   if(_scaffoldkey.currentContext == null)return;
                   showDialog(
-                    barrierColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.transparent .withOpacity(0.6) : Color(0xff110C00).withOpacity(0.8),
+                    barrierColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.transparent .withOpacity(0.6) : const Color(0xff110C00).withOpacity(0.8),
                     context: _scaffoldkey.currentContext!, builder:(context) {
                  return dialog(context);
                },);

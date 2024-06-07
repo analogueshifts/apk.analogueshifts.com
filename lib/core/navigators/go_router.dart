@@ -1,7 +1,4 @@
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
-import 'package:analogue_shifts_mobile/core/services/db_service.dart';
-import 'package:analogue_shifts_mobile/core/utils/logger.dart';
-import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/change_password.screen.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/verify_user_otp_view.dart';
@@ -11,14 +8,12 @@ import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/int
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/splash_screen.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/change_password_screen.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/deactivate_account_screen.dart';
-import 'package:analogue_shifts_mobile/modules/profile/presentation/views/faq_screen.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/help_center_screen.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/jobs_applied.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/settings_screen.drt.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-final _db = getIt<DBService>();
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class AppRoutes {
@@ -41,7 +36,7 @@ class AppRoutes {
       GoRoute(
         path: Routes.verifyUserOtp,
         builder: (context, state) => const VerifyUserOtpScreen(),
-        routes: []
+        routes: const []
       ),
       GoRoute(
         path: Routes.resetChangePassword,
@@ -59,7 +54,7 @@ class AppRoutes {
             path: Routes.settings,
             name: "settings",
             builder: (context, state) => const SettingsScreen(),
-            routes: [
+            routes: const [
              
             ]
           ),
@@ -90,7 +85,7 @@ class AppRoutes {
           GoRoute(
                 path: Routes.helpCenter,
                 name: 'faq-screen',
-                builder: (context, state) => JobsAppliedScreen()
+                builder: (context, state) => const JobsAppliedScreen()
                 
           ),
            GoRoute(

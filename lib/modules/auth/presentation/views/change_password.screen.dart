@@ -23,20 +23,15 @@ final TextEditingController _confirmPassword = TextEditingController();
 
  bool _isPasswordVisible = true;
  bool _isPasswordVisible2 = true;
-  bool _isFormValid = false;
 
-  bool _isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
 
-  String? _errorText;
   void _setFormValidState(){
     setState(() {
       if (_formKey.currentState == null)return;
       if (_formKey.currentState!.validate()) {
-       _isFormValid = false;
       }else{
-        _isFormValid = true;
       }
     });
   }

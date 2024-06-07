@@ -37,7 +37,7 @@ final textInputDecoration = InputDecoration(
     color: AppColors.labelTextColor,
   ),
   hintStyle: TextStyle(
-    color: Color(0xff000000).withOpacity(0.4),
+    color: const Color(0xff000000).withOpacity(0.4),
     fontFamily: AppFonts.manRope,
     fontSize: 14.0,
   ),

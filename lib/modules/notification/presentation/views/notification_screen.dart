@@ -1,20 +1,14 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
-import 'package:analogue_shifts_mobile/core/utils/extensions.dart';
 import 'package:analogue_shifts_mobile/core/utils/functions.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
-import 'package:analogue_shifts_mobile/modules/home/data/model/job_model.dart';
 import 'package:analogue_shifts_mobile/modules/notification/domain/entities/notification.entity.dart';
 import 'package:analogue_shifts_mobile/modules/notification/presentation/notifiers/notification_provider.dart';
 import 'package:analogue_shifts_mobile/modules/notification/presentation/widgets/no_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
@@ -28,11 +22,6 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
 
-  final List<RecentJob> _recentJob = [
-    RecentJob(image: "assets/images/youtube.png", title: "Mid-level Security Analyst", description: "Youtube"),
-    RecentJob(image: "assets/images/moniepoint.png", title: "Software Engineer", description: "Moniepoint"),
-    RecentJob(image: "assets/images/work-hotshift.png", title: "Data Analyst", description: "Hostshifts"),
-  ];
 
   @override
   Widget build(BuildContext context) {

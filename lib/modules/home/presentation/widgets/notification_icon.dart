@@ -11,7 +11,7 @@ class NotificationIcon extends StatelessWidget {
     return InkWell(
         onTap: () => Navigator.pushNamed(context, Routes.notification),
       child: Container(
-        padding: EdgeInsets.only(right: 15),
+        padding: const EdgeInsets.only(right: 15),
         child: SvgPicture.asset(theme == Brightness.light ? "assets/icons/Bell.svg" : "assets/icons/Bell-light.svg")));
   }
 }

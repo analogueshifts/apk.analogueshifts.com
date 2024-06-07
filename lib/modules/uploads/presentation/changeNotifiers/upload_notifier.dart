@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:analogue_shifts_mobile/core/network/api_errors.dart';
 import 'package:analogue_shifts_mobile/core/utils/disposable_provider.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
-import 'package:analogue_shifts_mobile/modules/uploads/domain/entities/upload_response.dart';
 import 'package:analogue_shifts_mobile/modules/uploads/domain/usecases/file_upload_usecase.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';

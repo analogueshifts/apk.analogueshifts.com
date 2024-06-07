@@ -1,15 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:analogue_shifts_mobile/core/network/api_client.dart';
-import 'package:analogue_shifts_mobile/core/network/api_errors.dart';
 import 'package:analogue_shifts_mobile/core/network/network_info.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/nodata_model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.model.dart';
-import 'package:analogue_shifts_mobile/modules/auth/data/models/user_login.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/verify_password_otp.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/forgetpaasswordcreate.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
@@ -20,7 +17,6 @@ import 'package:analogue_shifts_mobile/modules/auth/domain/entities/verify_passw
 import 'package:analogue_shifts_mobile/modules/auth/domain/repositories/auth.repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 class UserRepositoryImpl implements UserRepository {
@@ -231,7 +227,7 @@ final _db = getIt<DBService>();
         logger.i(response.data);
         // logger.d(response.data);
         final userModel = User.fromJson(response.data);
-        logger.d('fetching user ${userModel}');
+        logger.d('fetching user $userModel');
         return Right(userModel);
       }
        else {
@@ -276,7 +272,7 @@ final _db = getIt<DBService>();
 
    @override
   Future<Either<Exception, User>> verifyEmail(String otp) async {
-    logger.d('otp---<< ${otp}');
+    logger.d('otp---<< $otp');
     try {
       // if (await _deviceNetwork.isConnected() == false) {
       //   throw const SocketException('Network Error');

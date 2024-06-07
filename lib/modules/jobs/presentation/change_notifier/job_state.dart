@@ -1,6 +1,5 @@
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
-import 'package:dartz/dartz.dart';
 
 class JobState {
   bool _isGenerating = false;
@@ -11,8 +10,7 @@ class JobState {
   // Job? get jobs => _jobs;
 
   void updateJobs(List<Datum> jobs) {
-    logger.d('ruuning jobs data ${jobs}');
-    if(jobs == null)return;
+    logger.d('ruuning jobs data $jobs');
     _jobs?.addAll(jobs);
   }
 

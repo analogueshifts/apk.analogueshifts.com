@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 class PaylonyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const PaylonyAppBar({
-    Key? key,
+    super.key,
     required this.title,
     this.elevation,
     this.actions = const [],
     this.centerTitle = false,
-  }) : super(key: key);
+  });
 
   final String title;
   final List<Widget> actions;
@@ -20,8 +20,6 @@ class PaylonyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      // backgroundColor: AppColors.white,
-      // backgroundColor: Colors.transparent,
       title: TextBold(
         title,
         fontSize: 20,

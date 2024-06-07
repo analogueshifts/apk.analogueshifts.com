@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class NotificationEntity extends Equatable {
-    NotificationEntity({
+    const NotificationEntity({
         required this.notifications,
     });
 
@@ -31,7 +31,7 @@ class NotificationEntity extends Equatable {
 }
 
 class Notifications extends Equatable {
-    Notifications({
+    const Notifications({
         required this.currentPage,
         required this.data,
         required this.firstPageUrl,
@@ -69,9 +69,10 @@ class Notifications extends Equatable {
         int? lastPage,
         String? lastPageUrl,
         List<Link>? links,
-        dynamic? nextPageUrl,
+        dynamic nextPageUrl,
         String? path,
         int? perPage,
+        // ignore: unnecessary_question_mark
         dynamic? prevPageUrl,
         int? to,
         int? total,
@@ -113,12 +114,12 @@ class Notifications extends Equatable {
 
     Map<String, dynamic> toJson() => {
         "current_page": currentPage,
-        "data": data.map((x) => x?.toJson()).toList(),
+        "data": data.map((x) => x.toJson()).toList(),
         "first_page_url": firstPageUrl,
         "from": from,
         "last_page": lastPage,
         "last_page_url": lastPageUrl,
-        "links": links.map((x) => x?.toJson()).toList(),
+        "links": links.map((x) => x.toJson()).toList(),
         "next_page_url": nextPageUrl,
         "path": path,
         "per_page": perPage,
@@ -133,7 +134,7 @@ class Notifications extends Equatable {
 }
 
 class Datum extends Equatable {
-    Datum({
+    const Datum({
         required this.id,
         required this.userUuid,
         required this.title,
@@ -164,11 +165,11 @@ class Datum extends Equatable {
         String? userUuid,
         String? title,
         String? message,
-        dynamic? image,
+        dynamic image,
         String? viewed,
         String? path,
         String? source,
-        dynamic? sourceUuid,
+        dynamic sourceUuid,
         DateTime? createdAt,
         DateTime? updatedAt,
     }) {
@@ -223,7 +224,7 @@ class Datum extends Equatable {
 }
 
 class Link extends Equatable {
-    Link({
+    const Link({
         required this.url,
         required this.label,
         required this.active,

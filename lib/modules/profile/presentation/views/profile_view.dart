@@ -1,31 +1,15 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
-import 'package:analogue_shifts_mobile/app/widgets/app_back_button.dart';
-import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
-import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
-import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
-import 'package:analogue_shifts_mobile/core/constants/app_widgets.dart';
-import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
-import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/functions.dart';
-import 'package:analogue_shifts_mobile/core/utils/logger.dart';
-import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
-import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
-import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
-import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/edit_profile_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:googleapis/admob/v1.dart';
 import 'package:provider/provider.dart';
 
 class ProfileView extends StatefulWidget {
@@ -36,7 +20,7 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {

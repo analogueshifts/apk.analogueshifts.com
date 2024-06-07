@@ -23,13 +23,13 @@ class TouchableOpacity extends StatefulWidget {
     this.decoration,
     this.width,
     this.height,
-    Key? key,
+    super.key,
     this.behavior = HitTestBehavior.opaque,
     this.disabled = false,
     this.onTapDown,
     this.onTapUp,
     this.onTapCancel,
-  }) : super(key: key);
+  });
   final Widget child;
   final double? width;
   final double? height;

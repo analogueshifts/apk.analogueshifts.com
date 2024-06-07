@@ -8,6 +8,7 @@ import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
+// ignore: library_prefixes
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/reconmende_job.entity.dart' as REconmendedJobs;
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/single_job.screen.dart';
@@ -91,8 +92,8 @@ class _HomeViewState extends State<HomeView> {
           )
         ),
         centerTitle: false,
-        actions: [
-         const NotificationIcon()
+        actions: const [
+         NotificationIcon()
         ],
       ),
       body: SingleChildScrollView(
@@ -162,16 +163,16 @@ class _HomeViewState extends State<HomeView> {
             ),
             const Gap(8),
             Consumer<JobProvider>(
-              builder: (context, _reconmended, child) {
+              builder: (context, reconmended, child) {
                 return SizedBox(
                   height: 160.h,
                   width: double.infinity,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
-                    itemCount: _reconmended.reconmendedjobs.length,
+                    itemCount: reconmended.reconmendedjobs.length,
                       itemBuilder:(context, index){
-                      final data = _reconmended.reconmendedjobs[index];
+                      final data = reconmended.reconmendedjobs[index];
                         return _jobCard(data);
                       }
                   ),
@@ -241,7 +242,7 @@ class _HomeViewState extends State<HomeView> {
             const Gap(12),
             Text(data.title.toString(),  style: Theme.of(context).textTheme.bodyMedium, overflow: TextOverflow.ellipsis,),
             const Gap(8),
-             Text(data.baseSalary == null ? "N/A" : data.baseSalary?.value == null && data.baseSalary?.value?.value == null ? "N/A" : Functions.money(double.parse("${data.baseSalary?.value?.value.toString() ?? "0"}"), '\$'),  style: const TextStyle(
+             Text(data.baseSalary == null ? "N/A" : data.baseSalary?.value == null && data.baseSalary?.value?.value == null ? "N/A" : Functions.money(double.parse(data.baseSalary?.value?.value.toString() ?? "0"), '\$'),  style: const TextStyle(
                 fontSize: 14,fontWeight: FontWeight.w600,color: Color(0xff7B7B7B),
               ),),
           ],
@@ -251,8 +252,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
    Widget _recentJobCard(Datum data) {
-   final image = data.hiringOrganization == null ? null : data.hiringOrganization;
-    // logger.d(data.hiringOrganization?.logo);
+   final image = data.hiringOrganization;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
       child: ListTile(

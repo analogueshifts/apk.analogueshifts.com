@@ -1,13 +1,11 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
-import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 class BlogView extends StatefulWidget {
   const BlogView({super.key});
@@ -37,16 +35,16 @@ class _BlogViewState extends State<BlogView> {
         title: TextBold("Blogs", fontSize: 20, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
         centerTitle: true,
         actions: [
-          NotificationIcon()
+          const NotificationIcon()
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: Column(
           children: [
-            Gap(10),
+            const Gap(10),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               child: Row(
                 children: [
                   Expanded(
@@ -60,26 +58,26 @@ class _BlogViewState extends State<BlogView> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                         hintText: "Search",
-                          prefixIcon: _isLoading ? Container(margin: EdgeInsets.only(left:
-                          5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: CircularProgressIndicator(color: AppColors.primaryColor,),)  : Icon(Icons.search, color: Theme.of(context).iconTheme.color,)
+                          prefixIcon: _isLoading ? Container(margin: const EdgeInsets.only(left:
+                          5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: const CircularProgressIndicator(color: AppColors.primaryColor,),)  : Icon(Icons.search, color: Theme.of(context).iconTheme.color,)
                         ),
                       ),
                     ),
                   ),
-                  Gap(10),
+                  const Gap(10),
                   Expanded(
                     flex: 1,
                     child: TouchableOpacity(
@@ -93,17 +91,17 @@ class _BlogViewState extends State<BlogView> {
                           color: AppColors.primaryColor,
                           borderRadius: BorderRadius.circular(10)
                         ),
-                        child:Icon(Icons.tune_outlined, color: Colors.white,),
+                        child:const Icon(Icons.tune_outlined, color: Colors.white,),
                       ),
                     ),
                   )
                 ],
               ),
             ),
-            Gap(20),
+            const Gap(20),
             _jobCard("assets/images/computer.png"),
-            Divider(color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xffE4E4E4) : Color(0xffFFFFF).withOpacity(0.24),),
-            Gap(20),
+            Divider(color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xffE4E4E4) : const Color(0xffFFFFF).withOpacity(0.24),),
+            const Gap(20),
             _jobCard("assets/images/IMG6 2.png")
           ],
         ),
@@ -114,7 +112,7 @@ class _BlogViewState extends State<BlogView> {
 
   Widget _jobCard(String img){
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         width: double.infinity,
         // height: 170,
         decoration: BoxDecoration(
@@ -126,19 +124,19 @@ class _BlogViewState extends State<BlogView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image(image: AssetImage(img)),
-            Gap(15),
+            const Gap(15),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               // mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 TextSemiBold("Tech", color: AppColors.grey,),
-                Gap(30),
+                const Gap(30),
                 TextSemiBold("High Paying Jobs", color: AppColors.grey,)
               ],
             ),
-            Gap(15),
+            const Gap(15),
             TextSemiBold("Unveiling the Top Programming Languages for 2024: A Closer Look at the Future of Coding", fontWeight: FontWeight.w600,),
-            Gap(15),
+            const Gap(15),
             TextSemiBold("Posted: 17/02/2024", color: AppColors.grey,)
           ],)
 
