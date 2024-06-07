@@ -2,19 +2,12 @@ import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/core/constants/constants.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
-import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
-import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
-import 'package:analogue_shifts_mobile/modules/auth/presentation/views/create_account_view.dart';
-import 'package:analogue_shifts_mobile/modules/auth/presentation/views/login_view.dart';
-import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/illustrator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class IntroductionScreen extends StatefulWidget {
@@ -81,7 +74,6 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                   scrollDirection: Axis.horizontal,
                   controller: _pageController,
                   onPageChanged: (int index) {
-                    print(index);
                     setState(() {
                       currentIndex = index;
                     });
@@ -332,8 +324,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 15),
-                      Text(
+                      const SizedBox(height: 15),
+                      const Text(
                         'Explore endless possibilities and discover your next career move with our comprehensive job search feature',
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -408,8 +400,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                     duration: const Duration(seconds: 1),
 
 
-                    child: Center(
-                      child: const Icon(Icons.arrow_forward_outlined, color: Colors.white,size: 30,)
+                    child: const Center(
+                      child: Icon(Icons.arrow_forward_outlined, color: Colors.white,size: 30,)
                     ),
                   ),
                 )

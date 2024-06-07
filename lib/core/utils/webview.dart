@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
@@ -7,9 +6,6 @@ import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_respon
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -24,6 +20,7 @@ class CustomWebView extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomWebViewState createState() => _CustomWebViewState();
 }
 
@@ -52,6 +49,7 @@ class _CustomWebViewState extends State<CustomWebView> {
           onNavigationRequest: (NavigationRequest request) {
             logger.e(request.url);
             final Uri uri = Uri.parse(request.url);
+            // ignore: deprecated_member_use
             logger.wtf(uri.path);
             if (uri.path == '/api/auth/google/callback') {
               //  Navigator.pop(context);
@@ -84,18 +82,19 @@ class _CustomWebViewState extends State<CustomWebView> {
      final decodedData = Uri.decodeFull(value.toString());
      
         final parsedData = jsonDecode(decodedData);
-        logger.d('data from sh${parsedData}');
+        logger.d('data from sh$parsedData');
         var data = parsedData;
         logger.d(data);
         final startIndex = data.indexOf('{');
         logger.d(startIndex);
         final endIndex = data.lastIndexOf('}');
         final jsonString = data.substring(startIndex, endIndex + 1);
+        // ignore: deprecated_member_use
         logger.wtf(jsonString);
         final cv = jsonDecode(jsonString);
         final _db = getIt<DBService>();
         logger.w(cv);
-        UserViewModel auth_read = context.read<UserViewModel>();
+        UserViewModel authRead = context.read<UserViewModel>();
         String? token = cv['data']['token'];
         logger.d(token);
           Map<String, dynamic>? userMap = cv['data']['user']; // E
@@ -107,8 +106,9 @@ class _CustomWebViewState extends State<CustomWebView> {
         if (token!= null && userMap != null) {
            User user = User.fromJson(userMap); 
           await _db.saveToken(token);
-        auth_read.saveUser(user);
+        authRead.saveUser(user);
           Navigator.pushAndRemoveUntil(
+              // ignore: use_build_context_synchronously
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
@@ -117,6 +117,7 @@ class _CustomWebViewState extends State<CustomWebView> {
         }
       
     }).catchError((error) {
+      // ignore: deprecated_member_use
       logger.wtf(error);
     });
   }

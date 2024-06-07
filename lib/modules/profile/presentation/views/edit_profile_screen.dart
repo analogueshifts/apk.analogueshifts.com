@@ -31,7 +31,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     final user = context.read<UserViewModel>().authState.user;
-    final upload = context.read<FileUploadNotifier>();
+    context.read<FileUploadNotifier>();
     _nameController.text = user?.name ?? "";
     _emailController.text = user?.email ?? "";
     _phoneController.text = user?.tel ?? "";

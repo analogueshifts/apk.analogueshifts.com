@@ -1,9 +1,5 @@
 import 'dart:io';
 
-import 'package:logger/logger.dart';
-// ignore: depend_on_referenced_packages
-// import 'package:device_info_plus/device_info_plus.dart';
-
 
 class DeviceInfo {
   int  getDeviceType() {

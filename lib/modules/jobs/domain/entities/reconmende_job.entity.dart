@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class REconmendedJobs extends Equatable {
-    REconmendedJobs({
+    const REconmendedJobs({
         required this.status,
         required this.success,
         required this.data,
@@ -43,7 +43,7 @@ class REconmendedJobs extends Equatable {
 }
 
 class Data extends Equatable {
-    Data({
+    const Data({
         required this.recommendation,
     });
 
@@ -64,7 +64,7 @@ class Data extends Equatable {
     }
 
     Map<String, dynamic> toJson() => {
-        "recommendation": recommendation.map((x) => x?.toJson()).toList(),
+        "recommendation": recommendation.map((x) => x.toJson()).toList(),
     };
 
     @override
@@ -73,7 +73,7 @@ class Data extends Equatable {
 }
 
 class Recommendation extends Equatable {
-    Recommendation({
+    const Recommendation({
         required this.id,
         required this.uuid,
         required this.slug,
@@ -135,7 +135,7 @@ class Recommendation extends Equatable {
         DateTime? validThrough,
         String? status,
         String? apply,
-        dynamic? alts,
+        dynamic alts,
         DateTime? createdAt,
         DateTime? updatedAt,
     }) {
@@ -197,7 +197,7 @@ class Recommendation extends Equatable {
         "description": description,
         "identifier": identifier?.toJson(),
         "hiringOrganization": hiringOrganization?.toJson(),
-        "applicantLocationRequirements": applicantLocationRequirements.map((x) => x?.toJson()).toList(),
+        "applicantLocationRequirements": applicantLocationRequirements.map((x) => x.toJson()).toList(),
         "baseSalary": baseSalary?.toJson(),
         "directApply": directApply,
         "employmentType": employmentType,
@@ -217,7 +217,7 @@ class Recommendation extends Equatable {
 }
 
 class ApplicantLocationRequirement extends Equatable {
-    ApplicantLocationRequirement({
+    const ApplicantLocationRequirement({
         required this.type,
         required this.name,
     });
@@ -253,7 +253,7 @@ class ApplicantLocationRequirement extends Equatable {
 }
 
 class BaseSalary extends Equatable {
-    BaseSalary({
+    const BaseSalary({
         required this.type,
         required this.currency,
         required this.value,
@@ -295,7 +295,7 @@ class BaseSalary extends Equatable {
 }
 
 class Value extends Equatable {
-    Value({
+    const Value({
         required this.type,
         required this.value,
         required this.unitText,
@@ -337,7 +337,7 @@ class Value extends Equatable {
 }
 
 class HiringOrganization extends Equatable {
-    HiringOrganization({
+    const HiringOrganization({
         required this.type,
         required this.name,
         required this.sameAs,
@@ -353,7 +353,7 @@ class HiringOrganization extends Equatable {
         String? type,
         String? name,
         String? sameAs,
-        dynamic? logo,
+        dynamic logo,
     }) {
         return HiringOrganization(
             type: type ?? this.type,
@@ -385,7 +385,7 @@ class HiringOrganization extends Equatable {
 }
 
 class Identifier extends Equatable {
-    Identifier({
+    const Identifier({
         required this.type,
         required this.name,
         required this.value,
@@ -398,7 +398,7 @@ class Identifier extends Equatable {
     Identifier copyWith({
         String? type,
         String? name,
-        dynamic? value,
+        dynamic value,
     }) {
         return Identifier(
             type: type ?? this.type,
@@ -427,7 +427,7 @@ class Identifier extends Equatable {
 }
 
 class JobLocation extends Equatable {
-    JobLocation({
+    const JobLocation({
         required this.type,
         required this.address,
     });
@@ -463,7 +463,7 @@ class JobLocation extends Equatable {
 }
 
 class Address extends Equatable {
-    Address({
+    const Address({
         required this.type,
         required this.streetAddress,
         required this.addressLocality,
@@ -481,11 +481,11 @@ class Address extends Equatable {
 
     Address copyWith({
         String? type,
-        dynamic? streetAddress,
-        dynamic? addressLocality,
-        dynamic? addressRegion,
-        dynamic? postalCode,
-        dynamic? addressCountry,
+        dynamic streetAddress,
+        dynamic addressLocality,
+        dynamic addressRegion,
+        dynamic postalCode,
+        dynamic addressCountry,
     }) {
         return Address(
             type: type ?? this.type,

@@ -14,9 +14,9 @@ class _VettingSystemScreenState extends State<VettingSystemScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PaylonyAppBarTwo(title: "Vetting System"),
+      appBar: const PaylonyAppBarTwo(title: "Vetting System"),
       body: Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: 10),
         child: ListView(
           children: [
             Table(
@@ -25,7 +25,7 @@ class _VettingSystemScreenState extends State<VettingSystemScreen> {
                   
                 TableRow(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff56669F).withOpacity(0.06) : Color(0xff2A261F)
+                    color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff56669F).withOpacity(0.06) : const Color(0xff2A261F)
                   ),
                   children: const [
                   Padding(
@@ -49,7 +49,7 @@ class _VettingSystemScreenState extends State<VettingSystemScreen> {
               ],
             ),
             SizedBox(height: 100.h,),
-            Center(child: NoItemVetting())
+            const Center(child: NoItemVetting())
           ],
         ),
       ),

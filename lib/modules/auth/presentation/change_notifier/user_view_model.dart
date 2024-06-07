@@ -223,7 +223,7 @@ class UserViewModel extends ChangeNotifier {
     final GoogleSignInAccount? googleSignInAccount =
     await googleSignIn.signIn();
     GoogleSignInAuthentication auth = await googleSignInAccount!.authentication;
-    var  profile = await googleSignInAccount!.displayName;
+    var  profile = await googleSignInAccount.displayName;
     logger.d(auth.accessToken);
     logger.d(profile);
     toggleGenerating(false);

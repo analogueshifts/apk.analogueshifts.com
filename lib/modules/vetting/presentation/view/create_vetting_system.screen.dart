@@ -1,12 +1,8 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
-import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
-import 'package:analogue_shifts_mobile/modules/vetting/presentation/widgets/no_item.dart';
 import 'package:analogue_shifts_mobile/modules/vetting/presentation/widgets/text_editor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class CreateVettingScreen extends StatefulWidget {
@@ -18,7 +14,6 @@ class CreateVettingScreen extends StatefulWidget {
 
 class _CreateVettingScreenState extends State<CreateVettingScreen> {
 
-  QuillController _controller = QuillController.basic();
 
   @override
   Widget build(BuildContext context) {
@@ -61,12 +56,12 @@ class _CreateVettingScreenState extends State<CreateVettingScreen> {
                
                child: Column(
                 children: [
-                  Gap(20),
+                  const Gap(20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.symmetric(vertical: 5),
                         width: screenWidth(context) * 0.4,
                         decoration: BoxDecoration(
                           border: Border.all(color: AppColors.primaryColor),
@@ -76,24 +71,22 @@ class _CreateVettingScreenState extends State<CreateVettingScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             TextSemiBold("Add Question",color: AppColors.primaryColor,),
-                            Icon(Icons.add, color: AppColors.primaryColor,)
+                            const Icon(Icons.add, color: AppColors.primaryColor,)
                           ],
                         ),
                       ),
                     ],
                   ),
-                  Container(
-                    child: Column(
-                      children: [
-                        TextEditor(),
-                        
-                      ],
-                    ),
+                  const Column(
+                    children: [
+                      TextEditor(),
+                      
+                    ],
                   )
                 ],
                ),
              ),
-            Placeholder()
+            const Placeholder()
           ])),
     );
   }

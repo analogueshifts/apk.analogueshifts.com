@@ -1,14 +1,9 @@
-
-import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/network/api_errors.dart';
-import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
-import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/notification/domain/entities/notification.entity.dart';
 import 'package:analogue_shifts_mobile/modules/notification/domain/usecases/get_notification_use_cases.dart';
 import 'package:analogue_shifts_mobile/modules/notification/presentation/notifiers/notification_state.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -22,11 +17,11 @@ class NotificationProvider extends ChangeNotifier {
 
   NotificationState get notificationState => _notificationState;
 
-  List<Datum> _notifications = [];
+  final List<Datum> _notifications = [];
   List<Datum> get notifications => _notifications;
 
   void updateNotification(List<Datum> data) {
-    logger.d('ruuning jobs data ${data}');
+    logger.d('ruuning jobs data $data');
     _notifications.addAll(data);
     notifyListeners();
   }
@@ -61,7 +56,7 @@ class NotificationProvider extends ChangeNotifier {
 
       },
           (result) async{
-            logger.d('From Notification: ${result}');
+            logger.d('From Notification: $result');
             
             _lastPage = result.notifications?.lastPage;
             final newNotifications = result.notifications?.data.where((job) => !_notifications.contains(job)).toList();

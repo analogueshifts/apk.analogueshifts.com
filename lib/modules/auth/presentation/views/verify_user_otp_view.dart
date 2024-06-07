@@ -4,7 +4,6 @@ import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/verify_password.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
-import 'package:analogue_shifts_mobile/modules/auth/presentation/views/change_password.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:otp_text_field/otp_text_field.dart';
@@ -34,14 +33,14 @@ class _VerifyUserOtpScreenState extends State<VerifyUserOtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PaylonyAppBarTwo(
+      appBar: const PaylonyAppBarTwo(
         title: "",
         centerTitle: false,
       ),
       body: Consumer<UserViewModel>(
         builder: (_, auth, __) {
         return SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -62,11 +61,11 @@ class _VerifyUserOtpScreenState extends State<VerifyUserOtpScreen> {
                     width: MediaQuery.of(context).size.width,
                     fieldWidth: 60,
                     otpFieldStyle: OtpFieldStyle(
-                      backgroundColor: Color(0xff000000).withOpacity(0.02),
+                      backgroundColor: const Color(0xff000000).withOpacity(0.02),
                       borderColor: AppColors.primaryColor,
                       enabledBorderColor: AppColors.primaryColor
                     ),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 17
                     ),
                     textFieldAlignment: MainAxisAlignment.spaceAround,

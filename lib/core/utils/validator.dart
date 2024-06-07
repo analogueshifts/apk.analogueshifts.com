@@ -22,7 +22,7 @@ static bool isValidAccountNumber(String accountNumber) {
 }
 
 static String? isEmptyString(String value, String valueName){
-    if(value.isEmpty)return "${valueName} ${AppStrings.emptyString}";
+    if(value.isEmpty)return "$valueName ${AppStrings.emptyString}";
     return null;
 }
 }

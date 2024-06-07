@@ -31,7 +31,6 @@ class _LoginViewState extends State<LoginView> {
 
   // bool _isValid = true;
 
-  bool _isEmail = true;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -44,13 +43,11 @@ class _LoginViewState extends State<LoginView> {
 
   void setLoader() {
     setState(() {
-      _isLoading = true;
     });
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         if (mounted) {
           setState(() {
-            _isLoading = false;
           });
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => const HomeNavigation()),
@@ -85,8 +82,7 @@ class _LoginViewState extends State<LoginView> {
       absorbing: read.authState.isGenerating,
       child: Scaffold(
         appBar: PaylonyAppBarTwo(title: "Login", centerTitle: false,backTap: (){
-          if(widget.toggleView == null)return;
-          widget.toggleView!(true);
+          widget.toggleView(true);
         },),
          body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -263,14 +259,12 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  bool _isLoading = false;
 
   void updateLoader(bool value){
 
     if(!mounted)return;
 
     setState(() {
-      _isLoading = value;
     });
   }
 }

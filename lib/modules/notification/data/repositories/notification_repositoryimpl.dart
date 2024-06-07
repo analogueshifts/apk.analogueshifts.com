@@ -3,7 +3,6 @@ import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/notification/domain/entities/notification.entity.dart';
 import 'package:analogue_shifts_mobile/modules/notification/domain/repositories/notification_repository.dart';
 import 'package:dartz/dartz.dart';
-import 'package:get_it/get_it.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
   late DioManager dioManager;

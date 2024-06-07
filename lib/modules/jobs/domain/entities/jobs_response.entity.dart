@@ -5,7 +5,7 @@ part 'jobs_response.entity.g.dart';
 
 @JsonSerializable(createToJson: false)
 class JobResponseEntity extends Equatable {
-  JobResponseEntity({
+  const JobResponseEntity({
     required this.status,
     required this.success,
     required this.data,
@@ -24,7 +24,7 @@ class JobResponseEntity extends Equatable {
 
 @JsonSerializable(createToJson: false)
 class Data extends Equatable {
-  Data({
+  const Data({
     required this.jobs,
   });
 
@@ -39,7 +39,7 @@ class Data extends Equatable {
 
 @JsonSerializable(createToJson: false)
 class Jobs extends Equatable {
-  Jobs({
+  const Jobs({
     required this.currentPage,
     required this.data,
     required this.firstPageUrl,
@@ -91,7 +91,7 @@ class Jobs extends Equatable {
 
 @JsonSerializable(createToJson: false)
 class Datum extends Equatable {
-  Datum({
+  const Datum({
     required this.id,
     required this.uuid,
     required this.slug,
@@ -150,7 +150,7 @@ class Datum extends Equatable {
 
 @JsonSerializable(createToJson: false)
 class BaseSalary extends Equatable {
-  BaseSalary({
+  const BaseSalary({
     required this.type,
     required this.value,
   });
@@ -168,7 +168,7 @@ class BaseSalary extends Equatable {
 
 @JsonSerializable(createToJson: false)
 class Value extends Equatable {
-  Value({
+  const Value({
     required this.type,
     required this.value,
   });
@@ -186,7 +186,7 @@ class Value extends Equatable {
 
 @JsonSerializable(createToJson: false)
 class HiringOrganization extends Equatable {
-  HiringOrganization({
+  const HiringOrganization({
     required this.type,
     required this.name,
     required this.sameAs,
@@ -208,7 +208,7 @@ class HiringOrganization extends Equatable {
 
 @JsonSerializable(createToJson: false)
 class Identifier extends Equatable {
-  Identifier({
+  const Identifier({
     required this.type,
     required this.name,
     required this.value,
@@ -228,7 +228,7 @@ class Identifier extends Equatable {
 
 @JsonSerializable(createToJson: false)
 class JobLocation extends Equatable {
-  JobLocation({
+  const JobLocation({
     required this.type,
     required this.address,
   });
@@ -246,7 +246,7 @@ class JobLocation extends Equatable {
 
 @JsonSerializable(createToJson: false)
 class Address extends Equatable {
-  Address({
+  const Address({
     required this.type,
     required this.streetAddress,
     required this.addressLocality,
@@ -272,7 +272,7 @@ class Address extends Equatable {
 
 @JsonSerializable(createToJson: false)
 class Link extends Equatable {
-  Link({
+  const Link({
     required this.url,
     required this.label,
     required this.active,

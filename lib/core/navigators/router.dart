@@ -1,6 +1,5 @@
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
-import 'package:analogue_shifts_mobile/modules/auth/presentation/views/login_view.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:analogue_shifts_mobile/modules/notification/presentation/views/notification_screen.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/introduction._screen.dart';

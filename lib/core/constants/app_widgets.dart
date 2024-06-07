@@ -3,7 +3,6 @@ import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/core/constants/app_strings.dart';
 import 'package:analogue_shifts_mobile/core/constants/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:logo_n_spinner/logo_n_spinner.dart';
 
 class AppWidgets{
@@ -18,7 +17,7 @@ class AppWidgets{
     fontWeight: FontWeight.w500,
   );
 
-  final Widget logoSpinner = LogoandSpinner(
+  final Widget logoSpinner = const LogoandSpinner(
     imageAssets: 'assets/images/logo.png',
     reverse: true,
     arcColor: AppColors.primaryColor,

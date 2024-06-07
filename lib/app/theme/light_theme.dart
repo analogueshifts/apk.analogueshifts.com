@@ -104,8 +104,8 @@ final lightTheme = ThemeData(
   ),
   unselectedWidgetColor: const Color(0xffDEDEDE),
       switchTheme: SwitchThemeData(
-        thumbColor: MaterialStateProperty.all(Color(0xffEBEBEB)),
+        thumbColor: MaterialStateProperty.all(const Color(0xffEBEBEB)),
         trackColor: MaterialStateProperty.resolveWith((states) =>
-            states.contains(MaterialState.selected) ? Color(0xffEBEBEB).withOpacity(0.6) : null)),
+            states.contains(MaterialState.selected) ? const Color(0xffEBEBEB).withOpacity(0.6) : null)),
 );
 

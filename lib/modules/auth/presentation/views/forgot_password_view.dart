@@ -40,14 +40,14 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
       return AbsorbPointer(
         absorbing: auth.authState.isGenerating,
         child: Scaffold(
-          appBar: PaylonyAppBarTwo(
+          appBar: const PaylonyAppBarTwo(
             title: "",
             centerTitle: false,
           ),
           body: Consumer<UserViewModel>(
             builder: (_, auth, __) {
            return SingleChildScrollView(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -62,7 +62,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                     ),
                     const Gap(5),
                     TextSemiBold(
-                        'Don’t worry! It occurs. Please enter the email address linked with your account.', color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.6) : Color(0xff909090) ,),
+                        'Don’t worry! It occurs. Please enter the email address linked with your account.', color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.6) : const Color(0xff909090) ,),
                     const Gap(30),
                     Form(
                       key: _formKey,
@@ -73,17 +73,17 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.06) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.25) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                             hintText: 'Enter your email'),
                         validator: (value) {

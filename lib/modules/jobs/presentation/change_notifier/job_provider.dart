@@ -1,10 +1,7 @@
 
-import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/network/api_errors.dart';
-import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
-import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/reconmende_job.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/usecases/fetch_job.usecase.dart';
@@ -17,7 +14,6 @@ class JobProvider extends ChangeNotifier {
   final FetchJobsUseCase _fetchJobsUseCase = GetIt.instance<FetchJobsUseCase>();
    final FetchReconmendedJobsUseCase _fetchReconmendedJobsUseCase = GetIt.instance<FetchReconmendedJobsUseCase>();
   final ErrorHandler _errorHandler = GetIt.instance<ErrorHandler>();
-  final _db = getIt<DBService>();
 
 
 
@@ -26,7 +22,7 @@ class JobProvider extends ChangeNotifier {
   JobState get jobhState => _jobState;
 
 
-  List<Datum> _jobs = [];
+  final List<Datum> _jobs = [];
   List<Datum> get job => _jobs;
   int _currentPage = 1;
   int get currentPage => _currentPage;

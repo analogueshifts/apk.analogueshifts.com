@@ -98,7 +98,7 @@ class _JobViewState extends State<JobView> {
         title: TextBold("Jobs", fontSize: 20, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
         centerTitle: true,
         actions: [
-          NotificationIcon()
+          const NotificationIcon()
         ],
       ),
       body: Consumer<JobProvider>(
@@ -121,17 +121,17 @@ class _JobViewState extends State<JobView> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.18)
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.18)
                           )
                         ),
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xff000000).withOpacity(0.4) : Color(0xffFFFFFF).withOpacity(0.4)
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
                         hintText: "Search",
                               prefixIcon: _isLoading ? Container(margin: const EdgeInsets.only(left:
@@ -179,17 +179,17 @@ class _JobViewState extends State<JobView> {
                       return Column(
                         children: [
                           _recentJobCard(e),
-                          Gap(10),
-                          Divider(color: Theme.of(context).colorScheme.brightness == Brightness.light ? Color(0xffE4E4E4) : Color(0xffFFFFF).withOpacity(0.24),)
+                          const Gap(10),
+                          Divider(color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xffE4E4E4) : const Color(0xffFFFFF).withOpacity(0.24),)
                         ],
                       );
                     }
                 ),
-                Gap(20),
+                const Gap(20),
                 _isPaginateButton ? BusyButton(title: "Load More...", onTap:() {
-                  final _updateCurrentPage = job.currentPage + 1;
-                  job.getJobs(context, _updateCurrentPage);
-                },) : Text("")
+                  final updateCurrentPage = job.currentPage + 1;
+                  job.getJobs(context, updateCurrentPage);
+                },) : const Text("")
               ],
             ),
           );

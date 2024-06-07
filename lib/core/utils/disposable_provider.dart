@@ -5,7 +5,8 @@ abstract class DisposableProvider with ChangeNotifier {
     // super.dispose();
   );
 
-   void dispose() {
+   @override
+     void dispose() {
     // Clean up resources here
     super.dispose();
   }

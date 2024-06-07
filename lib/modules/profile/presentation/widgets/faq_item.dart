@@ -1,4 +1,3 @@
-import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class QAItem extends StatelessWidget {
@@ -20,11 +19,11 @@ class QAItem extends StatelessWidget {
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
       childrenPadding: EdgeInsets.zero,
       title: title,
-      children: children,
       collapsedIconColor: Colors.transparent,
       dense: false,
-      collapsedShape: RoundedRectangleBorder(),
-      shape: RoundedRectangleBorder(side: BorderSide(color: Colors.transparent)),
+      collapsedShape: const RoundedRectangleBorder(),
+      shape: const RoundedRectangleBorder(side: BorderSide(color: Colors.transparent)),
+      children: children,
     );
   }
 }

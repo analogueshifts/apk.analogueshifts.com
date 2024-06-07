@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:json_annotation/json_annotation.dart';
 
 part 'jobsResponseModel.g.dart';
@@ -110,7 +111,7 @@ class Jobs {
     String? nextPageUrl,
     String? path,
     int? perPage,
-    dynamic? prevPageUrl,
+    dynamic prevPageUrl,
     int? to,
     int? total,
   }) {
@@ -201,13 +202,13 @@ class Datum {
     List<dynamic>? applicantLocationRequirements,
     BaseSalary? baseSalary,
     String? directApply,
-    dynamic? employmentType,
+    dynamic employmentType,
     JobLocation? jobLocation,
-    dynamic? jobLocationType,
+    dynamic jobLocationType,
     DateTime? validThrough,
     String? status,
     String? apply,
-    dynamic? alts,
+    dynamic alts,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -314,7 +315,7 @@ class HiringOrganization {
     String? type,
     String? name,
     String? sameAs,
-    dynamic? logo,
+    dynamic logo,
   }) {
     return HiringOrganization(
       type: type ?? this.type,
@@ -346,7 +347,7 @@ class Identifier {
   Identifier copyWith({
     String? type,
     String? name,
-    dynamic? value,
+    dynamic value,
   }) {
     return Identifier(
       type: type ?? this.type,
@@ -409,11 +410,11 @@ class Address {
 
   Address copyWith({
     String? type,
-    dynamic? streetAddress,
-    dynamic? addressLocality,
-    dynamic? addressRegion,
-    dynamic? postalCode,
-    dynamic? addressCountry,
+    dynamic streetAddress,
+    dynamic addressLocality,
+    dynamic addressRegion,
+    dynamic postalCode,
+    dynamic addressCountry,
   }) {
     return Address(
       type: type ?? this.type,
