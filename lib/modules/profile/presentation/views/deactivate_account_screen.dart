@@ -73,7 +73,7 @@ class _DeactivateAccountScreenState extends State<DeactivateAccountScreen> {
                     const Gap(5),
                     Center(
                       child: Text(
-                        Functions.capitalize(user.authState.user?.name.toString() ?? "", ),
+                        Functions.capitalize(user.authState.user?.firstName.toString() ?? "", ),
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),

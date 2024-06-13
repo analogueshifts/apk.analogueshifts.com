@@ -49,9 +49,9 @@ class _ProfileViewState extends State<ProfileView> {
       ),
       body: Consumer<UserViewModel>(
         builder: (context, UserViewModel user, child) {
-          final name = Functions.capitalize(user.authState.user?.name ?? "");
-        final splitName = name.split(' ');
-        final firstName = splitName[0];
+          final name = Functions.capitalize(user.authState.user?.firstName ?? "");
+        // final splitName = name.split(' ');
+        // final firstName = splitName[0];
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
           child: ListView(children: [
@@ -76,7 +76,7 @@ class _ProfileViewState extends State<ProfileView> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextBold("Hi!, $firstName", fontSize: 16, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    TextBold("Hi!, $name", fontSize: 16, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w700,
                       fontSize: 17
                     ),),

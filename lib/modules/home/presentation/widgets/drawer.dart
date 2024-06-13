@@ -42,7 +42,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   Widget build(BuildContext context) {
     return Consumer<UserViewModel>(
       builder: (context, UserViewModel user, child) {
-        final name = Functions.capitalize(user.authState.user?.name ?? "");
+        final name = Functions.capitalize(user.authState.user?.firstName ?? "");
         final splitName = name.split(' ');
         final firstName = splitName[0];
       return AbsorbPointer(

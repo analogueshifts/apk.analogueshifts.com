@@ -84,6 +84,7 @@ class _JobViewState extends State<JobView> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        scrolledUnderElevation: 0,
         leading: TouchableOpacity(
           onTap: () {
              Scaffold.of(context).openDrawer();

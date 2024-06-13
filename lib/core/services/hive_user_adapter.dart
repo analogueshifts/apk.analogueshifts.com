@@ -8,43 +8,54 @@ class UserAdapter extends TypeAdapter<User> {
 
   @override
   User read(BinaryReader reader) {
-    return User(
-      id: reader.read(),
-      uuid: reader.read(),
-      name: reader.read(),
-      username: reader.read(),
-      email: reader.read(),
-      tel: reader.read(),
-      role: reader.read(),
-      profile: reader.read(),
-      otp: reader.read(),
-      isVerified: reader.read(),
-      googleToken: reader.read(),
-      emailVerifiedAt: reader.read(),
-      createdAt: reader.read(),
-      updatedAt: reader.read(),
-    );
+    try {
+
+      // print(requiredBytes());
+      // print(reader.availableBytes.toString());
+      // // Ensure there are enough bytes to read a complete User object
+      // if (reader.availableBytes < requiredBytes()) {
+      //   throw RangeError('Not enough bytes available');
+      // }
+      //
+      // print('Available bytes: ${reader.availableBytes}');
+
+      return User(
+        id: reader.readInt(),
+        firstName: reader.readString(),
+        lastName: reader.readString(),
+        username: reader.readString(),
+        email: reader.readString(),
+        profile: reader.readString(),
+        isVerified: reader.readBool(),
+      );
+    } catch (e) {
+      print('Error reading user: $e');
+      rethrow; // Rethrow the exception if caught
+    }
   }
 
   @override
   void write(BinaryWriter writer, User obj) {
-    writer.write(obj.id);
-    writer.write(obj.uuid);
-    writer.write(obj.name);
-    writer.write(obj.username);
-    writer.write(obj.email);
-    writer.write(obj.tel);
-    writer.write(obj.role);
-    writer.write(obj.profile);
-    writer.write(obj.otp);
-    writer.write(obj.isVerified);
-    writer.write(obj.googleToken);
-    writer.write(obj.emailVerifiedAt);
-    writer.write(obj.createdAt);
-    writer.write(obj.updatedAt);
+    if (obj == null || !obj.isValid()) {
+      throw Exception('Invalid User object');
+    }
+    writer.writeInt(obj.id);
+    writer.writeString(obj.firstName);
+    writer.writeString(obj.lastName);
+    writer.writeString(obj.username);
+    writer.writeString(obj.email);
+    writer.writeString(obj.profile);
+    writer.writeBool(obj.isVerified ?? false);
+  }
+
+  int requiredBytes() {
+    // Calculate the minimum bytes needed for a complete User object
+    // Assuming fixed length for int (4 bytes) and bool (1 byte)
+    return 4 + // id
+        1 + // isVerified
+        5 * 50; // Approximation for string fields (adjust if necessary)
   }
 }
-
 
 class ThemeModeAdapter extends TypeAdapter<ThemeMode> {
   @override

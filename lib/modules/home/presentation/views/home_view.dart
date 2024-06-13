@@ -66,13 +66,14 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserViewModel>();
-    final name = Functions.capitalize(user.authState.user?.name ?? "");
+    final name = Functions.capitalize(user.authState.user?.firstName ?? "");
     final splitName = name.split(' ');
     final firstName = splitName[0];
     return Scaffold(
       
       appBar: AppBar(
         elevation: 0,
+        scrolledUnderElevation: 0,
         leading: TouchableOpacity(
           onTap: () {
              Scaffold.of(context).openDrawer();

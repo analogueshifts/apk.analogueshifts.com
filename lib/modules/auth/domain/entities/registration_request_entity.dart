@@ -2,60 +2,61 @@ import 'package:equatable/equatable.dart';
 
 class RegisterRequest extends Equatable {
     RegisterRequest({
-        required this.name,
+        required this.firstName,
+        required this.lastName,
         required this.email,
         required this.password,
         required this.passwordConfirmation,
         required this.deviceToken,
-        required this.deviceType,
     });
 
-    final String? name;
+    final String? firstName;
+    final String? lastName;
     final String? email;
     final String? password;
     final String? passwordConfirmation;
     final String? deviceToken;
-    final String? deviceType;
 
     RegisterRequest copyWith({
-        String? name,
+        String? firstName,
+        String? lastName,
         String? email,
         String? password,
         String? passwordConfirmation,
         String? deviceToken,
-        String? deviceType,
     }) {
         return RegisterRequest(
-            name: name ?? this.name,
+            firstName: firstName ?? this.firstName,
+            lastName: lastName ?? this.lastName,
             email: email ?? this.email,
             password: password ?? this.password,
             passwordConfirmation: passwordConfirmation ?? this.passwordConfirmation,
             deviceToken: deviceToken ?? this.deviceToken,
-            deviceType: deviceType ?? this.deviceType,
         );
     }
 
-    factory RegisterRequest.fromJson(Map<String, dynamic> json){ 
+    factory RegisterRequest.fromJson(Map<String, dynamic> json){
         return RegisterRequest(
-            name: json["name"],
+            firstName: json["first_name"],
+            lastName: json["last_name"],
             email: json["email"],
             password: json["password"],
             passwordConfirmation: json["password_confirmation"],
             deviceToken: json["device_token"],
-            deviceType: json["device_type"],
         );
     }
 
     Map<String, dynamic> toJson() => {
-        "name": name,
+        "first_name": firstName,
+        "last_name": lastName,
         "email": email,
         "password": password,
         "password_confirmation": passwordConfirmation,
         "device_token": deviceToken,
-        "device_type": deviceType,
     };
 
     @override
     List<Object?> get props => [
-    name, email, password, passwordConfirmation, deviceToken, deviceType, ];
+        firstName, lastName, email, password, passwordConfirmation, deviceToken, ];
 }
+

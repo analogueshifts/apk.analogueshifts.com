@@ -19,7 +19,13 @@ class DioManager {
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $tokenProvider',
-            'Content-Type': 'application/json', },
+            'Content-Type': 'application/json',
+            'public_key': 'AS_PUBLIC_HtqFHcL1LLmqt',
+            'secret_key': 'AS_SECRET_29MOHf8Ff2ImH',
+            'slug': 'user_version_1.0_android',
+            'user_type': 'user',
+            'version': '1.0'
+          },
         )
     );
 

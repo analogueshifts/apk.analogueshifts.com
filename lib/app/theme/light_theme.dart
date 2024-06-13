@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 
 final lightTheme = ThemeData(
+  splashColor: Colors.transparent,
+  highlightColor: Colors.transparent,
   colorScheme: const ColorScheme(
     brightness: Brightness.light, 
     primary: AppColors.primaryColor, 
@@ -15,7 +17,7 @@ final lightTheme = ThemeData(
     background: AppColors.white, 
     onBackground: Color(0xffFFFFFF), 
     surface:  AppColors.white, 
-    onSurface: AppColors.white, 
+    onSurface: AppColors.white
     ),
   useMaterial3: true,
   dialogTheme: DialogTheme(
