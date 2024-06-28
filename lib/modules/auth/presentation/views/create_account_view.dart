@@ -29,7 +29,8 @@ class CreateAccountView extends StatefulWidget {
 }
 
 class _CreateAccountViewState extends State<CreateAccountView> {
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -76,7 +77,8 @@ class _CreateAccountViewState extends State<CreateAccountView> {
 @override
   void dispose() {
     _emailController.dispose();
-    _nameController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -120,14 +122,51 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                         child: Center(child: SvgPicture.asset(AppAsset.google))),
                   ),
                   const Gap(20),
-                  TextSemiBold("Name", color: AppColors.background,fontWeight: FontWeight.w700,),
+                  TextSemiBold("First Name", color: AppColors.background,fontWeight: FontWeight.w700,),
                   const Gap(6),
                   TextFormField(
-                    controller: _nameController,
+                    controller: _firstNameController,
                     validator: (value){
-                      CustomValidator.isEmptyString(value!, "name");
+                      CustomValidator.isEmptyString(value!, "first name");
                       if(value.isEmpty){
-                        return ("Input your name");
+                        return ("Input your first name");
+                      }
+
+                      return null;
+                    },
+                    decoration: textInputDecoration.copyWith(
+                        fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.18)
+                            )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.18)
+                            )
+                        ),
+                        hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
+                        hintText: 'First Name'
+                    ),
+                    onChanged: (value){
+                      _setFormValidState();
+
+                    },
+                  ),
+                  const Gap(15),
+                  TextSemiBold("Last Name", color: AppColors.background,fontWeight: FontWeight.w700,),
+                  const Gap(6),
+                  TextFormField(
+                    controller: _lastNameController,
+                    validator: (value){
+                      CustomValidator.isEmptyString(value!, "last name");
+                      if(value.isEmpty){
+                        return ("Input your last name");
                       }
           
                       return null;
@@ -149,7 +188,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                         hintStyle: TextStyle(
                           color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
-                      hintText: 'Full Name'
+                      hintText: 'Last Name'
                     ),
                     onChanged: (value){
                       _setFormValidState();
@@ -254,7 +293,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
                           currentFocus.focusedChild?.unfocus();
                         }
-                      auth.registerUser(RegisterRequest(name: _nameController.text.trim(), email: _emailController.text.trim(), password: _passwordController.text.trim(), passwordConfirmation: _passwordController.text.trim(), deviceToken: firebaseToken.toString(), deviceType: deviceType.toString()), context);
+                      auth.registerUser(RegisterRequest(firstName: _firstNameController.text.trim(), lastName: _lastNameController.text.trim(), email: _emailController.text.trim(), password: _passwordController.text.trim(), passwordConfirmation: _passwordController.text.trim(), deviceToken: firebaseToken.toString()), context);
                     }
           
                   }),

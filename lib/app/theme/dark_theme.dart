@@ -3,6 +3,8 @@ import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:flutter/material.dart';
 
 final darkTheme = ThemeData(
+  splashColor: Colors.transparent,
+  highlightColor: Colors.transparent,
    colorScheme: const ColorScheme(
     brightness: Brightness.dark, 
     primary: AppColors.primaryColor, 

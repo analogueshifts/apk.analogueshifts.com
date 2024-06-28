@@ -55,7 +55,7 @@ class UserViewModel extends ChangeNotifier {
     logger.e("running PP FUNXTION");
     if (user == null) return;
     final dbUser = user;
-    saveUser(User(id: dbUser.id, uuid: dbUser.uuid, name: dbUser.name, username: dbUser.username, email: dbUser.email, tel: dbUser.tel, role: dbUser.role, profile: dbUser.profile, otp: dbUser.otp, isVerified: dbUser.isVerified, googleToken: dbUser.googleToken, emailVerifiedAt: dbUser.emailVerifiedAt, createdAt: dbUser.createdAt, updatedAt: dbUser.updatedAt));
+    saveUser(User(phoneNoCode: dbUser.phoneNoCode, phoneNo: dbUser.phoneNo, status: dbUser.status, id: dbUser.id, deviceType: dbUser.deviceType, deviceToken: dbUser.deviceToken, uuid: dbUser.uuid, firstName: dbUser.firstName,lastName: dbUser.lastName, username: dbUser.username, email: dbUser.email, tel: dbUser.tel, userType: dbUser.userType, profile: dbUser.profile, otp: dbUser.otp, isVerified: dbUser.isVerified,emailVerifiedAt: dbUser.emailVerifiedAt, createdAt: dbUser.createdAt, updatedAt: dbUser.updatedAt));
     logger.i(_authState.user);
     notifyListeners();
 
@@ -69,6 +69,7 @@ class UserViewModel extends ChangeNotifier {
 
 
   void saveUser(User value){
+    logger.w(value);
     _authState.updateUser(value);
     notifyListeners();
   }

@@ -31,9 +31,9 @@ final _db = getIt<DBService>();
     logger.d(user.email);
     try {
       await _db.removeAuthToken();
-      // if (await _deviceNetwork.isConnected() == false) {
-      //   throw const SocketException('Network Error');
-      // }
+      if (await _deviceNetwork.isConnected() == false) {
+        throw const SocketException('Network Error');
+      }
       
       final response = await dioManager.dio.post(
         'login',
@@ -54,6 +54,9 @@ final _db = getIt<DBService>();
         throw Exception('Login failed');
       }
     } catch (e) {
+      logger.e(e);
+      throw Exception(e);
+
       return Left(e as Exception);
     }
   }
@@ -68,14 +71,7 @@ final _db = getIt<DBService>();
       
       final response = await dioManager.dio.post(
         'register',
-        data: {
-          'name': payload.name,
-          'email': payload.email,
-          'password': payload.password,
-          'password_confirmation': payload.passwordConfirmation,
-          'device_token': payload.deviceToken,
-          'device_type': payload.deviceType
-        },
+        data:payload.toJson(),
          options: Options(
             headers: {
               HttpHeaders.acceptHeader: 'application/json',
@@ -94,7 +90,7 @@ final _db = getIt<DBService>();
         logger.d("runnunfb_____>>>>>____");
         return Right(userModel.toString());
       } else {
-        return Left(Exception(response.data));
+        throw Exception(response.data);
       }
     } catch (e) {
       logger.e(e);
@@ -198,7 +194,7 @@ final _db = getIt<DBService>();
       
       final response = await dioManager.dio.post(
         'update/profile',
-         data: json.encode(UpdateUser(name: user.name, username: user.username, tel: user.tel, profile: user.profile)),
+         data: json.encode(UpdateUser(firstName: user.firstName, lastName: user.lastName, username: user.username,  profile: user.profile)),
       );
       logger.d(response.data);
       logger.d(response.statusCode);

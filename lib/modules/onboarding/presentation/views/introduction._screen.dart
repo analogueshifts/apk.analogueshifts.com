@@ -119,7 +119,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                                 child: InkWell(
                                   onTap: () {
                                     _db.save('onboard', "1");
-                                    context.replace(Routes.authenticate);
+                                    Navigator.pushNamedAndRemoveUntil(context, Routes.authenticate, (route) => false);
                                   },
                                   child: Text(
                                     'Skip',

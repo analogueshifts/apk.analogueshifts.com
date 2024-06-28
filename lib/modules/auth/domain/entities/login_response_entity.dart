@@ -52,56 +52,97 @@ class Data extends Equatable {
 class User extends Equatable {
     User({
         required this.id,
-        required this.uuid,
-        required this.name,
+        this.uuid,
+        required this.firstName,
+        required this.lastName,
         required this.username,
         required this.email,
-        required this.tel,
-        required this.role,
+        this.phoneNoCode,
+         this.phoneNo,
+        this.tel,
+        this.userType,
         required this.profile,
-        required this.otp,
+        this.otp,
         this.isVerified,
-        this.googleToken,
-        required this.emailVerifiedAt,
-        required this.createdAt,
-        required this.updatedAt,
+        this.emailVerifiedAt,
+        this.deviceType,
+        this.deviceToken,
+        this.status,
+        this.createdAt,
+        this.updatedAt,
     });
 
-    final int? id;
+    final int id;
     final String? uuid;
-    String? name;
+    final String? firstName;
+    final String? lastName;
     final String? username;
     final String? email;
-    String? tel;
-    final String? role;
-    String? profile;
+    final dynamic? phoneNoCode;
+    final dynamic? phoneNo;
+    final dynamic tel;
+    final String? userType;
+    final dynamic profile;
     final String? otp;
     final dynamic isVerified;
-    final dynamic googleToken;
     final dynamic emailVerifiedAt;
+    final dynamic deviceType;
+    final dynamic deviceToken;
+    final String? status;
     final DateTime? createdAt;
     final DateTime? updatedAt;
 
-    factory User.fromJson(Map<String, dynamic> json){ 
+    factory User.fromJson(Map<String, dynamic> json){
         return User(
             id: json["id"],
             uuid: json["uuid"],
-            name: json["name"],
+            firstName: json["first_name"],
+            lastName: json["last_name"],
             username: json["username"],
             email: json["email"],
+            phoneNoCode: json["phone_no_code"],
+            phoneNo: json["phone_no"],
             tel: json["tel"],
-            role: json["role"],
+            userType: json["user_type"],
             profile: json["profile"],
             otp: json["OTP"],
             isVerified: json["is_verified"],
-            googleToken: json["google_token"],
             emailVerifiedAt: json["email_verified_at"],
+            deviceType: json["device_type"],
+            deviceToken: json["device_token"],
+            status: json["status"],
             createdAt: DateTime.tryParse(json["created_at"] ?? ""),
             updatedAt: DateTime.tryParse(json["updated_at"] ?? ""),
         );
     }
 
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "uuid": uuid,
+        "first_name": firstName,
+        "last_name": lastName,
+        "username": username,
+        "email": email,
+        "phone_no_code": phoneNoCode,
+        "phone_no": phoneNo,
+        "tel": tel,
+        "user_type": userType,
+        "profile": profile,
+        "OTP": otp,
+        "is_verified": isVerified,
+        "email_verified_at": emailVerifiedAt,
+        "device_type": deviceType,
+        "device_token": deviceToken,
+        "status": status,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+    };
+
     @override
     List<Object?> get props => [
-    id, uuid, name, username, email, tel, role, profile, otp, isVerified, googleToken, emailVerifiedAt, createdAt, updatedAt, ];
+        id, uuid, firstName, lastName, username, email, phoneNoCode, phoneNo, tel, userType, profile, otp, isVerified, emailVerifiedAt, deviceType, deviceToken, status, createdAt, updatedAt, ];
+
+    bool isValid() {
+        return email!.isNotEmpty && username!.isNotEmpty;
+    }
 }

@@ -25,20 +25,31 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   @override
   void initState() {
     final user = context.read<UserViewModel>().authState.user;
     context.read<FileUploadNotifier>();
-    _nameController.text = user?.name ?? "";
+    _firstNameController.text = user?.firstName ?? "";
+    _lastNameController.text = user?.lastName ?? "";
     _emailController.text = user?.email ?? "";
-    _phoneController.text = user?.tel ?? "";
+    _phoneController.text = user?.phoneNo ?? "";
    
     super.initState();
   }
 
+
+@override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +99,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 const Gap(20),
-                  TextSemiBold("Name", style: Theme.of(context).textTheme.bodyMedium,),
+                  TextSemiBold("First Name", style: Theme.of(context).textTheme.bodyMedium,),
                   const Gap(6),
                   TextFormField(
-                    controller: _nameController,
+                    controller: _firstNameController,
                     decoration: textInputDecoration.copyWith(
                       fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
                         enabledBorder: OutlineInputBorder(
@@ -112,7 +123,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           fontSize: 12,
                           color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
-                        hintText: user.authState.user?.name ?? 'John James'),
+                        hintText: user.authState.user?.firstName ?? 'John James'),
                     validator: (value) {
                       if (value == null) return ("Enter your name");
                       if (CustomValidator.validEmail(value.trim()) == false) {
@@ -124,6 +135,43 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     onChanged: (value) {
                     },
                   ),
+                const Gap(20),
+                TextSemiBold("Last Name", style: Theme.of(context).textTheme.bodyMedium,),
+                const Gap(6),
+                TextFormField(
+                  controller: _lastNameController,
+                  decoration: textInputDecoration.copyWith(
+                      fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                      ),
+                      hintStyle: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontFamily: AppFonts.manRope,
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
+                      ),
+                      hintText: user.authState.user?.lastName ?? 'John James'),
+                  validator: (value) {
+                    if (value == null) return ("Enter your name");
+                    if (CustomValidator.validEmail(value.trim()) == false) {
+                      return ("Invalid name");
+                    }
+
+                    return null;
+                  },
+                  onChanged: (value) {
+                  },
+                ),
                 const Gap(20),
                   TextSemiBold("Email", style: Theme.of(context).textTheme.bodyMedium,),
                   const Gap(6),
@@ -216,7 +264,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       if(!mounted)return;
                        AppSnackbar.error(context, message: "Update your profile image");
                     }else{
-                       user.updateUser(User(id: savedUser?.id, uuid: savedUser?.uuid, name: _nameController.text, username: savedUser?.username ?? Random().nextInt(100).toString(), email: savedUser?.email, tel: _phoneController.text, role: savedUser?.role, profile: upload.uploadedImage ?? savedUser?.profile, otp: "", isVerified: savedUser?.isVerified, googleToken: "", emailVerifiedAt: "", createdAt: savedUser?.createdAt, updatedAt: savedUser?.updatedAt), context);
+                       user.updateUser(User(id: savedUser!.id, uuid: savedUser.uuid, firstName: "Tori", lastName: _lastNameController.text.trim(), username: savedUser?.username ?? Random().nextInt(100).toString(), email: savedUser!.email, tel: _phoneController.text, profile: upload.uploadedImage ?? savedUser?.profile, otp: "", isVerified: savedUser?.isVerified,emailVerifiedAt: "", createdAt: savedUser?.createdAt, updatedAt: savedUser?.updatedAt, deviceToken: "", deviceType: "android", phoneNo: _phoneController.text, phoneNoCode: "+234", status: "1",userType: "user",  ), context);
                     }
                    
                   },)

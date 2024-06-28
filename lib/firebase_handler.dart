@@ -1,3 +1,4 @@
+import 'package:analogue_shifts_mobile/core/notificaton/local_notification_service.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,39 +24,64 @@ class FirebaseHandler {
 
 
 
-class LocalNotificationService {
-  
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  Future<void> init() async {
-    // Initialize native android notification
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-
-    // Initialize native Ios Notifications
-    const DarwinInitializationSettings initializationSettingsIOS =
-        DarwinInitializationSettings();
-
-    const InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
-
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-    );
-  }
-}
+// class LocalNotificationService {
+//
+//   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//       FlutterLocalNotificationsPlugin();
+//
+//   Future<void> init() async {
+//     // Initialize native android notification
+//     const AndroidInitializationSettings initializationSettingsAndroid =
+//         AndroidInitializationSettings('@mipmap/ic_launcher');
+//
+//     // Initialize native Ios Notifications
+//     const DarwinInitializationSettings initializationSettingsIOS =
+//         DarwinInitializationSettings();
+//
+//     const InitializationSettings initializationSettings =
+//         InitializationSettings(
+//       android: initializationSettingsAndroid,
+//       iOS: initializationSettingsIOS,
+//     );
+//
+//     await flutterLocalNotificationsPlugin.initialize(
+//       initializationSettings,
+//     );
+//   }
+//
+//   Future<void> showNotification(RemoteNotification? notification) async {
+//     AndroidNotificationDetails androidPlatformChannelSpecifics =
+//     AndroidNotificationDetails(
+//       notification!.hashCode.toString(),
+//       'general',
+//       importance: Importance.max,
+//       priority: Priority.high,
+//       showWhen: false,
+//     );
+//     const iosNotificatonDetail = DarwinNotificationDetails();
+//      var notificationDetails = NotificationDetails(
+//       iOS: iosNotificatonDetail,
+//       android: androidPlatformChannelSpecifics,
+//     );
+//
+//     await flutterLocalNotificationsPlugin.show(
+//       notification.hashCode,
+//       notification?.title,
+//       notification?.body,
+//       notificationDetails,
+//       payload: 'item x',
+//     );
+//   }
+// }
 class PushNotificationService {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   Future initialize() async {
     FirebaseMessaging.instance.requestPermission();
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
 
-      if (message.notification != null) {
+      if (message?.notification != null) {
+        LocalNtificationService().showLocalNotification(message!.notification!);
       }
     });
 

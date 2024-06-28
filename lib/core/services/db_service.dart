@@ -16,7 +16,11 @@ class DBService {
     await Hive.initFlutter();
     Hive.registerAdapter(UserAdapter());
     Hive.registerAdapter(ThemeModeAdapter());
-    await Hive.openBox<User>(boxName); 
+    await Hive.openBox<User>(boxName);
+    if(this.getUser(0) != null){
+      await this.removeUser(0);
+    }
+
     await Hive.openBox(box);
     
     // if(getTheme() == null){
