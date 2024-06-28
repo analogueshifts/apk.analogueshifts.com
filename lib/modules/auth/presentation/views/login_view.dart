@@ -77,6 +77,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     UserViewModel read = context.read<UserViewModel>();
     return  AbsorbPointer(
       absorbing: read.authState.isGenerating,
@@ -134,7 +135,10 @@ class _LoginViewState extends State<LoginView> {
                   ],
                 ),
                 const Gap(20),
-                TextSemiBold("Email", color: AppColors.background,fontWeight: FontWeight.w700,),
+                TextSemiBold(
+                  "Email",
+                  color: theme.brightness == Brightness.light ? AppColors.background : AppColors.white,
+                  fontWeight: FontWeight.w700,),
                 const Gap(6),
                 TextFormField(
                   controller: _emailController,
@@ -171,7 +175,7 @@ class _LoginViewState extends State<LoginView> {
                 const Gap(15),
                 TextSemiBold(
                   "Password",
-                  color: AppColors.background,
+                  color: theme.brightness == Brightness.light ? AppColors.background : AppColors.white,
                   fontWeight: FontWeight.w700,
                 ),
                 const Gap(6),
@@ -238,7 +242,10 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 const Gap(40),
                 BusyButton(
-                  disabled: _isFormValid, title: "Login", isLoading: context.watch<UserViewModel>().authState.isGenerating == false ? false : true, textColor: Colors.white, height: 58, onTap:(){
+                  disabled: _isFormValid,
+                    title: "Login",
+                    isLoading: context.watch<UserViewModel>().authState.isGenerating == false ? false : true,
+                    textColor: Colors.white, height: 58, onTap:(){
                   // setLoader();
                   if(_formKey.currentState == null)return;
                   if(_formKey.currentState!.validate()){
@@ -246,7 +253,7 @@ class _LoginViewState extends State<LoginView> {
                         if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
                           currentFocus.focusedChild?.unfocus();
                         }
-                    final user = LoginUser(email: _emailController.text.trim(), password: _passwordController.text.trim().toString());
+                    final user = LoginUser(email: _emailController.text.trim().toLowerCase(), password: _passwordController.text.trim().toString());
                     context.read<UserViewModel>().loginUser(user, context);
                     // setLoader();
                   }

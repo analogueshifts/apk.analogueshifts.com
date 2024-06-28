@@ -25,8 +25,7 @@ class UserAdapter extends TypeAdapter<User> {
         lastName: reader.readString(),
         username: reader.readString(),
         email: reader.readString(),
-        profile: reader.readString(),
-        isVerified: reader.readBool(),
+        profile: reader.readString()
       );
     } catch (e) {
       print('Error reading user: $e');
@@ -40,12 +39,11 @@ class UserAdapter extends TypeAdapter<User> {
       throw Exception('Invalid User object');
     }
     writer.writeInt(obj.id);
-    writer.writeString(obj.firstName);
-    writer.writeString(obj.lastName);
-    writer.writeString(obj.username);
-    writer.writeString(obj.email);
+    writer.writeString(obj.firstName ?? "");
+    writer.writeString(obj.lastName ?? "");
+    writer.writeString(obj.username ?? "");
+    writer.writeString(obj.email ?? "");
     writer.writeString(obj.profile);
-    writer.writeBool(obj.isVerified ?? false);
   }
 
   int requiredBytes() {

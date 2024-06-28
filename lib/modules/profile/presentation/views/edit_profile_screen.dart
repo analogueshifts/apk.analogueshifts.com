@@ -264,7 +264,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       if(!mounted)return;
                        AppSnackbar.error(context, message: "Update your profile image");
                     }else{
-                       user.updateUser(User(id: savedUser!.id, uuid: savedUser?.uuid, firstName: _firstNameController.text.trim(), lastName: _lastNameController.text.trim(), username: savedUser?.username ?? Random().nextInt(100).toString(), email: savedUser!.email, tel: _phoneController.text, profile: upload.uploadedImage ?? savedUser?.profile, otp: "", isVerified: savedUser?.isVerified,emailVerifiedAt: "", createdAt: savedUser?.createdAt, updatedAt: savedUser?.updatedAt, deviceToken: "", deviceType: "android", phoneNo: _phoneController.text, phoneNoCode: "+234", status: "1",userType: "user",  ), context);
+                       user.updateUser(User(id: savedUser!.id, uuid: savedUser.uuid, firstName: "Tori", lastName: _lastNameController.text.trim(), username: savedUser?.username ?? Random().nextInt(100).toString(), email: savedUser!.email, tel: _phoneController.text, profile: upload.uploadedImage ?? savedUser?.profile, otp: "", isVerified: savedUser?.isVerified,emailVerifiedAt: "", createdAt: savedUser?.createdAt, updatedAt: savedUser?.updatedAt, deviceToken: "", deviceType: "android", phoneNo: _phoneController.text, phoneNoCode: "+234", status: "1",userType: "user",  ), context);
                     }
                    
                   },)

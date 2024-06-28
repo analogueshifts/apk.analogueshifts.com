@@ -63,7 +63,7 @@ class User extends Equatable {
         this.userType,
         required this.profile,
         this.otp,
-        required this.isVerified,
+        this.isVerified,
         this.emailVerifiedAt,
         this.deviceType,
         this.deviceToken,
@@ -74,12 +74,12 @@ class User extends Equatable {
 
     final int id;
     final String? uuid;
-    final String firstName;
-    final String lastName;
-    final String username;
-    final String email;
-    final dynamic phoneNoCode;
-    final dynamic phoneNo;
+    final String? firstName;
+    final String? lastName;
+    final String? username;
+    final String? email;
+    final dynamic? phoneNoCode;
+    final dynamic? phoneNo;
     final dynamic tel;
     final String? userType;
     final dynamic profile;
@@ -143,6 +143,6 @@ class User extends Equatable {
         id, uuid, firstName, lastName, username, email, phoneNoCode, phoneNo, tel, userType, profile, otp, isVerified, emailVerifiedAt, deviceType, deviceToken, status, createdAt, updatedAt, ];
 
     bool isValid() {
-        return id != null && email.isNotEmpty && username.isNotEmpty;
+        return email!.isNotEmpty && username!.isNotEmpty;
     }
 }

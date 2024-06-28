@@ -7,6 +7,7 @@ import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:upgrader/upgrader.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -42,20 +43,22 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     screenHeight(context);
-    return Scaffold(
-      body: Center(child:  SizedBox(
-        width: 150,
-        height: 150,
-        child: Image.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? AppAsset.logo : "assets/images/logo-black.png").animate(
-            onPlay: (controller) =>
-                controller.repeat(reverse: true))
-            .shimmer(
-            delay: 200.ms,
-            duration: 1200.ms,
-            color: AppColors.primaryColor.withOpacity(.4)).shake(hz: 4, curve: Curves.easeInOutCubic).scaleXY(end: 1.1, duration: 600.ms)
-            .then(delay: 600.ms)
-            .scaleXY(end: 1 / 1.1),
-      ))
+    return UpgradeAlert(
+      child: Scaffold(
+        body: Center(child:  SizedBox(
+          width: 150,
+          height: 150,
+          child: Image.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? AppAsset.logo : "assets/images/logo-black.png").animate(
+              onPlay: (controller) =>
+                  controller.repeat(reverse: true))
+              .shimmer(
+              delay: 200.ms,
+              duration: 1200.ms,
+              color: AppColors.primaryColor.withOpacity(.4)).shake(hz: 4, curve: Curves.easeInOutCubic).scaleXY(end: 1.1, duration: 600.ms)
+              .then(delay: 600.ms)
+              .scaleXY(end: 1 / 1.1),
+        ))
+      ),
     );
   }
 }

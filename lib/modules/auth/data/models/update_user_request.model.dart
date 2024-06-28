@@ -1,37 +1,31 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'update_user_request.model.g.dart';
-
-@JsonSerializable()
 class UpdateUser {
     UpdateUser({
-        required this.name,
+        required this.firstName,
+        required this.lastName,
         required this.username,
-        required this.tel,
         required this.profile,
     });
 
-    final String? name;
+    final String? firstName;
+    final String? lastName;
     final String? username;
-    final String? tel;
     final String? profile;
 
-    UpdateUser copyWith({
-        String? name,
-        String? username,
-        String? tel,
-        String? profile,
-    }) {
+    factory UpdateUser.fromJson(Map<String, dynamic> json){
         return UpdateUser(
-            name: name ?? this.name,
-            username: username ?? this.username,
-            tel: tel ?? this.tel,
-            profile: profile ?? this.profile,
+            firstName: json["first_name"],
+            lastName: json["last_name"],
+            username: json["username"],
+            profile: json["profile"],
         );
     }
 
-    factory UpdateUser.fromJson(Map<String, dynamic> json) => _$UpdateUserFromJson(json);
-
-    Map<String, dynamic> toJson() => _$UpdateUserToJson(this);
+    Map<String, dynamic> toJson() => {
+        "first_name": firstName,
+        "last_name": lastName,
+        "username": username,
+        "profile": profile,
+    };
 
 }
+
