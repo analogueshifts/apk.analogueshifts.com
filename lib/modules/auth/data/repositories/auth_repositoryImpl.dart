@@ -53,11 +53,13 @@ final _db = getIt<DBService>();
       } else {
         throw Exception('Login failed');
       }
-    } catch (e) {
+    } on DioException catch (e) {
+      logger.d(e.response?.data);
       logger.e(e);
-      throw Exception(e);
-
-      return Left(e as Exception);
+      // var error = _errorHandler.handleError(e);
+      return Left(e);
+    }catch(e){
+      return Left(Exception(e));
     }
   }
 
@@ -92,16 +94,20 @@ final _db = getIt<DBService>();
       } else {
         throw Exception(response.data);
       }
-    } catch (e) {
+    } on DioException catch (e) {
+      logger.d(e.response?.data);
       logger.e(e);
       // var error = _errorHandler.handleError(e);
-      return Left(e as Exception);
+      return Left(e);
+    }catch(e){
+      return Left(Exception(e));
     }
   }
 
     @override
   Future<Either<Exception, bool>> forgotPassword(String email) async {
     try {
+      logger.w("RUnning forget oassword");
       await _db.removeAuthToken();
       final response = await dioManager.dio.post(
         'forgot-password',
@@ -114,18 +120,26 @@ final _db = getIt<DBService>();
       if (response.statusCode == 200) {
         return const Right(true);
       } else {
+        logger.w(response.data);
         return Left(Exception(response.data));
       }
-    } catch (e) {
+    } on DioException catch (e) {
+       logger.d(e.response?.data);
       logger.e(e);
       // var error = _errorHandler.handleError(e);
-      return Left(e as Exception);
+      return Left(e);
+    }catch(e){
+      return Left(Exception(e));
     }
   }
 
   @override
   Future<Either<Exception, bool>> verifyPasswordOtp(VerifyPasswordEntity payload) async {
     try {
+      if (await _deviceNetwork.isConnected() == false) {
+        throw const SocketException('Network Error');
+      }
+
       final response = await dioManager.dio.post(
         'check-otp',
         data: json.encode(VerifyPasswordOtpRequestModel(otp: payload.otp, email: payload.email)),
@@ -137,10 +151,13 @@ final _db = getIt<DBService>();
       } else {
         return Left(Exception(response.data));
       }
-    } catch (e) {
+    } on DioException catch (e) {
+      logger.d(e.response?.data);
       logger.e(e);
       // var error = _errorHandler.handleError(e);
-      return Left(e as Exception);
+      return Left(e);
+    }catch(e){
+      return Left(Exception(e));
     }
   }
 
@@ -156,18 +173,23 @@ final _db = getIt<DBService>();
       } else {
         return Left(Exception(response.data));
       }
-    } catch (e) {
+    } on DioException catch (e) {
+      logger.d(e.response?.data);
       logger.e(e);
       // var error = _errorHandler.handleError(e);
-      return Left(e as Exception);
+      return Left(e);
+    }catch(e){
+      return Left(Exception(e));
     }
   }
 
 
   @override
   Future<Either<Exception, NoDataResponse>> initiateVerificationCode() async {
-    try {
-      final response = await dioManager.dio.post(
+    try { if (await _deviceNetwork.isConnected() == false) {
+      throw const SocketException('Network Error');
+    }
+    final response = await dioManager.dio.post(
           'email/verification-notification');
       logger.d(response.data);
 
@@ -177,10 +199,13 @@ final _db = getIt<DBService>();
       } else {
         return Left(Exception(response.data));
       }
-    } catch (e) {
+    } on DioException catch (e) {
+      logger.d(e.response?.data);
       logger.e(e);
       // var error = _errorHandler.handleError(e);
-      return Left(e as Exception);
+      return Left(e);
+    }catch(e){
+      return Left(Exception(e));
     }
   }
 
@@ -207,8 +232,13 @@ final _db = getIt<DBService>();
       } else {
         throw Exception('User update failed');
       }
-    } catch (e) {
-      return Left(e as Exception);
+    } on DioException catch (e) {
+      logger.d(e.response?.data);
+      logger.e(e);
+      // var error = _errorHandler.handleError(e);
+      return Left(e);
+    }catch(e){
+      return Left(Exception(e));
     }
   }
   
@@ -216,6 +246,10 @@ final _db = getIt<DBService>();
    @override
   Future<Either<Exception, User>> fetchUser() async {
     try {
+      if (await _deviceNetwork.isConnected() == false) {
+        throw const SocketException('Network Error');
+      }
+
       final response = await dioManager.dio.get('user');
       logger.wtf(response);
 
@@ -229,19 +263,23 @@ final _db = getIt<DBService>();
        else {
         throw Exception('Failed to fetch user.');
       }
-    } catch (e) {
+    } on DioException catch (e) {
+      logger.d(e.response?.data);
       logger.e(e);
-      return Left(e as Exception);
+      // var error = _errorHandler.handleError(e);
+      return Left(e);
+    }catch(e){
+      return Left(Exception(e));
     }
   }
 
   @override
   Future<Either<Exception, NoDataResponse>> createNewPassword(CreateForgetNewPasswordEntity payload) async {
     try {
-      // if (await _deviceNetwork.isConnected() == false) {
-      //   throw const SocketException('Network Error');
-      // }
-      
+      if (await _deviceNetwork.isConnected() == false) {
+        throw const SocketException('Network Error');
+      }
+
       final response = await dioManager.dio.post(
         'reset-password',
          data: {
@@ -261,8 +299,12 @@ final _db = getIt<DBService>();
       } else {
         throw Exception('User update failed');
       }
-    } catch (e) {
-      return Left(e as Exception);
+    } on DioException catch (e) {
+      logger.d(e.response?.data);
+      logger.e(e);
+      return Left(e);
+    }catch(e){
+      return Left(Exception(e));
     }
   }
 
@@ -270,9 +312,9 @@ final _db = getIt<DBService>();
   Future<Either<Exception, User>> verifyEmail(String otp) async {
     logger.d('otp---<< $otp');
     try {
-      // if (await _deviceNetwork.isConnected() == false) {
-      //   throw const SocketException('Network Error');
-      // }
+      if (await _deviceNetwork.isConnected() == false) {
+        throw const SocketException('Network Error');
+      }
       
       final response = await dioManager.dio.post(
         'email/verification-otp',
@@ -291,8 +333,12 @@ final _db = getIt<DBService>();
       } else {
         throw Exception('Verification failed');
       }
-    } catch (e) {
-      return Left(e as Exception);
+    } on DioException catch (e) {
+      logger.d(e.response?.data);
+      logger.e(e);
+      return Left(e);
+    }catch(e){
+      return Left(Exception(e));
     }
   }
 
@@ -300,6 +346,10 @@ final _db = getIt<DBService>();
    @override
   Future<Either<Exception, bool>> deleteAccount(bool isDelete, String password, [String? reason]) async {
     try {
+      if (await _deviceNetwork.isConnected() == false) {
+        throw const SocketException('Network Error');
+      }
+
       final response = await dioManager.dio.post(
        isDelete ?  'user/account/delete' : 'user/account/disable',
         data: {
@@ -314,9 +364,12 @@ final _db = getIt<DBService>();
       } else {
         return Left(Exception(response.data));
       }
-    } catch (e) {
+    } on DioException catch (e) {
+      logger.d(e.response?.data);
       logger.e(e);
-      return Left(e as Exception);
+      return Left(e);
+    }catch(e){
+      return Left(Exception(e));
     }
   }
 }

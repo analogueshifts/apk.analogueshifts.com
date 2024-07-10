@@ -9,6 +9,7 @@ import 'package:analogue_shifts_mobile/modules/profile/presentation/views/edit_p
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
@@ -58,7 +59,7 @@ class _ProfileViewState extends State<ProfileView> {
             const Gap(20),
             Row(
               children: [
-                user.authState.user?.profile == null ? Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/avatar_image.png" : "assets/images/profile-black.png"), width: 45,height: 45,) : 
+                user.authState.user?.profile == null ? SvgPicture.asset("assets/images/user-avatar.svg")  :
                 ClipOval(
                   child: CachedNetworkImage(
                   imageUrl: user.authState.user?.profile ?? "",

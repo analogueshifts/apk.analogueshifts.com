@@ -28,16 +28,6 @@ final lightTheme = ThemeData(
     backgroundColor: AppColors.white,
     selectedItemColor: AppColors.primaryColor,
     unselectedItemColor: AppColors.background,
-    selectedLabelStyle: TextStyle(
-      color: AppColors.primaryColor,
-      fontFamily: 
-      AppFonts.manRope
-    ),
-    unselectedLabelStyle: TextStyle(
-      color: Colors.red,
-      fontFamily: 
-      AppFonts.manRope
-    )
   ),
   // scaffoldBackgroundColor: AppColors.,
   primaryColor: AppColors.white,

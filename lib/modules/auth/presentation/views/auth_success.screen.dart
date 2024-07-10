@@ -37,7 +37,7 @@ class _AuthSuccessScreenState extends State<AuthSuccessScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(height: 100.h, width: 100.w, Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/Sticker.png" : "assets/icons/Sticker-dark.png"),
+              Image.asset(height: 100.h, width: 100.w, Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/Sticker.png" : "assets/images/tick-good-green.png"),
               const Gap(20),
               Text(
                 widget.title,
@@ -58,14 +58,11 @@ class _AuthSuccessScreenState extends State<AuthSuccessScreen> {
               ),
               const Gap(40),
               BusyButton(title: "Enter", onTap: () async{
-                logger.d('running from myself');
-                
                 if (token == null) {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         Routes.authenticate,
                         (Route<dynamic> route) => false);
                 }else{
-       
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           Routes.homeNavigation,
                           (Route<dynamic> route) => false);

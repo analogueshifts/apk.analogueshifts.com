@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
@@ -29,6 +31,24 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
     }
   }
   String? _otp;
+  int _start = 60;
+  Timer? _timer;
+
+  void startTimer() {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+    _start = 60;
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_start == 0) {
+          timer.cancel();
+        } else {
+          _start--;
+        }
+      });
+    });
+  }
 
 
 
@@ -42,6 +62,14 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
   }
 
   @override
+  void dispose() {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PaylonyAppBarTwo(
@@ -51,8 +79,8 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
       body: Consumer<UserViewModel>(
         builder: (_, auth, __) {
         return AbsorbPointer(
-          absorbing: false,
-          // absorbing: auth.authState.isGenerating,
+          // absorbing: ,
+          absorbing: auth.authState.isGenerating,
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
             child: Column(
@@ -113,7 +141,7 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
                         }
                         auth.initateUserVerification(context);
                       },
-                      child: TextSemiBold("Resend", fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.brightness == Brightness.light ?  AppColors.background : AppColors.white,))
+                      child: TextSemiBold("Resend in ${_start}s", fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.brightness == Brightness.light ?  AppColors.background : AppColors.white,))
                   ],
                 )
               ],

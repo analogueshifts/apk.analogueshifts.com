@@ -14,6 +14,7 @@ import 'package:analogue_shifts_mobile/modules/uploads/presentation/changeNotifi
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
@@ -63,7 +64,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             child: ListView(
               children: [
-                user.authState.user?.profile == null && upload.uploadedImage == null ? const Icon(Icons.verified_user) : CircleAvatar(
+                user.authState.user?.profile == null && upload.uploadedImage == null ? SvgPicture.asset("assets/images/user-avatar.svg") : CircleAvatar(
                   radius: 30.w,
                   child: ClipOval(
                     child: CachedNetworkImage(
@@ -264,7 +265,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       if(!mounted)return;
                        AppSnackbar.error(context, message: "Update your profile image");
                     }else{
-                       user.updateUser(User(id: savedUser!.id, uuid: savedUser.uuid, firstName: "Tori", lastName: _lastNameController.text.trim(), username: savedUser?.username ?? Random().nextInt(100).toString(), email: savedUser!.email, tel: _phoneController.text, profile: upload.uploadedImage ?? savedUser?.profile, otp: "", isVerified: savedUser?.isVerified,emailVerifiedAt: "", createdAt: savedUser?.createdAt, updatedAt: savedUser?.updatedAt, deviceToken: "", deviceType: "android", phoneNo: _phoneController.text, phoneNoCode: "+234", status: "1",userType: "user",  ), context);
+                       user.updateUser(User(id: savedUser!.id, uuid: savedUser.uuid, firstName: _firstNameController.text.trim(), lastName: _lastNameController.text.trim(), username: savedUser?.username ?? Random().nextInt(100).toString(), email: savedUser!.email, tel: _phoneController.text, profile: upload.uploadedImage ?? savedUser?.profile, otp: "", isVerified: savedUser?.isVerified,emailVerifiedAt: "", createdAt: savedUser?.createdAt, updatedAt: savedUser?.updatedAt, deviceToken: "", deviceType: "android", phoneNo: _phoneController.text, phoneNoCode: "+234", status: "1",userType: "user",  ), context);
                     }
                    
                   },)

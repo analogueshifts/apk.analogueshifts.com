@@ -1,4 +1,5 @@
 
+import 'package:analogue_shifts_mobile/app/widgets/loading_dailog.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/network/api_errors.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
@@ -80,10 +81,9 @@ class UserViewModel extends ChangeNotifier {
   }
 
     Future<void> registerUser(RegisterRequest payload, BuildContext context) async {
-    toggleGenerating(true);
-    notifyListeners();
+    showLoadingDialog(context: context);
     final result = await _registerUseCase.call(payload);
-    toggleGenerating(false);
+    Navigator.pop(context);
     result.fold(
           (exception) {
         var error = _errorHandler.handleError(exception);
@@ -113,6 +113,7 @@ class UserViewModel extends ChangeNotifier {
     toggleGenerating(false);
     result.fold(
           (exception) {
+            logger.d(exception);
         var error = _errorHandler.handleError(exception);
         if(context.mounted){
           AppSnackbar.error(context, message: error);
@@ -172,10 +173,9 @@ class UserViewModel extends ChangeNotifier {
 
 
   Future<void> loginUser(LoginUser user, BuildContext context) async {
-    toggleGenerating(true);
-    notifyListeners();
+    showLoadingDialog(context: context);
     final result = await _loginUseCase(user);
-    toggleGenerating(false);
+    Navigator.pop(context);
     result.fold(
           (exception) {
             toggleGenerating(false);
@@ -199,8 +199,15 @@ class UserViewModel extends ChangeNotifier {
               saveUser(user.data!.user!);
               _db.saveUser(user.data!.user!);
             }
+
+
             
             if(context.mounted){
+              if(user.data?.user?.isVerified == null || user.data?.user?.isVerified == false){
+                await AppSnackbar.warning(context, message: "Verify your account!");
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => UserVerificationOtpScreen(email: user.data?.user?.email)));
+              }
               // await AppSnackbar.success(context, message: "Login Successful✅");
               Navigator.pushAndRemoveUntil(
               context,
@@ -210,7 +217,7 @@ class UserViewModel extends ChangeNotifier {
              (Route<dynamic> route) => false);
             }
               }
-             
+
             }
       },
     );
@@ -332,6 +339,10 @@ class UserViewModel extends ChangeNotifier {
           (user) async{
             logger.i('Update successful: $user');
             await _db.saveUser(user);
+            if(user.isVerified == false){
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => UserVerificationOtpScreen(email: user.email)));
+            }
             saveUser(user);  
             notifyListeners();
       },

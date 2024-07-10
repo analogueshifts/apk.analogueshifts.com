@@ -36,7 +36,7 @@ class FaqScreen extends StatelessWidget {
                     fontWeight: FontWeight.w600
                     
                   ),), children: [
-                    Text("Analog shifts entail transitioning from manual recruitment methods to digital solutions, optimizing processes for efficiency. This transition involves adopting online job boards & so much more. It aims to streamline hiring, enhance candidate experience, and improve overall recruitment outcomes.",
+                    Text("Analogue shifts entail transitioning from manual recruitment methods to digital solutions, optimizing processes for efficiency. This transition involves adopting online job boards & so much more. It aims to streamline hiring, enhance candidate experience, and improve overall recruitment outcomes.",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.6) : AppColors.white.withOpacity(0.6)
                     )

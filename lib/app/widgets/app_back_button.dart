@@ -10,12 +10,9 @@ class AppBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 50.w,
-      height: 50.h,
-      margin: const EdgeInsets.only(left: 10),
-      padding: EdgeInsets.zero,
-      child: SvgPicture.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/back.svg" : "assets/images/back-black.svg", width: 50, height: 20,)
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      child: Image.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/icons/back-button-black.png" : "assets/icons/back-button-white.png",)
     );
   }
 }

@@ -13,11 +13,13 @@ import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/edit_profile_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
@@ -32,6 +34,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
     final _db = getIt<DBService>();
+  final InAppReview inAppReview = InAppReview.instance;
 
 @override
   void initState() {
@@ -56,57 +59,56 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Column(
             children: [
-              DrawerHeader(
+              Gap(15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TouchableOpacity(
+                      onTap:() => Navigator.pop(context),
+                      child: SvgPicture.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/icons/close_icon.svg" : "assets/images/close-icon-white.svg"))
+                ],
+              ),
+              Gap(10),
+              Container(
+                width: double.infinity,
+                margin: EdgeInsets.zero,
+                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 20),
                 decoration: BoxDecoration(
                   border: Border(bottom: BorderSide(width: 0.1, color: Theme.of(context).colorScheme.brightness ==Brightness.light ?  AppColors.grey : AppColors.white))
                 ),
-             
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
+
+                // padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TouchableOpacity(
-                          onTap:() => Navigator.pop(context),
-                          child: SvgPicture.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/icons/close_icon.svg" : "assets/images/close-icon-white.svg"))
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        user.authState.user?.profile == null ? const Icon(Icons.verified_user) : 
-                        CircleAvatar(
-                          radius: 30.w,
-                          child: ClipOval(
-                            child: CachedNetworkImage(
-                              imageUrl: user.authState.user?.profile ?? "",
-                              width: 60.w,
-                              height: 60.h,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => CircleAvatar(
-                                backgroundColor: Theme.of(context).colorScheme.background,
-                                minRadius: 50,
-                                child: const CircularProgressIndicator()),
-                              errorWidget: (context, url, error) => const Icon(Icons.error, size: 50,),
-                            ),
-                          ),
+                    user.authState.user?.profile == null ? SvgPicture.asset("assets/images/user-avatar.svg"):
+                    CircleAvatar(
+                      radius: 30.w,
+                      child: ClipOval(
+                        child: CachedNetworkImage(
+                          imageUrl: user.authState.user?.profile ?? "",
+                          width: 60.w,
+                          height: 60.h,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => CircleAvatar(
+                              backgroundColor: Theme.of(context).colorScheme.background,
+                              minRadius: 50,
+                              child: const CircularProgressIndicator()),
+                          errorWidget: (context, url, error) => const Icon(Icons.error, size: 50,),
                         ),
-                        // Image.asset("assets/images/Avatar Image.png", width: 40.w,),
-                        const Gap(5),
-                        TextBold("Hello, $firstName", style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600
-                        )),
-                        const Gap(3),
-                        TextSemiBold("@${user.authState.user?.username ?? ""}", style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontSize: 9
-                        ),),
-                        // Gap(10)
-                      ],
-                    )
+                      ),
+                    ),
+                    // Image.asset("assets/images/Avatar Image.png", width: 40.w,),
+                    const Gap(5),
+                    TextBold("Hello, $firstName", style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600
+                    )),
+                    const Gap(3),
+                    TextSemiBold("@${user.authState.user?.username ?? ""}", style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontSize: 9
+                    ),),
+                    // Gap(10)
                   ],
                 ),
               ),
@@ -128,38 +130,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               
               ListTile(
                 contentPadding: EdgeInsets.zero,
-                leading: Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/document.png" : "assets/images/document-black.png"), width: 35.w,height: 35.h,),
-                title: Text('Vetting System', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                leading: Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/messages.png" : "assets/images/document-black.png"), width: 35.w,height: 35.h,),
+                title: Text('Messages', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600
                 ),),
                 onTap: () {
                   Navigator.pushNamed(context, Routes.vetting);
                 },
-              ),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                 leading: Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/card.png" : "assets/images/card-black.png"), width: 35.w,height: 35.h,),
-                title: Row(
-                  children: [
-                    Text('Payment Gateway', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w600
-                    ),),
-                    const Gap(2),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 2),
-                      decoration: BoxDecoration(
-                        color: const Color(0xffD399AF).withOpacity(0.14),
-                        borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: const Text("Coming Soon", style: TextStyle(
-                        color: Color(0xffE16592),
-                        fontSize: 8
-                      ),),
-                    )
-                  ],
-                ),
-                // onTap: () {
-                // },
               ),
               ListTile(
                 contentPadding: EdgeInsets.zero,
@@ -225,7 +202,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 title: Text('Rate Us', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600
                 ),),
-                onTap: () {
+                onTap: () async{
+                  logger.d(await inAppReview.isAvailable());
+                  if (await inAppReview.isAvailable()) {
+                  inAppReview.requestReview();
+                  }
                 },
               ),
               ListTile(
