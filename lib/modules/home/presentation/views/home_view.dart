@@ -6,6 +6,7 @@ import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/functions.dart';
+import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/job_analytics_card.dart';
@@ -224,7 +225,7 @@ class _HomeViewState extends State<HomeView> {
                   physics: const NeverScrollableScrollPhysics(),
 
                   shrinkWrap: true,
-                  itemCount: job.job.length > 3 ? 3 : job.job.length,
+                  itemCount: job.job.length >= 3 ? 3 : job.job.length,
                   itemBuilder:(context, index) {
                     final e = job.job[index];
                     // logger.d(e);
@@ -241,6 +242,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
    Widget _recentJobCard(Datum data) {
+     logger.d(data.description!.length);
    final image = data.hiringOrganization;
    final desc = Text(data.description.toString(), maxLines: 1,);
     return TouchableOpacity(
@@ -291,7 +293,7 @@ class _HomeViewState extends State<HomeView> {
 
         HtmlWidget(
           enableCaching: true,
-           data.description == null ? "" : '${data.description!.substring(0, 90)+'..'}',
+           data.description == null ? "" : data.description!.length < 90 ? data.description.toString() : '${data.description!.substring(0, 90)}..',
           textStyle: const TextStyle(fontSize: 12, color: Color(0xff7B7B7B), fontFamily: AppFonts.manRope, ),
         ),
 

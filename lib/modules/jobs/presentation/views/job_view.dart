@@ -8,6 +8,7 @@ import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/post_job.screen.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/single_job.screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,12 +61,12 @@ class _JobScreenState extends State<JobScreen> {
       ),
       body: Column(
         children: [
-          Gap(15),
+          const Gap(15),
 
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 20),
+            margin: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: Theme.of(context).brightness == Brightness.light ? Color(0xffFFFAEB) : AppColors.background
+              color: Theme.of(context).brightness == Brightness.light ? const Color(0xffFFFAEB) : AppColors.background
             ),
             width: double.infinity,
             child: Row(
@@ -80,12 +81,12 @@ class _JobScreenState extends State<JobScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                           color: showMyPlans
-                              ? Color(0xffFFBB0A)
+                              ? const Color(0xffFFBB0A)
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(14)),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 15),
-                      child: TextSemiBold('My Plans', textAlign: TextAlign.center, color: showMyPlans ? AppColors.white : Color(0xffFFBB0A),),
+                      child: TextSemiBold('Apply to Jobs', textAlign: TextAlign.center, color: showMyPlans ? AppColors.white : const Color(0xffFFBB0A),),
                     ),
                   ),
                 ),
@@ -100,12 +101,12 @@ class _JobScreenState extends State<JobScreen> {
 
                         decoration: BoxDecoration(
                             color: !showMyPlans
-                                ? Color(0xffFFBB0A)
+                                ? const Color(0xffFFBB0A)
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(14)),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 15),
-                        child: TextSemiBold('My Plans', textAlign: TextAlign.center, color: !showMyPlans ? AppColors.white : Color(0xffFFBB0A)),
+                        child: TextSemiBold('Post a Jobs', textAlign: TextAlign.center, color: !showMyPlans ? AppColors.white : const Color(0xffFFBB0A)),
                       ),
                     ),
 
@@ -119,13 +120,8 @@ class _JobScreenState extends State<JobScreen> {
           Expanded(
               child: showMyPlans
                   ? const JobView()
-                  : Center(
-                child: TextSemiBold(
-                  "No Active Plan",
-                  color: const Color(0xffC9C9C9),
-                  fontWeight: FontWeight.w600,
-                ),
-              )),
+                  : const PostJobScreen()
+          ),
         ],
       ),
     );
@@ -208,7 +204,7 @@ class _JobViewState extends State<JobView> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                Gap(17),
+                const Gap(17),
                 Row(
                   children: [
                     Expanded(
@@ -256,7 +252,7 @@ class _JobViewState extends State<JobView> {
                                 borderRadius: BorderRadius.circular(10)
                             ),
                             child:
-                            Padding(padding: EdgeInsets.symmetric(horizontal: 12),
+                            Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
                                 child:Image.asset("assets/icons/Settings-adjust.png", width: 30, height: 30,))
                         ),
                       ),
@@ -269,7 +265,7 @@ class _JobViewState extends State<JobView> {
                     TextSemiBold("All Jobs", fontSize: 16, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white, textAlign: TextAlign.start,),
                   ],
                 ),
-                Gap(5),
+                const Gap(5),
                 job.job.isEmpty ? Center(
                   child: Column(
                     children: [
@@ -330,12 +326,12 @@ class _JobViewState extends State<JobView> {
         );
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: 10),
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
             border: Border.all(
-              color: Color(0xffEBEBEB),
+              color: const Color(0xffEBEBEB),
             )
         ),
         child: Column(
@@ -356,7 +352,7 @@ class _JobViewState extends State<JobView> {
                 scrollDirection: Axis.horizontal,
                 children: [
                   chip(data.employmentType),
-                  Gap(5),
+                  const Gap(5),
                   chip(data.jobLocationType),
                   // Gap(5),
                   // chip(data.employmentType),
@@ -364,11 +360,11 @@ class _JobViewState extends State<JobView> {
               ),
             ),
 
-            Gap(20),
+            const Gap(20),
 
             HtmlWidget(
               enableCaching: true,
-              data.description == null ? "" : '${data.description!.substring(0, 90)+'..'}',
+              data.description == null ? "" : data.description!.length < 90 ? data.description.toString() : '${data.description!.substring(0, 90)}..',
               textStyle: const TextStyle(fontSize: 12, color: Color(0xff7B7B7B), fontFamily: AppFonts.manRope, ),
             ),
 
@@ -381,12 +377,12 @@ class _JobViewState extends State<JobView> {
   Widget chip(text){
     bool isLight = Theme.of(context).colorScheme.brightness == Brightness.light;
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
       decoration: BoxDecoration(
-          color: isLight ?  Color(0xffFDF9EE) : AppColors.background,
+          color: isLight ?  const Color(0xffFDF9EE) : AppColors.background,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-              color: isLight ? Colors.transparent : Color(0xffFDF9EE)
+              color: isLight ? Colors.transparent : const Color(0xffFDF9EE)
           )
       ),
       child: Center(child: Row(
