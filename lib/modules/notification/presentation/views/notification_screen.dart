@@ -8,6 +8,7 @@ import 'package:analogue_shifts_mobile/modules/notification/presentation/notifie
 import 'package:analogue_shifts_mobile/modules/notification/presentation/widgets/no_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +40,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         return createdAtDate;
       });
         return ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
     itemCount: groupedNotifications.length,
     itemBuilder: (BuildContext context, int index) {
       String date = groupedNotifications.keys.elementAt(index);
@@ -75,7 +76,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              data.image == null ? const Icon(Icons.notifications_active, size: 20,) : ClipOval(
+              data.image == null ? SvgPicture.asset("assets/icons/company_placeholder.svg",) : ClipOval(
                  child: CachedNetworkImage(
                    imageUrl: data.image,
                   //  width: 40.w,

@@ -61,7 +61,7 @@ final TextEditingController _confirmPassword = TextEditingController();
                 const Gap(15),
                 TextSemiBold("Create New Password", color: theme == Brightness.light ? AppColors.background : AppColors.white,fontWeight: FontWeight.w700, fontSize: 20,),
                  TextSemiBold(
-                      'Your new password must be unique from those previously used.', color: theme == Brightness.light ? AppColors.background : AppColors.white, fontSize: 14,),
+                      'Your new password must be unique from those previously used.', color: theme == Brightness.light ? Color(0xff000000).withOpacity(0.6) : AppColors.white, fontSize: 14,),
                 const Gap(15),
                 TextFormField(
                     controller: _newPassword,

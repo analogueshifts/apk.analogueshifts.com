@@ -25,8 +25,6 @@ class PaylonyAppBarTwo extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       scrolledUnderElevation: 0,
-      // backgroundColor: Color(0xffFBFBFB),
-      // systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: AppColors.white, statusBarIconBrightness: Brightness.dark),
       leading: TouchableOpacity(
         onTap: backTap ?? () => Navigator.pop(context),
         child: const AppBackButton(),

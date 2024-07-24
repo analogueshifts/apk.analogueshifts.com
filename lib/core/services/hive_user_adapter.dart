@@ -43,7 +43,7 @@ class UserAdapter extends TypeAdapter<User> {
     writer.writeString(obj.lastName ?? "");
     writer.writeString(obj.username ?? "");
     writer.writeString(obj.email ?? "");
-    writer.writeString(obj.profile);
+    writer.writeString(obj.profile ?? "");
   }
 
   int requiredBytes() {

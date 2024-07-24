@@ -14,7 +14,7 @@ showLoadingDialog({String? lottie, BuildContext? context}) async {
           width: 120,
           height: 120,
           child: LottieBuilder.asset(
-            lottie ?? 'assets/images/loadingcubes.json',
+            lottie ?? 'assets/images/loading.json',
             height: 120,
             width: 120,
             fit: BoxFit.contain,

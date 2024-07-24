@@ -34,9 +34,10 @@ class DioManager {
         // Attach access token to headers
         final token = _db.getToken();
         final accessToken = token ?? tokenProvider;
-        logger.d(accessToken);
+
 
         if (accessToken != null) {
+          logger.d(accessToken);
           options.headers['Authorization'] = 'Bearer $accessToken';
         }
 

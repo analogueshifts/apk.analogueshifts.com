@@ -5,6 +5,7 @@ import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/custom_single_chile_scroll_view.dart';
 import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/utils/functions.dart';
+import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,7 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
             children: [
               Row(
                 children: [
-                   widget.data.hiringOrganization == null ? SvgPicture.asset("assets/images/work-image.svg") : widget.data.hiringOrganization?.logo == null ?  SvgPicture.asset("assets/images/work-image.svg") :
+                   widget.data.hiringOrganization == null ? SvgPicture.asset("assets/icons/company_placeholder.svg") : widget.data.hiringOrganization?.logo == null ?  SvgPicture.asset("assets/icons/company_placeholder.svg") :
                   CachedNetworkImage(
                     imageUrl: "",
                     width: 50.w,
@@ -114,6 +115,11 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
 
                 widget.data.description.toString(),
                 renderMode: RenderMode.column,
+                customStylesBuilder: (element) {
+                  return {
+                    'line-height': '1.8em',
+                  };
+                },
                 textStyle: const TextStyle(fontSize: 14, color: Color(0xff7B7B7B), fontFamily: AppFonts.manRope),
               
               ),
@@ -121,8 +127,13 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
               // Text(widget.data.description.toString()),
               const Gap(35),
               const Spacer(),
-              BusyButton(title: "Apply", onTap:() {
-                launchUrl(Uri(scheme: 'https', path: widget.data.apply ?? widget.data.directApply));
+              BusyButton(title: "Apply", onTap:() async{
+                logger.d(widget.data.apply);
+                var url = widget.data.apply ?? "https://flutter.io";
+                final Uri _url = Uri.parse(url);
+
+                await launchUrl(_url,mode: LaunchMode.inAppBrowserView);
+                // launchUrl(Uri(path: widget.data.apply));
               },),
               const Gap(20)
             ],

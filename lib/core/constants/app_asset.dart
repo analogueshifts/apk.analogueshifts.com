@@ -11,10 +11,10 @@ class AppAsset {
   static const String faceId = 'assets/images/ios-face-recognition.png';
   static const String homeActiveIcon = "assets/icons/Home-active.svg";
   static const String homeIcon = "assets/icons/Home.svg";
-   static const String bagActiveIcon = "assets/icons/Bag-active.svg";
+   static const String bagActiveIcon = "assets/icons/briefcase-active.svg";
     static const String bagIcon = "assets/icons/Bag.svg";
-    static const String invoiceIcon = "assets/icons/Invoice.svg";
-    static const String invoiceActiveIcon = "assets/icons/Invoice-active.svg";
+    static const String invoiceIcon = "assets/icons/digital-clock.svg";
+    static const String invoiceActiveIcon = "assets/icons/digital-clock-active.svg";
     static const String userActiveIcon = "assets/icons/User-active.svg";
     static const String userIcon = "assets/icons/User.svg";
     static const String profileIicon = "assets/images/profile.svg";
@@ -46,5 +46,6 @@ class AppAsset {
      static const String appleSvg = "assets/icons/Apple.svg";
      static const String logout = 'assets/images/logout.svg';
      static const String splashBg = 'assets/images/splash-bg.png';
+     static const String settings = "assets/images/Settings-adjust.svg";
 
 }

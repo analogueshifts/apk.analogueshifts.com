@@ -23,6 +23,7 @@ class ErrorHandler  {
       return("Error occurred, please try again");
     }
     if (e is DioException) {
+      logger.d(e);
       if (e.type == DioExceptionType.badResponse) {
         logger.e(e.response.toString());
         if (e.response.runtimeType == int) {
@@ -35,7 +36,7 @@ class ErrorHandler  {
       }
       return (e.response?.data['message'] ?? e.response?.data['error'] ?? e.message);
     }
-    return (e.toString());
+    return ("Fail to process");
 
   }
 

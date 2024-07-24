@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
@@ -41,7 +43,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   final TextEditingController _passwordController = TextEditingController();
   final DeviceInfo _deviceInfo = GetIt.instance<DeviceInfo>();
 
-  // PhoneNumber _number = PhoneNumber(isoCode: 'NG');
+
 
   bool _isPasswordVisible = true;
   bool _isFormValid = false;
@@ -80,6 +82,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
     _firstNameController.dispose();
     _lastNameController.dispose();
     _passwordController.dispose();
+
     super.dispose();
   }
   @override
@@ -310,8 +313,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                         },
                         child: TextSemiBold("Login Now", fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.primaryColor,))
                     ],
-                  )
-          
+                  ),Gap(10)
                 ],
               ),
             ),
