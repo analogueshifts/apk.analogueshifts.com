@@ -1,7 +1,14 @@
+import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
+import 'package:analogue_shifts_mobile/app/widgets/loading_dailog.dart';
+import 'package:analogue_shifts_mobile/modules/uploads/presentation/changeNotifiers/upload_notifier.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+
+import 'package:provider/provider.dart';
 
 class LogoUploadWidget extends StatefulWidget {
   @override
@@ -18,37 +25,55 @@ class _LogoUploadWidgetState extends State<LogoUploadWidget> {
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
+        context.read<FileUploadNotifier>().openImagePicker(context);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: getImage,
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          border: Border.all(color: Color(0xffE8E8E8)),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(
-              'Upload logo',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-            ),
-            SizedBox(height: 8),
-            TextSemiBold('Supported file types: PNG, JPEG', color: Color(0xff525252), fontSize: 10,),
-            TextSemiBold('The file size can be up to 20MB', color: Color(0xff525252), fontSize: 10,),
-            SizedBox(height: 16),
-            if (_image != null) ...[
+    return Consumer<FileUploadNotifier>(
+      builder: (context, FileUploadNotifier upload, child) =>
+      InkWell(
+      onTap: () async{
+        await upload.openImagePicker(context);
+      },
+      child:
+        Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xffE8E8E8)),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                'Upload logo',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+              SizedBox(height: 8),
+              TextSemiBold('Supported file types: PNG, JPEG', color: Color(0xff525252), fontSize: 10,),
+              TextSemiBold('The file size can be up to 20MB', color: Color(0xff525252), fontSize: 10,),
               SizedBox(height: 16),
-              Image.file(_image!),
+              // upload.isUploading == true ? CircularProgressIndicator(color: AppColors.primaryColor) :Text(""),
+              if (upload.uploadedImage != null && upload.isUploading == false) ...[
+                SizedBox(height: 16),
+                CachedNetworkImage(
+                  imageUrl: upload.uploadedImage!,
+                  width: 60.w,
+                  height: 60.h,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => CircleAvatar(
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      minRadius: 50,
+                      child: const CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => const Icon(Icons.error, size: 50,),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

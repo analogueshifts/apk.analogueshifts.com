@@ -31,6 +31,7 @@ class FileUploadNotifier extends DisposableProvider {
     notifyListeners();
    }
     Future<void> openImagePicker(BuildContext context) async {
+     _uploadedImage = null;
     final image = await ImagePicker()
         .pickImage(source: ImageSource.gallery, imageQuality: 100);
 
