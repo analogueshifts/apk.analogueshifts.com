@@ -12,7 +12,7 @@ class AppBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 12),
-      child: Image.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/icons/back-button-black.png" : "assets/icons/back-button-white.png",)
+      child: Image.asset(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/icons/back-button-black.png" : "assets/icons/back-button.white.png",)
     );
   }
 }

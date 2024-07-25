@@ -1,6 +1,11 @@
 // ignore: file_names
+import 'dart:convert';
+
 import 'package:analogue_shifts_mobile/core/network/api_client.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
+import 'package:analogue_shifts_mobile/modules/auth/domain/entities/no_data.entity.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/data/model/addCompanyDto.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/company.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/reconmende_job.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/repositories/jobs_repository.dart';
@@ -48,6 +53,46 @@ class JobsRepositoryImpl implements JobsRepository {
       logger.e(e);
       // var error = _errorHandler.handleError(e);
       return Left(e as Exception);
+    }
+  }
+
+  @override
+  Future<Either<Exception, NoDataResponse>> addCompany(AddCompanyDto payload) async {
+    try {
+      final response = await dioManager.dio.post('profile/create/company', data: payload.toJson()
+      );
+      // logger.d(response.data);
+
+      if (response.statusCode == 200) {
+        // logger.d(response.data);
+       final results = NoDataResponse.fromJson(response.data);
+        return Right(results);
+      } else {
+        return Left(Exception('Unable to add company'));
+      }
+    } catch (e) {
+      logger.e(e);
+      // var error = _errorHandler.handleError(e);
+      return Left(e as Exception);
+    }
+  }@override
+  Future<Either<Exception, List<Company>>> fetchSavedCompanies([int? page]) async {
+    try {
+      final response = await dioManager.dio.get('profile/companies');
+      // logger.d(response.data);
+
+      if (response.statusCode == 200) {
+        logger.d(response.data['data']['companies']['data']);
+        final List<dynamic> data = response.data['data']['companies']['data'];
+        final List<Company> results = data.map((json) => Company.fromJson(json)).toList();
+        return Right(results);
+      } else {
+        return Left(Exception('Unable to fetch companies'));
+      }
+    } catch (e) {
+      logger.e(e);
+      // var error = _errorHandler.handleError(e);
+      return Left(Exception(e));
     }
   }
 }
