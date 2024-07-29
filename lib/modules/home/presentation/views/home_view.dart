@@ -174,7 +174,7 @@ class _HomeViewState extends State<HomeView> {
             Gap(30),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-              child: TextSemiBold("Reconmended", fontSize: 16, fontWeight: FontWeight.w600,),
+              child: TextSemiBold("Recommended", fontSize: 16, fontWeight: FontWeight.w600,),
             ),
             const Gap(8),
             Consumer<JobProvider>(
@@ -249,8 +249,21 @@ class _HomeViewState extends State<HomeView> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => SingleJobScreen(data: data)
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => SingleJobScreen(data: data),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              var begin = Offset(1.0, 0.0);
+              var end = Offset.zero;
+              var curve = Curves.ease;
+
+              var tween = Tween(begin: begin, end: end)
+                  .chain(CurveTween(curve: curve));
+
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
           ),
         );
       },
@@ -269,11 +282,14 @@ class _HomeViewState extends State<HomeView> {
 
               contentPadding: EdgeInsets.zero,
               leading: image == null ? SvgPicture.asset("assets/icons/company_placeholder.svg",) : image.logo == null ?  SvgPicture.asset("assets/icons/company_placeholder.svg") :
-               CachedNetworkImage(
-                imageUrl: image.logo!,
-                placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) => Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
-              ),
+               Hero(
+                 tag: image.logo!,
+                 child: CachedNetworkImage(
+                  imageUrl: image.logo!,
+                  placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
+                               ),
+               ),
               title: TextSemiBold(data.title.toString(), fontSize: 14,fontWeight: FontWeight.w600,), subtitle: TextSemiBold(data.hiringOrganization?.name.toString() ?? "Unknown Company", fontSize: 11,color: AppColors.grey, fontWeight: FontWeight.w400,),),
             SizedBox(
               height: 30,
@@ -282,9 +298,9 @@ class _HomeViewState extends State<HomeView> {
                 children: [
                   chip(data.employmentType),
                   Gap(5),
-                  chip(data.employmentType),
-                  Gap(5),
-                  chip(data.employmentType),
+                  chip(data.jobLocationType),
+                  // Gap(5),
+                  // chip(data.employmentType),
                 ],
               ),
             ),

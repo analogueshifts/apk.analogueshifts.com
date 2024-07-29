@@ -1,4 +1,5 @@
 import 'package:analogue_shifts_mobile/app/notifier/app_notifier.dart';
+import 'package:analogue_shifts_mobile/modules/Event/presentation/change_notifier/event.notifier.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:analogue_shifts_mobile/modules/notification/presentation/notifiers/notification_provider.dart';
@@ -22,6 +23,9 @@ List<SingleChildWidget> providers = [
 
   ChangeNotifierProvider(
     create: (_) => NotificationProvider()
+  ),
+  ChangeNotifierProvider(
+      create: (_) => EventProvider()
   ),
 
 ];

@@ -1,22 +1,35 @@
 import 'package:analogue_shifts_mobile/core/notificaton/local_notification_service.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
+import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class FirebaseHandler {
  Future<void> init() async{
     await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+    // Enable Crashlytics in release mode
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-   debugPrint("FCMToken $fcmToken");
+  final fcmToken = await FirebaseMessaging.instance.getToken().then((value) {
+
+  }
+
+  ).catchError((e) => logger.e(e));
+   // debugPrint("FCMToken $fcmToken");
     await getIt<DBService>().saveFirebaseToken(fcmToken.toString());
   }
+
+
 
 
 }

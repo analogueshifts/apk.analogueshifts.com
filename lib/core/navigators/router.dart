@@ -8,6 +8,7 @@ import 'package:analogue_shifts_mobile/modules/profile/presentation/views/change
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/deactivate_account_screen.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/help_center_screen.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/jobs_applied.dart';
+import 'package:analogue_shifts_mobile/modules/profile/presentation/views/kyc_screen.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/settings_screen.drt.dart';
 import 'package:analogue_shifts_mobile/modules/vetting/presentation/view/vetting_system.screen.dart';
 import 'package:flutter/material.dart';

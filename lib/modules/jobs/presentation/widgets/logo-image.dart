@@ -32,6 +32,7 @@ class _LogoUploadWidgetState extends State<LogoUploadWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final isLight = Theme.of(context).colorScheme.brightness == Brightness.light;
     return Consumer<FileUploadNotifier>(
       builder: (context, FileUploadNotifier upload, child) =>
       InkWell(
@@ -41,25 +42,25 @@ class _LogoUploadWidgetState extends State<LogoUploadWidget> {
       child:
         Container(
           width: double.infinity,
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            border: Border.all(color: Color(0xffE8E8E8)),
+            border: Border.all(color: const Color(0xffE8E8E8)),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
+              const Text(
                 'Upload logo',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
               ),
-              SizedBox(height: 8),
-              TextSemiBold('Supported file types: PNG, JPEG', color: Color(0xff525252), fontSize: 10,),
-              TextSemiBold('The file size can be up to 20MB', color: Color(0xff525252), fontSize: 10,),
-              SizedBox(height: 16),
+              const SizedBox(height: 8),
+              TextSemiBold('Supported file types: PNG, JPEG', color: isLight ? const Color(0xff525252) : const Color(0xff525252).withOpacity(0.9), fontSize: 10,),
+              TextSemiBold('The file size can be up to 20MB', color: isLight ? const Color(0xff525252) : const Color(0xff525252).withOpacity(0.9), fontSize: 10,),
+              const SizedBox(height: 16),
               // upload.isUploading == true ? CircularProgressIndicator(color: AppColors.primaryColor) :Text(""),
               if (upload.uploadedImage != null && upload.isUploading == false) ...[
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 CachedNetworkImage(
                   imageUrl: upload.uploadedImage!,
                   width: 60.w,

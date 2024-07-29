@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:analogue_shifts_mobile/app/widgets/loading_dailog.dart';
 import 'package:analogue_shifts_mobile/core/network/api_errors.dart';
 import 'package:analogue_shifts_mobile/core/utils/disposable_provider.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
@@ -57,6 +58,41 @@ class FileUploadNotifier extends DisposableProvider {
         );
       notifyListeners();   
     }
+
+  }
+
+  Future<String?> SelectAndUploadImage(BuildContext context) async {
+     String? uploadUrl;
+
+    final image = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 100);
+
+    if (image != null) {
+      _image = File(image.path);
+      logger.d(image.path);
+      setLoader(true);
+      showLoadingDialog(context: context);
+      final upload = await _uploadFileUseCase.call(File(image.path));
+      Navigator.pop(context);
+      setLoader(false);
+      upload.fold(
+              (exception){
+            var error = _errorHandler.handleError(exception);
+            if(context.mounted){
+              AppSnackbar.error(context, message: error);
+            }
+          },
+              (result) async {
+            if (result.baseUrl == null && result.path == null)return null;
+            final url = '${result.baseUrl!}/${result.path!}';
+            logger.d(url);
+            uploadUrl = url;
+            return uploadUrl;
+          }
+      );
+      notifyListeners();
+    }
+    return uploadUrl;
   }
   
   @override

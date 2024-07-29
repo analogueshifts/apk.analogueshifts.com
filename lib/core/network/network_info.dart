@@ -2,7 +2,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 class DeviceNetwork {
   final connection = InternetConnection.createInstance(
   customCheckOptions: [
-    InternetCheckOption(uri: Uri.parse('https://google.com')),
+    InternetCheckOption(uri: Uri.parse('https://api.analogueshifts.com/')),
   ],
 );
   Future<bool> isConnected() async {

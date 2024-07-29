@@ -43,7 +43,6 @@ class _HomeNavigationState extends State<HomeNavigation> {
       if(mounted){
         context.read<UserViewModel>().fetchUser(context);
         context.read<JobProvider>().getJobs(context);
-        context.read<NotificationProvider>().getNotifications(context);
         context.read<JobProvider>().get_reconmended_jobs(context);
       }
     });
@@ -63,7 +62,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
       builder: (context, UserViewModel user, child) {
       return user.authState.user == null ? Scaffold(
           body: Center(child: AppWidgets().logoSpinner)) : Scaffold(
-        drawer: Drawer(
+        drawer: const Drawer(
       
           shape: RoundedRectangleBorder(),
       child: DrawerWidget()
@@ -74,13 +73,13 @@ class _HomeNavigationState extends State<HomeNavigation> {
           currentIndex: _selectedIndex,
           type: BottomNavigationBarType.fixed,
           unselectedFontSize: 10,
-          selectedLabelStyle: TextStyle(
+          selectedLabelStyle: const TextStyle(
             color: AppColors.primaryColor,
             fontWeight: FontWeight.w400,
             fontFamily: AppFonts.manRope
           ),
           unselectedLabelStyle: TextStyle(
-              color: isLightMode ? Color(0xffB0B0B0) : Color(0xffB0B0B0)
+              color: isLightMode ? const Color(0xffB0B0B0) : const Color(0xffB0B0B0)
           ),
           selectedFontSize: 10,
           onTap: _onItemTapped,
@@ -104,7 +103,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset("assets/images/checkmark-badge-03.svg", width: screenWidth(context) * 0.06,),
-              activeIcon: SvgPicture.asset("assets/icons/digital-clock-active.svg", width: screenWidth(context) * 0.06,),
+              activeIcon: SvgPicture.asset("assets/images/checkmark-badge-active.svg", width: screenWidth(context) * 0.06,),
               label: 'Vetting System',
             ),
           ],

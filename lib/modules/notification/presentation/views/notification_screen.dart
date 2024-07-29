@@ -6,6 +6,7 @@ import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/notification/domain/entities/notification.entity.dart';
 import 'package:analogue_shifts_mobile/modules/notification/presentation/notifiers/notification_provider.dart';
 import 'package:analogue_shifts_mobile/modules/notification/presentation/widgets/no_item.dart';
+import 'package:analogue_shifts_mobile/modules/notification/presentation/widgets/notification_shimmer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,6 +24,14 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationScreenState extends State<NotificationScreen> {
 
+  @override
+  void initState() {
+    if(context.mounted){
+      context.read<NotificationProvider>().getNotifications(context);
+    }
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +41,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
       },),
       body: Consumer<NotificationProvider>(
          builder: (context, NotificationProvider notification, child) {
-          logger.d(notification.notifications);
+          if(notification.notificationState.isGenerating && notification.notifications.isEmpty) {
+            return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: NotificationShimmerLoadingList(),
+          );
+          }
           if(notification.notifications.isEmpty)return const NoNotification();
               Map<String, List<Datum>> groupedNotifications =
       groupBy(notification.notifications.toList(), (Datum notification) {
