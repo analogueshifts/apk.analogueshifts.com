@@ -5,11 +5,13 @@ import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/constants.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
+import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/shimmer-loading-list.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/post_job.screen.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/single_job.screen.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/jobListing_shimmer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +37,12 @@ class _JobScreenState extends State<JobScreen> {
   bool _isLoading = false;
 
   final TextEditingController _search = TextEditingController();
+
+  @override
+  void initState() {
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +72,7 @@ class _JobScreenState extends State<JobScreen> {
           const Gap(15),
 
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
               color: Theme.of(context).brightness == Brightness.light ? const Color(0xffFFFAEB) : AppColors.background
             ),
@@ -78,7 +86,9 @@ class _JobScreenState extends State<JobScreen> {
                         showMyPlans = !showMyPlans;
                       });
                     },
-                    child: Container(
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 100),
+                      curve: Curves.fastEaseInToSlowEaseOut,
                       decoration: BoxDecoration(
                           color: showMyPlans
                               ? const Color(0xffFFBB0A)
@@ -97,8 +107,9 @@ class _JobScreenState extends State<JobScreen> {
                           showMyPlans = false;
                         });
                       },
-                      child: Container(
-
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 100),
+                        curve: Curves.fastEaseInToSlowEaseOut,
                         decoration: BoxDecoration(
                             color: !showMyPlans
                                 ? const Color(0xffFFBB0A)
@@ -163,7 +174,9 @@ class _JobViewState extends State<JobView> {
   }
   @override
   void initState() {
-   
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<JobProvider>().getJobs(context);
+    });
     _scrollController.addListener(_onScroll);
     super.initState();
   }
@@ -199,7 +212,13 @@ class _JobViewState extends State<JobView> {
     return Scaffold(
       body: Consumer<JobProvider>(
         builder: (context, job, child) {
-          return job.jobhState.isGenerating ? const Center(child: CircularProgressIndicator()) : SingleChildScrollView(
+          return job.jobhState.isGenerating & job.job.isEmpty  ?
+          Center(child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: ShimmerLoadingList(),
+          ))
+              :
+          SingleChildScrollView(
             controller: _scrollController,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
@@ -266,14 +285,15 @@ class _JobViewState extends State<JobView> {
                   ],
                 ),
                 const Gap(5),
-                job.job.isEmpty ? Center(
+                job.job.isEmpty
+                    ? Center(
                   child: Column(
                     children: [
                       TextSemiBold("No job available")
                     ],
                   ),
                 ) :
-                ListView.builder(
+                 ListView.builder(
                   
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -299,7 +319,7 @@ class _JobViewState extends State<JobView> {
                         final updateCurrentPage = job.currentPage + 1;
                         job.getJobs(context, updateCurrentPage);
                     },
-                    child: TextSemiBold("View All Jobs", color: AppColors.primaryColor, fontWeight: FontWeight.w700,) ,
+                    child: job.job.isNotEmpty && job.jobhState.isGenerating ? Center(child: CircularProgressIndicator()) : TextSemiBold("View All Jobs", color: AppColors.primaryColor, fontWeight: FontWeight.w700,) ,
                   ),
                 )
                     :

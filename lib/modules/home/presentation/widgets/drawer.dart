@@ -119,23 +119,25 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   fontWeight: FontWeight.w600
                 ),),
                 onTap: () {
-                    Navigator.push(
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditProfileScreen()
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) => EditProfileScreen(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        var begin = Offset(1.0, 0.0);
+                        var end = Offset.zero;
+                        var curve = Curves.ease;
+
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
                     ),
-            );
-                },
-              ),
-              
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/messages.png" : "assets/images/document-black.png"), width: 35.w,height: 35.h,),
-                title: Text('Messages', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w600
-                ),),
-                onTap: () {
-                  Navigator.pushNamed(context, Routes.vetting);
+                  );
                 },
               ),
               ListTile(

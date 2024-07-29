@@ -1,4 +1,5 @@
 
+import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class _CompaniesBottomSheetState extends State<CompaniesBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final isLight = Theme.of(context).colorScheme.brightness == Brightness.light;
       return Consumer<JobProvider>(
         builder: (_, job, __) =>
         Wrap(
@@ -35,7 +37,7 @@ class _CompaniesBottomSheetState extends State<CompaniesBottomSheet> {
                         height: 5.h,
                         margin: EdgeInsets.only(top: 3),
                         decoration: BoxDecoration(
-                          color: Color(0xffE7E7E7),
+                          color: isLight ? Color(0xffE7E7E7) : AppColors.white,
                           borderRadius: BorderRadius.circular(12)
                         ),
                       ),
@@ -44,7 +46,7 @@ class _CompaniesBottomSheetState extends State<CompaniesBottomSheet> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextBold("Companies", fontSize: 20,),
+                        TextSemiBold("Companies", fontSize: 20,),
                         InkWell(
                           onTap: (){
                             Navigator.pop(context);
@@ -53,14 +55,14 @@ class _CompaniesBottomSheetState extends State<CompaniesBottomSheet> {
                       ],
                     ),
                     Gap(30),
-                    job.companies.isEmpty ? Center(child: Text("No Companies!"),) :
+                    job.companies.isEmpty && job.jobhState.isGenerating ? const Center(child: CircularProgressIndicator(color: AppColors.primaryColor,)) : job.companies.isEmpty ? Center(child: TextSemiBold("No Companies!"),) :
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:
                       job.companies.map((e) =>
                           Container(
                             margin: EdgeInsets.symmetric(vertical: 6),
-                              child: TextSemiBold(e.name.toString(), fontWeight: FontWeight.w400, fontSize: 15, color: Color(0xff7B7B7B),)),).toList(),
+                              child: TextSemiBold(e.name.toString(), fontWeight: FontWeight.w400, fontSize: 15, color: isLight ? Color(0xff7B7B7B) : Color(0xff7B7B7B).withOpacity(0.8),)),).toList(),
                     ),
 
                     Gap(15),

@@ -6,6 +6,8 @@ import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/device_info.dart';
 import 'package:analogue_shifts_mobile/core/utils/url_launcher.dart';
 import 'package:analogue_shifts_mobile/firebase_handler.dart';
+import 'package:analogue_shifts_mobile/modules/Event/data/repositories/event-repositoryImpl.dart';
+import 'package:analogue_shifts_mobile/modules/Event/domain/repositories/event-repository.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/repositories/auth_repositoryImpl.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/repositories/auth.repository.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/usecases/register.usecase.dart';
@@ -38,6 +40,10 @@ Future<void> setupDependencies() async{
 
    getIt.registerLazySingleton<NotificationRepository>(
         () => NotificationRepositoryImpl(getIt<DioManager>()),
+  );
+
+  getIt.registerLazySingleton<EventRepository>(
+        () => EventRepositoryImpl(getIt<DioManager>()),
   );
 
   getIt.registerLazySingleton<LoginUseCase>(

@@ -34,7 +34,7 @@ class BusyButton extends StatelessWidget {
         width: width ?? double.infinity,
         decoration: BoxDecoration(
           borderRadius: borderRadius ?? BorderRadius.circular(5),
-          color: disabled ? AppColors.primaryColorLight : color,
+          color: disabled ? AppColors.primaryColor.withOpacity(0.5) : color,
         ),
         child: Center(
           child: isLoading ? const CircularProgressIndicator(color: Colors.white) : Text(

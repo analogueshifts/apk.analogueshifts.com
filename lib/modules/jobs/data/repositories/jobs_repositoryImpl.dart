@@ -75,7 +75,9 @@ class JobsRepositoryImpl implements JobsRepository {
       // var error = _errorHandler.handleError(e);
       return Left(e as Exception);
     }
-  }@override
+  }
+
+  @override
   Future<Either<Exception, List<Company>>> fetchSavedCompanies([int? page]) async {
     try {
       final response = await dioManager.dio.get('profile/companies');

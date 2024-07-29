@@ -55,6 +55,8 @@ dependencies:
   iconsax: ^0.0.8
   in_app_review: ^2.0.9
   quill_html_editor: ^2.2.8
+  shimmer: ^3.0.0
+  firebase_crashlytics: ^3.5.7
 
 dev_dependencies:
   flutter_test:

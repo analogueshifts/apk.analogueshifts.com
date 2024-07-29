@@ -41,13 +41,18 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
             children: [
               Row(
                 children: [
-                   widget.data.hiringOrganization == null ? SvgPicture.asset("assets/icons/company_placeholder.svg") : widget.data.hiringOrganization?.logo == null ?  SvgPicture.asset("assets/icons/company_placeholder.svg") :
-                  CachedNetworkImage(
-                    imageUrl: "",
-                    width: 50.w,
-                    height: 50.h,
-                    placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
+                   widget.data.hiringOrganization == null ? Hero(
+                     tag: "assets/icons/company_placeholder.svg",
+                       child: SvgPicture.asset("assets/icons/company_placeholder.svg")) : widget.data.hiringOrganization?.logo == null ?  SvgPicture.asset("assets/icons/company_placeholder.svg") :
+                  Hero(
+                    tag: widget.data.hiringOrganization?.logo,
+                    child: CachedNetworkImage(
+                      imageUrl: widget.data.hiringOrganization?.logo,
+                      width: 50.w,
+                      height: 50.h,
+                      placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
+                    ),
                   ),
                   const Gap(20),
                   Column(
