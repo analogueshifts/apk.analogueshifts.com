@@ -1,6 +1,7 @@
 import 'package:analogue_shifts_mobile/app/notifier/app_notifier.dart';
 import 'package:analogue_shifts_mobile/app/theme/dark_theme.dart';
 import 'package:analogue_shifts_mobile/app/theme/light_theme.dart';
+import 'package:analogue_shifts_mobile/core/navigators/navigation_service.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/navigators/router.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
@@ -11,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 class AnalogueApp extends StatefulWidget {
   const AnalogueApp({super.key});
 
@@ -37,7 +38,7 @@ void updateState(bool value){
     messagingService.initialize();
     super.initState();
   }
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  // static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final _db = getIt<DBService>();
 
   @override
@@ -54,7 +55,7 @@ void updateState(bool value){
           return MaterialApp(
              initialRoute: Routes.startUp,
             onGenerateRoute: generateRoute,
-            navigatorKey: navigatorKey,
+            navigatorKey: getIt<NavigationService>().navigatorKey,
           themeMode:  _db.getTheme() ?? ThemeMode.system,
           darkTheme: _db.getTheme() == null? ThemeData.dark() : (_db.getTheme() == ThemeMode.light? lightTheme : darkTheme),
             debugShowCheckedModeBanner: false,

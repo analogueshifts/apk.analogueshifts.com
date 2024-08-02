@@ -43,7 +43,7 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
                 children: [
                    widget.data.hiringOrganization == null ? Hero(
                      tag: "assets/icons/company_placeholder.svg",
-                       child: SvgPicture.asset("assets/icons/company_placeholder.svg")) : widget.data.hiringOrganization?.logo == null ?  SvgPicture.asset("assets/icons/company_placeholder.svg") :
+                       child: SvgPicture.asset("assets/icons/company_placeholder.svg", width: 50.w, height: 50.h,)) : widget.data.hiringOrganization?.logo == null ?  SvgPicture.asset("assets/icons/company_placeholder.svg",  width: 50.w, height: 50.h,) :
                   Hero(
                     tag: widget.data.hiringOrganization?.logo,
                     child: CachedNetworkImage(

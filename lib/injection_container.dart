@@ -1,4 +1,5 @@
 import 'package:analogue_shifts_mobile/app/notifier/app_notifier.dart';
+import 'package:analogue_shifts_mobile/core/navigators/navigation_service.dart';
 import 'package:analogue_shifts_mobile/core/network/api_client.dart';
 import 'package:analogue_shifts_mobile/core/network/api_errors.dart';
 import 'package:analogue_shifts_mobile/core/network/network_info.dart';
@@ -29,6 +30,7 @@ Future<void> setupDependencies() async{
   getIt.registerLazySingleton<UserRepository>(
         () => UserRepositoryImpl(getIt<DioManager>()),
   );
+  getIt.registerLazySingleton(() => NavigationService());
   getIt.registerLazySingleton<JobsRepository>(
         () => JobsRepositoryImpl(getIt<DioManager>()),
   );
