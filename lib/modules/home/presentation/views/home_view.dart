@@ -8,6 +8,7 @@ import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/functions.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
+import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/shimmer-loading-list.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/job_analytics_card.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
@@ -194,7 +195,7 @@ class _HomeViewState extends State<HomeView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextSemiBold(reconmended.reconmendedjobs.firstOrNull?.title.toString() ?? "", fontWeight: FontWeight.w700, color: isLight ? AppColors.background : AppColors.white,),
+                            TextSemiBold(reconmended.reconmendedjobs.firstOrNull?.title.toString() ?? "No Jobs yet!", fontWeight: FontWeight.w700, color: isLight ? AppColors.background : AppColors.white,),
                             Gap(8),
                             TextSemiBold("${reconmended.reconmendedjobs.length ?? 0} Available Jobs", color: Color(0xff909090),)
                           ],
@@ -218,10 +219,12 @@ class _HomeViewState extends State<HomeView> {
               child: TextSemiBold("Job Match Your Skills", fontSize: 16, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
             ),
            Padding(
-             padding: const EdgeInsets.symmetric(horizontal: 15),
+             padding:EdgeInsets.symmetric(horizontal: 15),
              child: Consumer<JobProvider>(
                 builder: (context, job, child) {
-                return  job.job.isEmpty && job.jobhState.isGenerating ? const Center(child: CircularProgressIndicator()) : ListView.builder(
+                return  job.job.isEmpty && job.jobhState.isGenerating ?
+                ShimmerLoadingList() :
+                ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
 
                   shrinkWrap: true,

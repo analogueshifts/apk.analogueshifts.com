@@ -359,9 +359,11 @@ class _JobViewState extends State<JobView> {
             ListTile(
 
               contentPadding: EdgeInsets.zero,
-              leading: image == null ? SvgPicture.asset("assets/icons/company_placeholder.svg",) : image.logo == null ?  SvgPicture.asset("assets/icons/company_placeholder.svg") :
+              leading: image == null ? SvgPicture.asset("assets/icons/company_placeholder.svg", width: 40.w, height: 40.h,) : image.logo == null ?  SvgPicture.asset("assets/icons/company_placeholder.svg", width: 40.w, height: 40.h,) :
               CachedNetworkImage(
                 imageUrl: image.logo!,
+                width: 40.w,
+                height: 40.w,
                 placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) => Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
               ),

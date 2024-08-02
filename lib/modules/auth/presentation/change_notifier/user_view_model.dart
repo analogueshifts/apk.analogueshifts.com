@@ -203,11 +203,11 @@ class UserViewModel extends ChangeNotifier {
 
             
             if(context.mounted){
-              if(user.data?.user?.isVerified == null || user.data?.user?.isVerified == false){
-                await AppSnackbar.warning(context, message: "Verify your account!");
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => UserVerificationOtpScreen(email: user.data?.user?.email)));
-              }
+              // if(user.data?.user?.isVerified == null || user.data?.user?.isVerified == false){
+              //   await AppSnackbar.warning(context, message: "Verify your account!");
+              //   Navigator.of(context).push(
+              //       MaterialPageRoute(builder: (context) => UserVerificationOtpScreen(email: user.data?.user?.email)));
+              // }
               // await AppSnackbar.success(context, message: "Login Successful✅");
               Navigator.pushAndRemoveUntil(
               context,

@@ -45,6 +45,7 @@ class DioManager {
       },
       onResponse: (response, handler) {
         logger.d('from manager $response');
+        logger.d(response.statusCode);
         // Handle token refresh if needed
         if (response.statusCode == 401) {
           if (context != null) {
