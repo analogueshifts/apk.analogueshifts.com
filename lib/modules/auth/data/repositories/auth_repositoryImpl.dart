@@ -27,7 +27,7 @@ final _db = getIt<DBService>();
   UserRepositoryImpl(this.dioManager);
 
   @override
-  Future<Either<Exception, LoginResponse>> loginUser(LoginUser user) async {
+  Future<Either<Exception, String>> loginUser(LoginUser user) async {
     logger.d(user.email);
     try {
       await _db.removeAuthToken();
@@ -46,10 +46,9 @@ final _db = getIt<DBService>();
       logger.d(response.statusCode);
 
       if (response.statusCode == 200) {
-        logger.d(response.data);
-        logger.d(response.data[0]);
-        final userModel = LoginResponse.fromJson(response.data);
-        return Right(userModel);
+        final userModel = response.data;
+        logger.d(userModel['data']['token']);
+        return Right(userModel['data']['token']);
       } else {
         throw Exception('Login failed');
       }
@@ -211,7 +210,7 @@ final _db = getIt<DBService>();
 
    @override
   Future<Either<Exception, User>> updateUser(User user) async {
-    logger.d(user.email);
+    // logger.d(user.email);
     try {
       if (await _deviceNetwork.isConnected() == false) {
         throw const SocketException('Network Error');
@@ -219,7 +218,7 @@ final _db = getIt<DBService>();
       
       final response = await dioManager.dio.post(
         'update/profile',
-         data: json.encode(UpdateUser(firstName: user.firstName, lastName: user.lastName, username: user.username,  profile: user.profile)),
+         data: json.encode(UpdateUser(firstName: user.user?.userProfile!.firstName, lastName: user.user?.userProfile?.lastName, username: user.user?.username,  profile: user.user?.userProfile?.avatar)),
       );
       logger.d(response.data);
       logger.d(response.statusCode);

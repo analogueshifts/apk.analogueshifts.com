@@ -104,9 +104,14 @@ class _QualificationBottomSheetState extends State<QualificationBottomSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:
                       filteredQualifications.map((e) =>
-                          Container(
-                              margin: EdgeInsets.symmetric(vertical: 8),
-                              child: TextSemiBold(e.name.toString(), fontWeight: FontWeight.w400, fontSize: 15, color: Color(0xff7B7B7B),)),).toList(),
+                          InkWell(
+                            onTap: (){
+                              Navigator.pop(context, e.name);
+                            },
+                            child: Container(
+                                margin: EdgeInsets.symmetric(vertical: 8),
+                                child: TextSemiBold(e.name.toString(), fontWeight: FontWeight.w400, fontSize: 15, color: Color(0xff7B7B7B),)),
+                          ),).toList(),
                     ),
 
                     Gap(15),

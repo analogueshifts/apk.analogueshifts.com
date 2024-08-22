@@ -73,7 +73,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserViewModel>();
-    final name = Functions.capitalize(user.authState.user?.firstName ?? "");
+    final name = Functions.capitalize(user.authState.user?.user?.userProfile?.firstName ?? "");
     final splitName = name.split(' ');
     final firstName = splitName[0];
     bool isLight = Theme.of(context).colorScheme.brightness == Brightness.light;
@@ -333,7 +333,7 @@ class _HomeViewState extends State<HomeView> {
           color: isLight ? Colors.transparent : Color(0xffFDF9EE)
         )
       ),
-      child: Center(child: TextSemiBold(text, fontSize: 12,)),
+      child: Center(child: TextSemiBold(text ?? "", fontSize: 12,)),
     );
   }
 }

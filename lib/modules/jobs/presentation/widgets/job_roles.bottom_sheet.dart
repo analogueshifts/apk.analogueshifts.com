@@ -30,6 +30,8 @@ class _JobRoleBottomSheetState extends State<JobRoleBottomSheet> {
 
   TextEditingController _searchController = TextEditingController();
 
+
+
   @override
   void initState() {
     super.initState();
@@ -94,7 +96,7 @@ class _JobRoleBottomSheetState extends State<JobRoleBottomSheet> {
                         TextSemiBold("Position Title", fontSize: 20,),
                         InkWell(
                             onTap: (){
-                              Navigator.pop(context);
+                              Navigator.pop(context, );
                             },
                             child: SvgPicture.asset("assets/icons/close-icon.svg"))
                       ],

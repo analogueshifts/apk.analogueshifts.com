@@ -53,6 +53,7 @@ class _CreateEventStepFormState extends State<CreateEventStepForm> {
         child: Column(
           children: [
             StepIndicator(currentStep: _currentPage, totalSteps: 3),
+            Gap(10),
             _currentPage == 1 ? _buildStep1() : _currentPage == 2 ? _buildStep2() : _buildStep3(context)
           ],
         ),
@@ -105,7 +106,7 @@ class _CreateEventStepFormState extends State<CreateEventStepForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Gap(35),
-            TextSemiBold('Your Email Address', fontSize: 12, style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: AppFonts.manRope)),
+            TextSemiBold('Your Email Address', fontSize: 12, style: const TextStyle(fontWeight: FontWeight.w600, fontFamily: AppFonts.manRope)),
             const Gap(4),
             TextSemiBold('Attendees will contact you via this email for any questions.',color: const Color(0xff575757),fontSize: 12, fontWeight: FontWeight.w400),
             const Gap(6),

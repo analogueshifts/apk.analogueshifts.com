@@ -11,7 +11,7 @@ import 'package:get_it/get_it.dart';
 class LoginUseCase {
   final UserRepository _userRepository = GetIt.instance<UserRepository>();
 
-  Future<Either<Exception, LoginResponse>> call(
+  Future<Either<Exception, String>> call(
       LoginUser loginRequest) async {
     return await _userRepository.loginUser(loginRequest);
   }

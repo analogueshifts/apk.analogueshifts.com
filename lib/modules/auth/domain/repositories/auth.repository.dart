@@ -8,7 +8,7 @@ import 'package:dartz/dartz.dart';
 
 
 abstract class UserRepository {
-  Future<Either<Exception, LoginResponse>> loginUser(LoginUser user);
+  Future<Either<Exception, String>> loginUser(LoginUser user);
   Future<Either<Exception, dynamic>> logoutUser();
    Future<Either<Exception, NoDataResponse>> initiateVerificationCode();
   Future<Either<Exception, String>> registerUser(RegisterRequest payload);

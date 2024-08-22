@@ -57,6 +57,7 @@ dependencies:
   quill_html_editor: ^2.2.8
   shimmer: ^3.0.0
   firebase_crashlytics: ^3.5.7
+  flutter_secure_storage: ^4.2.1
 
 dev_dependencies:
   flutter_test:

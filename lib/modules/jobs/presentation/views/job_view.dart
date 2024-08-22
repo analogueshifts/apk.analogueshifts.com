@@ -412,7 +412,7 @@ class _JobViewState extends State<JobView> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
 
-          TextSemiBold(text, fontSize: 12,),
+          TextSemiBold(text ?? "", fontSize: 12,),
         ],
       )),
     );

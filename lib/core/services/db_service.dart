@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:analogue_shifts_mobile/core/services/hive_user_adapter.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
 
@@ -14,12 +17,12 @@ class DBService {
   Future<void> startHive() async {
     
     await Hive.initFlutter();
-    Hive.registerAdapter(UserAdapter());
+    // Hive.registerAdapter(UserAdapter());
     Hive.registerAdapter(ThemeModeAdapter());
-    await Hive.openBox<User>(boxName);
-    if(this.getUser(0) != null){
-      await this.removeUser(0);
-    }
+    // await Hive.openBox<User>(boxName);
+    // if(this.getUser(0) != null){
+    //   await this.removeUser(0);
+    // }
 
     await Hive.openBox(box);
     
@@ -99,19 +102,38 @@ class DBService {
     await box.clear();
   }
 
-   Future<void> saveUser(User user) async {
-    final box = Hive.box<User>('user_box');
-    await box.put(0, user); // Use id as key
+
+  final _storage = new FlutterSecureStorage();
+
+
+  final String _userKey = 'user_data';
+
+  Future<void> saveUser(User user) async {
+    final userJson = jsonEncode(user.toJson());
+    await _storage.write(key: _userKey, value: userJson);
   }
 
-  User? getUser(int id) {
-    final box = Hive.box<User>("user_box");
-    logger.d(box);
-    return box.get(id); // Retrieve user by id
+  Future<User?> getUser() async {
+    final userJson = await _storage.read(key: _userKey);
+    if (userJson != null) {
+      final userMap = jsonDecode(userJson);
+      return User.fromJson(userMap);
+    }
+    return null;
   }
 
-  Future<void> removeUser(int id) async {
-    final box = Hive.box<User>("user_box");
-    await box.delete(id); // Remove user by id
+  Future<void> deleteUser() async {
+    await _storage.delete(key: _userKey);
   }
+
+
+  // Create storage
+
+
+
+
+
+
+// Write value
+
 }

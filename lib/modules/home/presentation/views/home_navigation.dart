@@ -4,6 +4,7 @@ import 'package:analogue_shifts_mobile/core/constants/constants.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/views/events.dart';
+import 'package:analogue_shifts_mobile/modules/auth/data/models/login_response.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_view.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/drawer.dart';
@@ -39,6 +40,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
   void initState() {
     super.initState();
     _onItemTapped(_selectedIndex);
+    context.read<UserViewModel>().init();
      WidgetsBinding.instance.addPostFrameCallback((_){
       if(mounted){
         context.read<UserViewModel>().fetchUser(context);
@@ -51,6 +53,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    final savedUser = Provider.of<UserViewModel>(context,listen: true).authState;
     bool isLightMode = Theme.of(context).colorScheme.brightness == Brightness.light;
     final tabs = [
       const HomeView(),
@@ -59,8 +62,10 @@ class _HomeNavigationState extends State<HomeNavigation> {
       const VettingSystemScreen()
     ];
     return  Consumer<UserViewModel>(
+
       builder: (context, UserViewModel user, child) {
-      return user.authState.user == null ? Scaffold(
+        logger.e(savedUser.user);
+      return savedUser.user == null ? Scaffold(
           body: Center(child: AppWidgets().logoSpinner)) : Scaffold(
         drawer: const Drawer(
       

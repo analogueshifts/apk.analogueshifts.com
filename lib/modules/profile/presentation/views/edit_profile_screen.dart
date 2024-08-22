@@ -34,10 +34,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     final user = context.read<UserViewModel>().authState.user;
     context.read<FileUploadNotifier>();
-    _firstNameController.text = user?.firstName ?? "";
-    _lastNameController.text = user?.lastName ?? "";
-    _emailController.text = user?.email ?? "";
-    _phoneController.text = user?.phoneNo ?? "";
+    _firstNameController.text = user?.user?.userProfile?.firstName ?? "";
+    _lastNameController.text = user?.user?.userProfile?.lastName ?? "";
+    _emailController.text = user?.user?.email ?? "";
+    _phoneController.text = user?.user?.phoneNumber ?? "";
    
     super.initState();
   }
@@ -64,11 +64,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             child: ListView(
               children: [
-                user.authState.user?.profile == null && upload.uploadedImage == null ? SvgPicture.asset("assets/images/user-avatar.svg") : CircleAvatar(
+                user.authState.user?.user?.userProfile?.avatar == null && upload.uploadedImage == null ? SvgPicture.asset("assets/images/user-avatar.svg") : CircleAvatar(
                   radius: 30.w,
                   child: ClipOval(
                     child: CachedNetworkImage(
-                      imageUrl: upload.uploadedImage ?? user.authState.user?.profile ?? "",
+                      imageUrl: upload.uploadedImage ?? user.authState.user?.user?.userProfile?.avatar ?? "",
                       width: 60.w,
                       height: 60.h,
                       fit: BoxFit.cover,
@@ -124,7 +124,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           fontSize: 12,
                           color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
-                        hintText: user.authState.user?.firstName ?? 'John James'),
+                        hintText: user.authState.user?.user?.userProfile?.firstName ?? 'John James'),
                     validator: (value) {
                       if (value == null) return ("Enter your name");
                       if (CustomValidator.validEmail(value.trim()) == false) {
@@ -161,7 +161,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           fontSize: 12,
                           color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
                       ),
-                      hintText: user.authState.user?.lastName ?? 'John James'),
+                      hintText: user.authState.user?.user?.userProfile?.lastName ?? 'John James'),
                   validator: (value) {
                     if (value == null) return ("Enter your name");
                     if (CustomValidator.validEmail(value.trim()) == false) {
@@ -242,7 +242,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           // fontSize: 12,
                           color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
                         ),
-                        hintText: user.authState.user?.tel ?? "Update Phone Number"),
+                        hintText: user.authState.user?.user?.phoneNumber ?? "Update Phone Number"),
                     validator: (value) {
                       if (value == null) return ("Enter your email");
                       if (CustomValidator.validEmail(value.trim()) == false) {
@@ -261,11 +261,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           currentFocus.focusedChild?.unfocus();
                         }
                     final savedUser = user.authState.user;
-                    if(savedUser?.profile == null && upload.uploadedImage == null){
+                    if(savedUser?.user?.userProfile == null && upload.uploadedImage == null){
                       if(!mounted)return;
                        AppSnackbar.error(context, message: "Update your profile image");
                     }else{
-                       user.updateUser(User(id: savedUser!.id, uuid: savedUser.uuid, firstName: _firstNameController.text.trim(), lastName: _lastNameController.text.trim(), username: savedUser?.username ?? Random().nextInt(100).toString(), email: savedUser!.email, tel: _phoneController.text, profile: upload.uploadedImage ?? savedUser?.profile, otp: "", isVerified: savedUser?.isVerified,emailVerifiedAt: "", createdAt: savedUser?.createdAt, updatedAt: savedUser?.updatedAt, deviceToken: "", deviceType: "android", phoneNo: _phoneController.text, phoneNoCode: "+234", status: "1",userType: "user",  ), context);
+                      // user.updateUser(User(id: savedUser!.id, uuid: savedUser.uuid, firstName: _firstNameController.text.trim(), lastName: _lastNameController.text.trim(), username: savedUser?.username ?? Random().nextInt(100).toString(), email: savedUser!.email, tel: _phoneController.text, profile: upload.uploadedImage ?? savedUser?.profile, otp: "", isVerified: savedUser?.isVerified,emailVerifiedAt: "", createdAt: savedUser?.createdAt, updatedAt: savedUser?.updatedAt, deviceToken: "", deviceType: "android", phoneNo: _phoneController.text, phoneNoCode: "+234", status: "1",userType: "user",  ), context);
                     }
                    
                   },)
