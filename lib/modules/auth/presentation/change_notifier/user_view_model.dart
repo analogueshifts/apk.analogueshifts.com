@@ -6,6 +6,7 @@ import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
+import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/forgetpaasswordcreate.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
@@ -93,11 +94,11 @@ class UserViewModel extends ChangeNotifier {
       },
           (user) async{
             logger.i('Login successful: $user');
-            // await _db.saveToken(user);
-            // if(context.mounted){
-            //    Navigator.of(context).push(
-            //   MaterialPageRoute(builder: (context) => UserVerificationOtpScreen(email: payload.email)));
-            // }
+            await _db.saveToken(user);
+            if(context.mounted){
+               Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => UserVerificationOtpScreen(email: payload.email)));
+            }
 
       },
     );
@@ -276,7 +277,7 @@ class UserViewModel extends ChangeNotifier {
     });
   }
 
-   Future<void> updateUser(User user, BuildContext context) async {
+   Future<void> updateUser(UpdateUserDto user, BuildContext context) async {
     toggleGenerating(true);
     notifyListeners();
     final result = await _updateUserUseCase.call(user);
@@ -291,8 +292,7 @@ class UserViewModel extends ChangeNotifier {
       },
           (user) async{
             logger.i('Update successful: $user');
-            saveUser(user);
-            _db.saveUser(user);
+            await fetchUser(context);
             AppSnackbar.success(context, message: "Update Successful!");
             notifyListeners();
       },

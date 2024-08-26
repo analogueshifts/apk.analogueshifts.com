@@ -9,6 +9,7 @@ import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/step.d
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/companies_bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/countries_bottom_sheet.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/employment_type_bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/job_field_bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/job_roles.bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/qualification_bottom_sheet.dart';
@@ -33,6 +34,9 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
   final _qualifiication = TextEditingController();
   final _companyWebsite = TextEditingController();
   final _companyLogoImage = TextEditingController();
+  final _employmentType = TextEditingController();
+  final _contractDuration = TextEditingController();
+  final _city = TextEditingController();
   int _currentPage = 1;
   @override
   Widget build(BuildContext context) {
@@ -269,8 +273,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
               ),
               const Gap(6),
               InkWell(
-                onTap: () {
-                  job.getSavedCompanies(context);
+                onTap: () {;
                   showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
@@ -298,7 +301,141 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
                 ),
               ),
               Gap(20),
-              BusyButton(title: "Next", onTap:(){}),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: 'City/Town', style: TextStyle(fontWeight: FontWeight.w700,color: isLight ? AppColors.background : AppColors.white,),),
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                    ),
+                  ],
+                ),
+              ),
+              const Gap(6),
+              TextFormField(
+                controller: _city,
+                // controller: _emailController,
+                decoration: textInputDecoration.copyWith(
+                    fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                        )
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                        )
+                    ),
+                    hintStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
+                    ),
+                    hintText: 'Input city'),
+                validator: (value) {
+                  if (value == null) return ("Enter city");
+
+                  return null;
+                },
+                onChanged: (value) {
+                },
+              ),
+              Gap(20),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: 'Employment Type', style: TextStyle(fontWeight: FontWeight.w700,color: isLight ? AppColors.background : AppColors.white,),),
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                    ),
+                  ],
+                ),
+              ),
+              const Gap(6),
+              InkWell(
+                onTap: () async{;
+                final results = await showModalBottomSheet(
+                    context: context,
+                    // isScrollControlled: true,
+                    builder:(context) {
+                      return EmploymentTypeBottomSheet();
+                    }
+                );
+
+
+                if(results != null){
+                  setState(() {
+                    _employmentType.text = results;
+                  });
+
+                }
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+                  width: double.infinity,
+                  // height: 56,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xffE5E5E5)),
+                      borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextSemiBold(_employmentType.text == null ? "Select employment type" : _employmentType.text, color: isLight ? Color(0xff000000).withOpacity(_employmentType.text.isEmpty ? 0.40 : 0.90) : AppColors.grey),
+                      Icon(Icons.keyboard_arrow_down)
+
+                    ],
+                  ),
+                ),
+              ),
+              Gap(20),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(text: 'Contract Duration', style: TextStyle(fontWeight: FontWeight.w700,color: isLight ? AppColors.background : AppColors.white,),),
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                    ),
+                  ],
+                ),
+              ),
+              const Gap(6),
+              TextFormField(
+                controller: _contractDuration,
+                // controller: _emailController,
+                decoration: textInputDecoration.copyWith(
+                    fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                        )
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                        )
+                    ),
+                    hintStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
+                    ),
+                    hintText: 'Select the duration of the contract'),
+                validator: (value) {
+                  if (value == null) return ("Select the duration of the contract");
+
+                  return null;
+                },
+                onChanged: (value) {
+                },
+              ),
+              Gap(20),
+              BusyButton(title: "Next", onTap:(){
+              }),
               Gap(30)
             ],
           ),

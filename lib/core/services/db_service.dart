@@ -100,6 +100,7 @@ class DBService {
   Future<void> clear() async {
     final box = getBox();
     await box.clear();
+    await deleteUser();
   }
 
 

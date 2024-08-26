@@ -8,6 +8,7 @@ import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
 import 'package:analogue_shifts_mobile/core/utils/validator.dart';
+import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/uploads/presentation/changeNotifiers/upload_notifier.dart';
@@ -30,6 +31,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _bioController = TextEditingController();
   @override
   void initState() {
     final user = context.read<UserViewModel>().authState.user;
@@ -38,6 +40,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _lastNameController.text = user?.user?.userProfile?.lastName ?? "";
     _emailController.text = user?.user?.email ?? "";
     _phoneController.text = user?.user?.phoneNumber ?? "";
+    _bioController.text = user?.user?.userProfile?.biography ?? "";
    
     super.initState();
   }
@@ -49,6 +52,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _lastNameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
+    _bioController.dispose();
     super.dispose();
   }
 
@@ -174,6 +178,43 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   },
                 ),
                 const Gap(20),
+                TextSemiBold("Bio", style: Theme.of(context).textTheme.bodyMedium,),
+                const Gap(6),
+                TextFormField(
+                  controller:_bioController,
+                  decoration: textInputDecoration.copyWith(
+                      fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                      ),
+                      hintStyle: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontFamily: AppFonts.manRope,
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.4) : const Color(0xffFFFFFF).withOpacity(0.4)
+                      ),
+                      hintText: user.authState.user?.user?.userProfile?.biography ?? 'Tell us a little bit about you'),
+                  validator: (value) {
+                    if (value == null) return ("Enter your name");
+                    if (CustomValidator.validEmail(value.trim()) == false) {
+                      return ("Invalid name");
+                    }
+
+                    return null;
+                  },
+                  onChanged: (value) {
+                  },
+                ),
+                const Gap(20),
                   TextSemiBold("Email", style: Theme.of(context).textTheme.bodyMedium,),
                   const Gap(6),
                   TextFormField(
@@ -265,7 +306,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       if(!mounted)return;
                        AppSnackbar.error(context, message: "Update your profile image");
                     }else{
-                      // user.updateUser(User(id: savedUser!.id, uuid: savedUser.uuid, firstName: _firstNameController.text.trim(), lastName: _lastNameController.text.trim(), username: savedUser?.username ?? Random().nextInt(100).toString(), email: savedUser!.email, tel: _phoneController.text, profile: upload.uploadedImage ?? savedUser?.profile, otp: "", isVerified: savedUser?.isVerified,emailVerifiedAt: "", createdAt: savedUser?.createdAt, updatedAt: savedUser?.updatedAt, deviceToken: "", deviceType: "android", phoneNo: _phoneController.text, phoneNoCode: "+234", status: "1",userType: "user",  ), context);
+                      user.updateUser(UpdateUserDto(username: savedUser?.user?.username ?? Random().nextInt(100).toString(), firstName: _firstNameController.text.toString(), lastName: _lastNameController.text, profile: upload.uploadedImage ?? savedUser?.user?.userProfile?.avatar, biography: _bioController.text), context);
                     }
                    
                   },)

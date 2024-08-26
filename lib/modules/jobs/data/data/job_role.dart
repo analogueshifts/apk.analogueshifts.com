@@ -284,3 +284,22 @@ List<JobRole> skills = [
   ),
 
 ];
+
+List<JobRole> employmet_type = [
+  JobRole(
+    name: "Full-time",
+  ),
+  JobRole(
+    name: "Part-time",
+  ),
+  JobRole(
+    name: "Contract",
+  ),
+  JobRole(
+    name: "Internship",
+  ),
+  JobRole(
+    name: "Volunteer",
+  ),
+
+];

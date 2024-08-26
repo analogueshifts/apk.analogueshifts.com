@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/logger.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final _db = getIt<DBService>();
 class DioManager {
@@ -12,19 +13,22 @@ class DioManager {
   BuildContext? context;
 
   DioManager(this.tokenProvider) {
-    
+  logger.d(dotenv.env['ENV']);
+  logger.d(dotenv.env['BASE_URL']);
+  logger.d(dotenv.env['SECRET_KEY']);
     _dio = Dio(
         BaseOptions(
           //DEVELOPMENT
-          baseUrl: 'https://developer.analogueshifts.com/api/',
+          // baseUrl: 'https://developer.analogueshifts.com/api/',
           //PRODUCTION URL
-          // baseUrl: 'https://api.analogueshifts.app/api/',
+          baseUrl: 'https://api.analogueshifts.app/api/',
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $tokenProvider',
             'Content-Type': 'application/json',
-            'public_key': 'AS_PUBLIC_HtqFHcL1LLmqt',
-            'secret_key': 'AS_SECRET_29MOHf8Ff2ImH',
+            //TODO: move to .env file
+            'x-api-public-key': 'AS_PUBLIC_HtqFHcL1LLmqt',
+            'x-api-secret-key': 'AS_SECRET_29MOHf8Ff2ImH',
             'slug': 'user_version_1.0_android',
             'user_type': 'user',
             'version': '1.0'

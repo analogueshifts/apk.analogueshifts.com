@@ -1,3 +1,4 @@
+import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/forgetpaasswordcreate.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
@@ -14,7 +15,7 @@ abstract class UserRepository {
   Future<Either<Exception, String>> registerUser(RegisterRequest payload);
   Future<Either<Exception, bool>> forgotPassword(String email);
   Future<Either<Exception, bool>> verifyPasswordOtp(VerifyPasswordEntity payload);
-  Future<Either<Exception, User>> updateUser(User user);
+  Future<Either<Exception, UserClass>> updateUser(UpdateUserDto user);
   Future<Either<Exception, User>> fetchUser();
    Future<Either<Exception, NoDataResponse>> createNewPassword(CreateForgetNewPasswordEntity payload);
    Future<Either<Exception, User>> verifyEmail(String otp);

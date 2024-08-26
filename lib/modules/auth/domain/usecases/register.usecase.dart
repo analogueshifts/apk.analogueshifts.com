@@ -1,3 +1,4 @@
+import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/forgetpaasswordcreate.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
@@ -64,8 +65,8 @@ class InitiateVerificationUseCase {
 class UpdateUserUseCase {
   final UserRepository _userRepository = GetIt.instance<UserRepository>();
 
-  Future<Either<Exception, User>> call(
-      User payload) async {
+  Future<Either<Exception, UserClass>> call(
+      UpdateUserDto payload) async {
     return await _userRepository.updateUser(payload);
   }
 

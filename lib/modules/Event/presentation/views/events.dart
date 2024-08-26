@@ -4,11 +4,13 @@ import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
+import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/change_notifier/event.notifier.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/views/create_event.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/views/single-event.dart';
+import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/event_card.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/shimmer-loading-list.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -93,6 +95,7 @@ class _EventsViewState extends State<EventsView> {
                 ),
               ),
               const Gap(20),
+              // EventCard(imageUrl: "assets/images/avatar_image.png", location: " d.ew kewnjlew", organizer: "kjdwew e;nwe", participants: 0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
