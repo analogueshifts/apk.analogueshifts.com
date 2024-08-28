@@ -1,7 +1,6 @@
 
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
-import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/data/data/job_role.dart';
@@ -14,51 +13,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
-class CountriesBottomSheet extends StatefulWidget {
-  const CountriesBottomSheet({super.key});
+class ApplicationBottomSheet extends StatefulWidget {
+  const ApplicationBottomSheet ({super.key});
 
   @override
-  State<CountriesBottomSheet> createState() => _CountriesBottomSheetState();
+  State<ApplicationBottomSheet> createState() => _ApplicationBottomSheetState();
 }
 
-class _CountriesBottomSheetState extends State<CountriesBottomSheet> {
+class _ApplicationBottomSheetState extends State<ApplicationBottomSheet> {
 
-  final _search = TextEditingController();
-
-  JobRole? _rolesList;
-
-  List<JobRole> filteredCountries = [];
-
-  TextEditingController _searchController = TextEditingController();
+  List<JobRole> filteredQualifications = [];
 
   @override
   void initState() {
     super.initState();
-    filteredCountries = countries;
+    filteredQualifications = applicationDeadline;
   }
 
-  void filterSearchResults(String query) {
-    List<JobRole> dummySearchList = [];
-    dummySearchList.addAll(fields);
-    if (query.isNotEmpty) {
-      List<JobRole> dummyListData = [];
-      dummySearchList.forEach((item) {
-        if (item.name!.toLowerCase().contains(query.toLowerCase())) {
-          dummyListData.add(item);
-        }
-      });
-      setState(() {
-        filteredCountries = [];
-        filteredCountries.addAll(dummyListData);
-      });
-      return;
-    } else {
-      setState(() {
-        filteredCountries = [];
-        filteredCountries = roles;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +62,7 @@ class _CountriesBottomSheetState extends State<CountriesBottomSheet> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextSemiBold("Job Location (Company)", fontSize: 20,),
+                        TextSemiBold("OR Select Quickly", fontSize: 20,),
                         InkWell(
                             onTap: (){
                               Navigator.pop(context);
@@ -100,12 +71,12 @@ class _CountriesBottomSheetState extends State<CountriesBottomSheet> {
                       ],
                     ),
                     Gap(20),
-                    filteredCountries.isEmpty ? Center(child: Text("No Qualifications!"),) :
+                    filteredQualifications.isEmpty ? Center(child: Text("No Application Deadlinne!"),) :
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:
-                      filteredCountries.map((e) =>
-                          TouchableOpacity(
+                      filteredQualifications.map((e) =>
+                          InkWell(
                             onTap: (){
                               Navigator.pop(context, e.name);
                             },

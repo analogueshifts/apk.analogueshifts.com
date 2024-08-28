@@ -43,21 +43,25 @@ class _CreateVettingScreenState extends State<CreateVettingScreen> with SingleTi
       appBar: PaylonyAppBarTwo(title: "Vetting System"),
       body: Column(
         children: [
-          TabBar(
-
-            controller: _tabController,
-            tabs: [
-              Tab(text: 'Question'),
-              Tab(text: 'Preview'),
-              Tab(text: 'Response',)
-            ],
-            labelColor: _isLight ?Color(0xff0F2942) : AppColors.white,
-            unselectedLabelColor: _isLight ? Color(0xff0F2942).withOpacity(0.46) : AppColors.white,
-            indicator: UnderlineTabIndicator(
-              borderSide: BorderSide(width: 5.0, color: AppColors.primaryColor),
-              insets: EdgeInsets.symmetric(horizontal: 0.0),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TabBar(
+              controller: _tabController,
+              tabs: [
+                Tab(text: 'Question'),
+                Tab(text: 'Preview'),
+                Tab(text: 'Response',)
+              ],
+              labelColor: AppColors.white,
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: Colors.orange,
+              indicator: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                color: AppColors.primaryColor,
+                shape: BoxShape.rectangle
+              ),
+              indicatorSize: TabBarIndicatorSize.tab,
             ),
-            indicatorSize: TabBarIndicatorSize.tab,
           ),
           Expanded(
             child: TabBarView(

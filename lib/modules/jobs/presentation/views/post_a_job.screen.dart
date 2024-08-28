@@ -7,12 +7,16 @@ import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/step.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/application_deadline_bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/companies_bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/countries_bottom_sheet.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/currency_bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/employment_type_bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/job_field_bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/job_roles.bottom_sheet.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/paymentType_bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/qualification_bottom_sheet.dart';
+import 'package:analogue_shifts_mobile/modules/vetting/presentation/widgets/text_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:googleapis/admob/v1.dart';
@@ -32,12 +36,50 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
   final _location = TextEditingController();
   final _jobField = TextEditingController();
   final _qualifiication = TextEditingController();
-  final _companyWebsite = TextEditingController();
-  final _companyLogoImage = TextEditingController();
+  final _currency = TextEditingController();
+  final _paymentType = TextEditingController();
+  final _maxAmount = TextEditingController();
+  final _minAMount = TextEditingController();
   final _employmentType = TextEditingController();
-  final _contractDuration = TextEditingController();
+  final _applicationDeadline = TextEditingController();
   final _city = TextEditingController();
+  final _description = TextEditingController();
+  final _applyOption = TextEditingController();
   int _currentPage = 1;
+  bool isFirstFormValid = false;
+  bool isSecondFormValid = false;
+
+  String? _jobDescription;
+
+
+
+
+
+  validateFirstForm(){
+    if(_companyName.text.isEmpty || _location.text.isEmpty || _jobField.text.isEmpty || _qualifiication.text.isEmpty || _location.text.isEmpty || _city.text.isEmpty || _employmentType.text.isEmpty){
+      setState(() {
+        isFirstFormValid = false;
+      });
+    }else{
+      setState(() {
+        isFirstFormValid = true;
+      });
+
+    }
+  }
+
+  validateSecondForm(){
+    if(_applicationDeadline.text.isEmpty || _paymentType.text.isEmpty || _maxAmount.text.isEmpty || _minAMount.text.isEmpty || _currency.text.isEmpty){
+      setState(() {
+        isSecondFormValid = false;
+      });
+    }else{
+      setState(() {
+        isSecondFormValid = true;
+      });
+
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final isLight = Theme.of(context).colorScheme.brightness == Brightness.light;
@@ -95,7 +137,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
                     setState(() {
                       _companyName.text = results;
                     });
-
+                    validateFirstForm();
                   }
                 },
                 child: Container(
@@ -143,7 +185,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
                    setState(() {
                      _positionTitle.text = results;
                    });
-
+                   validateFirstForm();
                  }
                 },
                 child: Container(
@@ -187,10 +229,11 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
                       }
                   );
                   if(results != null){
+
                     setState(() {
                       _jobField.text = results;
                     });
-
+                    validateFirstForm();
                   }
                 },
 
@@ -235,10 +278,11 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
                  logger.d(results);
 
                  if(results != null){
+
                    setState(() {
                      _qualifiication.text = results!;
                    });
-
+                   validateFirstForm();
                  }
                 },
                 child: Container(
@@ -273,14 +317,20 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
               ),
               const Gap(6),
               InkWell(
-                onTap: () {;
-                  showModalBottomSheet(
+                onTap: () async{;
+                 final result = await showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
                       builder:(context) {
                         return CountriesBottomSheet();
                       }
                   );
+                 if(result != null && result.runtimeType.toString().toLowerCase() == "string"){
+                   setState(() {
+                     _location.text = result!;
+                   });
+                   validateFirstForm();
+                 }
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
@@ -293,7 +343,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextSemiBold("Choose expected qualification", color: isLight ? Color(0xff000000).withOpacity(0.40) : AppColors.grey,),
+                      TextSemiBold(_location.text == null ? "Choose Country" : _location.text, color: isLight ? Color(0xff000000).withOpacity(_location.text.isEmpty ? 0.40 : 0.90) : AppColors.grey,),
                       Icon(Icons.keyboard_arrow_down)
 
                     ],
@@ -340,6 +390,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
                   return null;
                 },
                 onChanged: (value) {
+                  validateFirstForm();
                 },
               ),
               Gap(20),
@@ -370,6 +421,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
                   setState(() {
                     _employmentType.text = results;
                   });
+                  validateFirstForm();
 
                 }
                 },
@@ -392,49 +444,16 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
                 ),
               ),
               Gap(20),
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(text: 'Contract Duration', style: TextStyle(fontWeight: FontWeight.w700,color: isLight ? AppColors.background : AppColors.white,),),
-                    TextSpan(
-                      text: ' *',
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-                    ),
-                  ],
-                ),
-              ),
-              const Gap(6),
-              TextFormField(
-                controller: _contractDuration,
-                // controller: _emailController,
-                decoration: textInputDecoration.copyWith(
-                    fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
-                        )
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
-                        )
-                    ),
-                    hintStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
-                    ),
-                    hintText: 'Select the duration of the contract'),
-                validator: (value) {
-                  if (value == null) return ("Select the duration of the contract");
-
-                  return null;
-                },
-                onChanged: (value) {
-                },
-              ),
-              Gap(20),
-              BusyButton(title: "Next", onTap:(){
+              BusyButton(
+                  title: "Next",
+                  disabled: isFirstFormValid == true ? false : true,
+                  onTap:(){
+                validateFirstForm();
+                if(isFirstFormValid){
+                  setState(() {
+                    _currentPage = 2;
+                });
+                }
               }),
               Gap(30)
             ],
@@ -445,11 +464,378 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
   }
 
   Widget _buildStep2(){
-    return Container();
+    final isLight = Theme.of(context).colorScheme.brightness == Brightness.light;
+    return  Consumer<JobProvider>(
+      builder: (_, job, __) =>
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Gap(10),
+                  Center(child: TextSemiBold("To post a job kindly fill in job details below", fontSize: 14, color: Color(0xff666666),)),
+                  Gap(10),
+                  StepIndicator(currentStep: 2, totalSteps: 3),
+
+                  Gap(30),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(text: 'Payment Type', style: TextStyle(fontWeight: FontWeight.w700,color: isLight ? AppColors.background : AppColors.white,),),
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(6),
+
+                  InkWell(
+                    onTap: () async{
+                      job.getSavedCompanies(context);
+                      final results = await showModalBottomSheet(
+                          context: context,
+                          builder:(context) {
+                            return PaymentTypeBottomSheet();
+
+                          }
+                      );
+
+                      if(results != null){
+                        setState(() {
+                          _paymentType.text = results;
+                        });
+                        validateSecondForm();
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+                      width: double.infinity,
+                      // height: 56,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Color(0xffE5E5E5)),
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextSemiBold(_paymentType.text.isEmpty ? "Select the preferred payment type" : _paymentType.text,color:isLight ? Color(0xff000000).withOpacity(_paymentType.text.isEmpty ? 0.40 : 0.9) : AppColors.grey,),
+                          Icon(Icons.keyboard_arrow_down)
+
+                        ],
+                      ),
+                    ),
+                  ),
+                  Gap(15),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(text: 'Currency', style: TextStyle(fontWeight: FontWeight.w700,color: isLight ? AppColors.background : AppColors.white,),),
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(6),
+                  InkWell(
+                    onTap: () async{
+                      final results = await showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder:(context) {
+                            return CurrencyBottomSheet();
+                          }
+                      );
+
+                      if(results != null){
+                        setState(() {
+                          _currency.text = results;
+                        });
+                        validateSecondForm();
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+                      width: double.infinity,
+                      // height: 56,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Color(0xffE5E5E5)),
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextSemiBold(_currency.text.isEmpty ? "Select Currency " : _currency.text, color: isLight ? Color(0xff000000).withOpacity(_currency.text.isEmpty ? 0.40 : 0.90) : AppColors.grey),
+                          Icon(Icons.keyboard_arrow_down)
+
+                        ],
+                      ),
+                    ),
+                  ),
+                  Gap(20),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(text: 'Minimum Amount', style: TextStyle(fontWeight: FontWeight.w700,color: isLight ? AppColors.background : AppColors.white,),),
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(6),
+                  TextFormField(
+                    controller: _minAMount,
+                    keyboardType: TextInputType.number,
+                    decoration: textInputDecoration.copyWith(
+                        fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                            )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                            )
+                        ),
+                        hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
+                        hintText: 'Input minimum amount'),
+                    validator: (value) {
+                      if (value == null) return ("Enter min amount");
+
+                      return null;
+                    },
+                    onChanged: (value) {
+                      validateSecondForm();
+                    },
+                  ),
+                  Gap(20),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(text: 'Maximum Amount', style: TextStyle(fontWeight: FontWeight.w700,color: isLight ? AppColors.background : AppColors.white,),),
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(6),
+                  TextFormField(
+                    controller: _maxAmount,
+                    keyboardType: TextInputType.number,
+
+                    decoration: textInputDecoration.copyWith(
+                        fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                            )
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                            )
+                        ),
+                        hintStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
+                        ),
+                        hintText: 'Input max amount'),
+                    validator: (value) {
+                      if (value == null) return ("Enter amount");
+
+                      return null;
+                    },
+                    onChanged: (value) {
+                      validateSecondForm();
+                    },
+                  ),
+                  Gap(20),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(text: 'OR Select Quickly', style: TextStyle(fontWeight: FontWeight.w700,color: isLight ? AppColors.background : AppColors.white,),),
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(6),
+                  InkWell(
+                    onTap: () async{;
+                    final results = await showModalBottomSheet(
+                        context: context,
+                        // isScrollControlled: true,
+                        builder:(context) {
+                          return ApplicationBottomSheet();
+                        }
+                    );
+
+
+                    if(results != null){
+                      setState(() {
+                        _applicationDeadline.text = results;
+                        // _applicationDeadline.text = results;
+                      });validateSecondForm();
+
+                    }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+                      width: double.infinity,
+                      // height: 56,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Color(0xffE5E5E5)),
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextSemiBold(_applicationDeadline.text == null ? "Select  deadline" : _applicationDeadline.text, color: isLight ? Color(0xff000000).withOpacity(_applicationDeadline.text.isEmpty ? 0.40 : 0.90) : AppColors.grey),
+                          Icon(Icons.keyboard_arrow_down)
+
+                        ],
+                      ),
+                    ),
+                  ),
+                  Gap(20),
+                  BusyButton(
+                      title: "Next",
+                      disabled: isSecondFormValid == true ? false : true,
+                      onTap:(){
+                        validateFirstForm();
+                        if(isSecondFormValid){
+                          setState(() {
+                            _currentPage = 3;
+                          });
+                        }
+                      }),
+                  Gap(30)
+                ],
+              ),
+            ),
+          ),
+    );
   }
 
   Widget _buildStep3(){
-    return Container();
+    final isLight = Theme.of(context).colorScheme.brightness == Brightness.light;
+    return  Consumer<JobProvider>(
+      builder: (_, job, __) =>
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Gap(10),
+                  Center(child: TextSemiBold("To post a job kindly fill in job details below", fontSize: 14, color: Color(0xff666666),)),
+                  Gap(10),
+                  StepIndicator(currentStep: 3, totalSteps: 3),
+
+                  Gap(30),
+
+                  Gap(20),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(text: 'Tell us about the role (Description):', style: TextStyle(fontWeight: FontWeight.w700,color: isLight ? AppColors.background : AppColors.white,),),
+                        TextSpan(
+                          text: '',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(6),
+                  TextEditor(html: _jobDescription,),
+
+                  Gap(20),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(text: 'How to apply', style: TextStyle(fontWeight: FontWeight.w700,color: isLight ? AppColors.background : AppColors.white,),),
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(6),
+                  InkWell(
+                    onTap: () async{;
+                    final results = await showModalBottomSheet(
+                        context: context,
+                        // isScrollControlled: true,
+                        builder:(context) {
+                          return ApplicationBottomSheet();
+                        }
+                    );
+
+
+                    if(results != null){
+                      setState(() {
+                        //TODO: MAkE SURE YIU ADD STATE MANAMGEMENT TO THIS.
+                        _applyOption.text = results;
+                        // _applicationDeadline.text = results;
+                      });
+                      validateFirstForm();
+
+                    }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
+                      width: double.infinity,
+                      // height: 56,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Color(0xffE5E5E5)),
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextSemiBold(_applyOption.text == null ? "Select how to apply option" : _applyOption.text, color: isLight ? Color(0xff000000).withOpacity(_applyOption.text.isEmpty ? 0.40 : 0.90) : AppColors.grey),
+                          Icon(Icons.keyboard_arrow_down)
+
+                        ],
+                      ),
+                    ),
+                  ),
+                  Gap(20),
+                  BusyButton(
+                      title: "Next",
+                      // disabled: isFirstFormValid == true ? false : true,
+                      onTap:(){
+                        logger.d(_jobDescription);
+                        // validateFirstForm();
+                        // if(isFirstFormValid){
+                        //   setState(() {
+                        //     _currentPage = 3;
+                        //   });
+                        // }
+                      }),
+                  Gap(30)
+                ],
+              ),
+            ),
+          ),
+    );
   }
   }
 

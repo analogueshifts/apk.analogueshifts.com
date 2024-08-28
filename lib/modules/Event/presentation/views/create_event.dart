@@ -112,6 +112,7 @@ class _CreateEventStepFormState extends State<CreateEventStepForm> {
             const Gap(6),
             TextFormField(
               controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
               decoration: textInputDecoration.copyWith(
                   fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
                   enabledBorder: OutlineInputBorder(
@@ -147,6 +148,7 @@ class _CreateEventStepFormState extends State<CreateEventStepForm> {
             const Gap(6),
             TextFormField(
               controller: _phoneController,
+              keyboardType: TextInputType.phone,
               decoration: textInputDecoration.copyWith(
                   fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
                   enabledBorder: OutlineInputBorder(
@@ -250,6 +252,7 @@ class _CreateEventStepFormState extends State<CreateEventStepForm> {
             const Gap(6),
             TextFormField(
               controller: _priceController,
+              keyboardType: TextInputType.number,
               decoration: textInputDecoration.copyWith(
                   fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
                   enabledBorder: OutlineInputBorder(
@@ -611,7 +614,9 @@ class _CreateEventStepFormState extends State<CreateEventStepForm> {
                     endsDate: _endDate,
                     locationType: _isOnline == true ?  "online" : "venue",
                     location: _addressController.text.trim(),
-                    countriesPrices: null
+                    countriesPrices: null,
+                   maximum: 1000,
+                  urlLink: _addressController.text.trim()
                 ),
                     context
                 );

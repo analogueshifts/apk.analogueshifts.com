@@ -11,6 +11,8 @@ class CreateEventDto {
     required this.locationType,
     required this.location,
     required this.countriesPrices,
+    required this.maximum,
+    this.urlLink
   });
 
   final String? email;
@@ -24,6 +26,8 @@ class CreateEventDto {
   final String? locationType;
   final String? location;
   final dynamic countriesPrices;
+  final int maximum;
+  final String? urlLink;
 
   CreateEventDto copyWith({
     String? email,
@@ -37,6 +41,8 @@ class CreateEventDto {
     String? locationType,
     String? location,
     dynamic? countriesPrices,
+    int? maximum,
+    String? urlLink,
   }) {
     return CreateEventDto(
       email: email ?? this.email,
@@ -50,6 +56,9 @@ class CreateEventDto {
       locationType: locationType ?? this.locationType,
       location: location ?? this.location,
       countriesPrices: countriesPrices ?? this.countriesPrices,
+      maximum: maximum ?? this.maximum,
+      urlLink: urlLink ?? this.urlLink,
+
     );
   }
 
@@ -66,6 +75,8 @@ class CreateEventDto {
       locationType: json["location_type"],
       location: json["location"],
       countriesPrices: json["countriesPrices"],
+      maximum: json['maximum'],
+      urlLink:json["url_link"],
     );
   }
 
@@ -81,6 +92,8 @@ class CreateEventDto {
     "location_type": locationType,
     "location": location,
     "countriesPrices": countriesPrices,
+    "maximum": maximum,
+    "url_link": urlLink
   };
 
 }

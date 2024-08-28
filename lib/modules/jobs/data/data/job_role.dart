@@ -303,3 +303,70 @@ List<JobRole> employmet_type = [
   ),
 
 ];
+
+
+List<JobRole> paymentType = [
+  JobRole(
+    name: "Salary",
+  ),
+  JobRole(
+    name: "Hourly Wage",
+  ),
+  JobRole(
+    name: "Equity/Stock Options",
+  ),
+  JobRole(
+    name: "Stipend",
+  ),
+  JobRole(
+    name: "Contractual/Project-Based",
+  ),
+  JobRole(
+    name: "Revenue Share",
+  ),
+
+];
+
+List<JobRole> currency = [
+  JobRole(
+    name: "Naira NGN",
+  ),
+  JobRole(
+    name: "US Dollar USD",
+  ),
+  JobRole(
+    name: "UK Pounds",
+  ),
+  JobRole(
+    name: "Euro",
+  ),
+  JobRole(
+    name: "Other",
+  ),
+
+];
+
+List<JobRole> applicationDeadline = [
+  JobRole(
+    name: "One Week Expiration",
+  ),
+  JobRole(
+    name: "Two Weeks Expiration",
+  ),
+  JobRole(
+    name: "Three Weeks Expiration",
+  ),
+  JobRole(
+    name: "Four Weeks Expiration",
+  ),
+  JobRole(
+    name: "Five Weeks Expiration",
+  ),
+  JobRole(
+    name: "Six Weeks Expiration",
+  ),
+  JobRole(
+    name: "Seven Weeks Expiration",
+  ),
+
+];
