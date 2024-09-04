@@ -2,7 +2,7 @@ name: analogue_shifts_mobile
 description: "A Recruitment and Technical Support Platform."
 publish_to: 'none'
 #version: 1.0.0+1
-version: 1.0.1+2
+version: 1.0.3+3
 
 environment:
   sdk: '>=3.1.4 <4.0.0'

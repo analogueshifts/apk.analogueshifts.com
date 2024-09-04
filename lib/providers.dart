@@ -4,6 +4,7 @@ import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:analogue_shifts_mobile/modules/notification/presentation/notifiers/notification_provider.dart';
 import 'package:analogue_shifts_mobile/modules/uploads/presentation/changeNotifiers/upload_notifier.dart';
+import 'package:analogue_shifts_mobile/modules/vetting/presentation/change_notifiers/vetting.notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -26,6 +27,10 @@ List<SingleChildWidget> providers = [
   ),
   ChangeNotifierProvider(
       create: (_) => EventProvider()
+  ),
+
+  ChangeNotifierProvider(
+      create: (_) => VettingNotifier()
   ),
 
 ];

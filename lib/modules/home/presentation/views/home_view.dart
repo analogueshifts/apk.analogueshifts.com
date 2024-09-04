@@ -168,6 +168,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
             const Gap(30),
+            //TODO: IMPLEMENT ANALYTICS API AND DISPLAY CARD
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: JobAnalyticsCard(),

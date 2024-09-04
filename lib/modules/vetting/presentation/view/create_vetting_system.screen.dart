@@ -5,11 +5,13 @@ import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/custom_single_chile_scroll_view.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
+import 'package:analogue_shifts_mobile/modules/vetting/presentation/change_notifiers/vetting.notifier.dart';
 import 'package:analogue_shifts_mobile/modules/vetting/presentation/widgets/text_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:googleapis/streetviewpublish/v1.dart';
+import 'package:provider/provider.dart';
 
 class CreateVettingScreen extends StatefulWidget {
   const CreateVettingScreen({super.key});
@@ -25,7 +27,7 @@ class _CreateVettingScreenState extends State<CreateVettingScreen> with SingleTi
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     _tabController.index = 0; // Set initial tab to Preview
   }
 
@@ -41,39 +43,42 @@ class _CreateVettingScreenState extends State<CreateVettingScreen> with SingleTi
     final _isLight = Theme.of(context).colorScheme.brightness == Brightness.light;
     return Scaffold(
       appBar: PaylonyAppBarTwo(title: "Vetting System"),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TabBar(
-              controller: _tabController,
-              tabs: [
-                Tab(text: 'Question'),
-                Tab(text: 'Preview'),
-                Tab(text: 'Response',)
-              ],
-              labelColor: AppColors.white,
-              unselectedLabelColor: Colors.grey,
-              indicatorColor: Colors.orange,
-              indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: AppColors.primaryColor,
-                shape: BoxShape.rectangle
+      body: Consumer<VettingNotifier>(
+        builder:  (_, value, __) =>
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TabBar(
+                controller: _tabController,
+                tabs: [
+                  Tab(text: 'Question'),
+                  Tab(text: 'Preview'),
+                  // Tab(text: 'Response',)
+                ],
+                labelColor: AppColors.white,
+                unselectedLabelColor: Colors.grey,
+                indicatorColor: Colors.orange,
+                indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                  color: AppColors.primaryColor,
+                  shape: BoxShape.rectangle
+                ),
+                indicatorSize: TabBarIndicatorSize.tab,
               ),
-              indicatorSize: TabBarIndicatorSize.tab,
             ),
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                CreateForm(),
-                PreviewForm(),
-                Placeholder()
-              ],
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  CreateForm(),
+                  PreviewForm(),
+                  // Placeholder()
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -91,141 +96,148 @@ class _CreateFormState extends State<CreateForm> {
   @override
   Widget build(BuildContext context) {
     final _isLight = Theme.of(context).colorScheme.brightness == Brightness.light;
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: CustomSingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Gap(40),
-              TextSemiBold(
-                "Form title",
-                color: _isLight ? AppColors.background : AppColors.white,
-                fontWeight: FontWeight.w700,),
-              const Gap(6),
-              TextFormField(
-                // controller: _emailController,
-                decoration: textInputDecoration.copyWith(
-                    fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
-                        )
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
-                        )
-                    ),
-                    hintStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
-                    ),
-                    hintText: 'e.g “know your employee”'),
-                validator: (value) {
-                  if (value == null) return ("Enter your email");
+    return Consumer<VettingNotifier>(
+      builder: (_, vetting, __) =>
+      Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: CustomSingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Gap(40),
+                TextSemiBold(
+                  "Form title",
+                  color: _isLight ? AppColors.background : AppColors.white,
+                  fontWeight: FontWeight.w700,),
+                const Gap(6),
+                TextFormField(
+                  // controller: _emailController,
+                  decoration: textInputDecoration.copyWith(
+                      fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                      ),
+                      hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
+                      ),
+                      hintText: 'e.g “know your employee”'),
+                  validator: (value) {
+                    if (value == null) return ("Enter your email");
 
-                  return null;
-                },
-                onChanged: (value) {
-                },
-              ),
-              Gap(40),
-              TextSemiBold(
-                "Question",
-                color: _isLight ? AppColors.background : AppColors.white,
-                fontWeight: FontWeight.w700,),
-              const Gap(6),
-              TextFormField(
-                // controller: _emailController,
-                decoration: textInputDecoration.copyWith(
-                    fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
-                        )
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
-                        )
-                    ),
-                    hintStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
-                    ),
-                    hintText: 'e.g “What is your role'),
-                validator: (value) {
-                  if (value == null) return ("Enter question");
+                    return null;
+                  },
+                  onChanged: (value) {
+                  },
+                ),
+                Gap(40),
+                TextSemiBold(
+                  "Question",
+                  color: _isLight ? AppColors.background : AppColors.white,
+                  fontWeight: FontWeight.w700,),
+                const Gap(6),
+                TextFormField(
+                  // controller: _emailController,
+                  decoration: textInputDecoration.copyWith(
+                      fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                      ),
+                      hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
+                      ),
+                      hintText: 'e.g “What is your role'),
+                  validator: (value) {
+                    if (value == null) return ("Enter question");
 
-                  return null;
-                },
-                onChanged: (value) {
-                },
-              ),
-              Gap(20),
-              TextSemiBold(
-                "Answer",
-                color: _isLight ? AppColors.background : AppColors.white,
-                fontWeight: FontWeight.w700,),
-              const Gap(6),
-              TextFormField(
-                // controller: _emailController,
-                decoration: textInputDecoration.copyWith(
-                    fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
-                        )
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
-                        )
-                    ),
-                    hintStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
-                    ),
-                    hintText: 'e.g “product designer”'),
-                validator: (value) {
-                  if (value == null) return ("Enter answer");
+                    return null;
+                  },
+                  onChanged: (value) {
+                  },
+                ),
+                Gap(20),
+                TextSemiBold(
+                  "Answer",
+                  color: _isLight ? AppColors.background : AppColors.white,
+                  fontWeight: FontWeight.w700,),
+                const Gap(6),
+                TextFormField(
+                  // controller: _emailController,
+                  decoration: textInputDecoration.copyWith(
+                      fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.07) : const Color(0xffFFFFFF).withOpacity(0.18)
+                          )
+                      ),
+                      hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.25) : const Color(0xffFFFFFF).withOpacity(0.4)
+                      ),
+                      hintText: 'e.g “product designer”'),
+                  validator: (value) {
+                    if (value == null) return ("Enter answer");
 
-                  return null;
-                },
-                onChanged: (value) {
-                },
-              ),
-              Gap(20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25)
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.add, color: AppColors.primaryColor,),
-                        TextSemiBold("Add another question", color: AppColors.primaryColor,),
+                    return null;
+                  },
+                  onChanged: (value) {
+                  },
+                ),
+                Gap(20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25)
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.add, color: AppColors.primaryColor,),
+                          TextSemiBold("Add another question", color: AppColors.primaryColor,),
 
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              Gap(30),
-              BusyButton(
-                  title: "Save",
-                  height: 55, onTap: (){
-
-              })
-            ],
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                Gap(30),
+                BusyButton(
+                    title: "Post Form",
+                    height: 55, onTap: (){
+                      vetting.createForm(context, {
+                        "title": "Test",
+                        "description": "TEst form",
+                        "multi_response": false
+                      });
+                })
+              ],
+            ),
           ),
         ),
       ),
