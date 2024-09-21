@@ -10,6 +10,7 @@ import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/shimmer-loading-list.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
+import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/job_analytics_card.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
@@ -167,12 +168,12 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
             ),
-            const Gap(30),
+            const Gap(20),
             //TODO: IMPLEMENT ANALYTICS API AND DISPLAY CARD
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: JobAnalyticsCard(),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 15),
+            //   child: JobAnalyticsCard(),
+            // ),
             Gap(30),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
@@ -183,31 +184,63 @@ class _HomeViewState extends State<HomeView> {
               builder: (context, reconmended, child) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Container(
+                  child:Container(
                     padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 15),
                     decoration: BoxDecoration(
                       color: Color(0xffDDA000).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12)
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextSemiBold(reconmended.reconmendedjobs.firstOrNull?.title.toString() ?? "No Jobs yet!", fontWeight: FontWeight.w700, color: isLight ? AppColors.background : AppColors.white,),
-                            Gap(8),
-                            TextSemiBold("${reconmended.reconmendedjobs.length ?? 0} Available Jobs", color: Color(0xff909090),)
-                          ],
+                        // Expanded to handle overflow on the left side
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Title with ellipsis in case of overflow
+                              TextSemiBold(
+                                reconmended.reconmendedjobs.firstOrNull?.title.toString() ?? "No Jobs yet!",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,  // Limit to 1 line
+                                fontWeight: FontWeight.w700,
+                                color: isLight ? AppColors.background : AppColors.white,
+                              ),
+                              Gap(8),
+                              // Available Jobs text
+                              TextSemiBold(
+                                "${reconmended.reconmendedjobs.length ?? 0} Available Jobs",
+                                color: Color(0xff909090),
+                              ),
+                            ],
+                          ),
                         ),
+                        // View Jobs button and icon
                         Row(
                           children: [
-                            TextSemiBold("View Jobs", color: AppColors.primaryColor,),
+                            TouchableOpacity(
+                              onTap: () {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) => HomeNavigation(selectedIndex: 1),
+                                  ),
+                                      (Route<dynamic> route) => false,
+                                );
+                              },
+                              child: TextSemiBold(
+                                "View Jobs",
+                                color: AppColors.primaryColor,
+                              ),
+                            ),
                             Gap(5),
-                            Icon(Icons.north_east_outlined, color: AppColors.primaryColor,)
+                            Icon(
+                              Icons.north_east_outlined,
+                              color: AppColors.primaryColor,
+                            ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -247,6 +280,7 @@ class _HomeViewState extends State<HomeView> {
 
    Widget _recentJobCard(Datum data) {
      logger.d(data.description!.length);
+     logger.d(data.description);
    final image = data.hiringOrganization;
    final desc = Text(data.description.toString(), maxLines: 1,);
     return TouchableOpacity(

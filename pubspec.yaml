@@ -2,7 +2,7 @@ name: analogue_shifts_mobile
 description: "A Recruitment and Technical Support Platform."
 publish_to: 'none'
 #version: 1.0.0+1
-version: 1.0.3+3
+version: 1.0.4+4
 
 environment:
   sdk: '>=3.1.4 <4.0.0'
@@ -67,12 +67,12 @@ dev_dependencies:
   build_runner: ^2.4.9
   json_serializable: ^6.7.1
 
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/icons/launcher_icon.png"
-  min_sdk_android: 21 
-  remove_alpha_ios: true
+#flutter_launcher_icons:
+#  android: "launcher_icon"
+#  ios: true
+#  image_path: "assets/icons/launcher_icon.png"
+#  min_sdk_android: 21
+#  remove_alpha_ios: true
 
 flutter:
   uses-material-design: true

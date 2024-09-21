@@ -222,7 +222,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   showDialog(
                     barrierColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.transparent .withOpacity(0.6) : const Color(0xff110C00).withOpacity(0.8),
                     context: _scaffoldkey.currentContext!, builder:(context) {
-                 return dialog(context);
+                    return dialog(context);
                },);
                 },
               ),
@@ -240,8 +240,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     return Dialog(
       insetPadding: const EdgeInsets.all(10),
       child: AbsorbPointer(
-       absorbing: _isProcessing,
-        child: Container(
+     absorbing: _isProcessing,
+     child: Container(
           width: double.infinity,
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(

@@ -19,6 +19,7 @@ import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authentic
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/change_password.screen.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/user_verification.view.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/verify_user_otp_view.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/widgets/prompt_to_verify_bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -50,6 +51,12 @@ class UserViewModel extends ChangeNotifier {
   final AuthState _authState = AuthState();
 
   AuthState get authState => _authState;
+
+  bool _isPromptToVerify = false;
+
+  bool get PromptToVerify => _isPromptToVerify;
+
+
 
   init() async{
     final savedUser = await _db.getUser();
@@ -196,7 +203,7 @@ class UserViewModel extends ChangeNotifier {
                 context,
                 MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        const HomeNavigation()),
+                        HomeNavigation()),
                (Route<dynamic> route) => false);
 
             }
@@ -318,11 +325,11 @@ class UserViewModel extends ChangeNotifier {
           (user) async{
             logger.i('Update successful: $user');
             await _db.saveUser(user);
-            if(user.user?.emailVerifiedAt == null){
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => UserVerificationOtpScreen(email: user.user?.email)));
+            if(user.user?.emailVerifiedAt == null && _isPromptToVerify == false){
+              //TODO: add bootm sheeet
+              promptToVerify(context);
             }
-            saveUser(user);  
+            saveUser(user);
             notifyListeners();
       },
     );
@@ -407,7 +414,7 @@ class UserViewModel extends ChangeNotifier {
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      const HomeNavigation()),
+                      HomeNavigation()),
              (Route<dynamic> route) => false);
           
           AppSnackbar.error(context, message: error);
@@ -432,6 +439,19 @@ class UserViewModel extends ChangeNotifier {
       return true;
     });
     return false;
+  }
+
+
+  void promptToVerify(BuildContext context){
+    showModalBottomSheet(
+        context: context,
+        builder:(context) {
+          return PromptVerifyBottomSheet();
+
+        }
+    );
+    _isPromptToVerify = true;
+    notifyListeners();
   }
 
 }

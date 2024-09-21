@@ -48,7 +48,7 @@ class AppRoutes {
       ),
       GoRoute(
         path: Routes.homeNavigation,
-        builder: (context, state) => const HomeNavigation(),
+        builder: (context, state) => HomeNavigation(),
         routes: [
           GoRoute(
             path: Routes.settings,
