@@ -213,7 +213,7 @@ final TextEditingController _confirmPassword = TextEditingController();
                             currentFocus.focusedChild?.unfocus();
                           }
                           if (_formKey.currentState!.validate()) {
-                             user.updatePassword(CreateForgetNewPasswordEntity(email: user.authState.user?.email, password: _newPassword.text.trim(), passwordConfirmation: _confirmPassword.text.trim()), context);
+                             user.updatePassword(CreateForgetNewPasswordEntity(email: user.authState.user?.user?.email, password: _newPassword.text.trim(), passwordConfirmation: _confirmPassword.text.trim()), context);
                           }
                    
                   })

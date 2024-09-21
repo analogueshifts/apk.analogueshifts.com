@@ -49,7 +49,7 @@ class ErrorHandler  {
             nav.navigateTo(Routes.authenticate);
             return ("Session Expired! Unable to navigate to login.");
           }
-          return ("Session Expired!");
+          return (e.response?.data['message'] ?? "Session Expired!");
         }
         return (e.response?.data['message'] ?? e.response?.data['data']['message'] ?? e.message);
       }

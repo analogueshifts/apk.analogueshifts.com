@@ -186,6 +186,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                   const Gap(6),
                   TextFormField(
                     controller: _companyEmail,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: textInputDecoration.copyWith(
                         fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
                         enabledBorder: OutlineInputBorder(
@@ -228,6 +229,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
                   const Gap(6),
                   TextFormField(
                     controller: _companyPhone,
+                    keyboardType: TextInputType.number,
                     decoration: textInputDecoration.copyWith(
                         fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
                         enabledBorder: OutlineInputBorder(

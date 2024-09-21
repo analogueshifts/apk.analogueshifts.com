@@ -50,7 +50,7 @@ class _ProfileViewState extends State<ProfileView> {
       ),
       body: Consumer<UserViewModel>(
         builder: (context, UserViewModel user, child) {
-          final name = Functions.capitalize(user.authState.user?.firstName ?? "");
+          final name = Functions.capitalize(user.authState.user?.user?.userProfile?.firstName ?? "");
         // final splitName = name.split(' ');
         // final firstName = splitName[0];
         return Padding(
@@ -59,10 +59,10 @@ class _ProfileViewState extends State<ProfileView> {
             const Gap(20),
             Row(
               children: [
-                user.authState.user?.profile == null ? SvgPicture.asset("assets/images/user-avatar.svg")  :
+                user.authState.user?.user?.userProfile?.avatar == null ? SvgPicture.asset("assets/images/user-avatar.svg")  :
                 ClipOval(
                   child: CachedNetworkImage(
-                  imageUrl: user.authState.user?.profile ?? "",
+                  imageUrl: user.authState.user?.user?.userProfile?.avatar ?? "",
                   width: 60.w,
                     height: 60.h,
                     placeholder: (context, url) => CircleAvatar(
@@ -81,7 +81,7 @@ class _ProfileViewState extends State<ProfileView> {
                       fontWeight: FontWeight.w700,
                       fontSize: 17
                     ),),
-                    TextSemiBold("${user.authState.user?.email}", color: AppColors.grey,)
+                    TextSemiBold("${user.authState.user?.user?.email}", color: AppColors.grey,)
                   ],
                 )
               ],

@@ -58,27 +58,27 @@ class _PostJobScreenState extends State<PostJobScreen> {
                 ),
               ),
               Gap(20),
-              InkWell(
-                onTap: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PostAJobScreen()
-                    ),
-                  );
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: AppColors.primaryColor
-                    )
-                  ),
-                  child: TextSemiBold("Post a job", color: AppColors.primaryColor, fontWeight: FontWeight.w700, textAlign: TextAlign.center,),
-                ),
-              )
+              // InkWell(
+              //   onTap: (){
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //           builder: (context) => PostAJobScreen()
+              //       ),
+              //     );
+              //   },
+              //   child: Container(
+              //     padding: EdgeInsets.symmetric(vertical: 16),
+              //     width: double.infinity,
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(10),
+              //       border: Border.all(
+              //         color: AppColors.primaryColor
+              //       )
+              //     ),
+              //     child: TextSemiBold("Post a job", color: AppColors.primaryColor, fontWeight: FontWeight.w700, textAlign: TextAlign.center,),
+              //   ),
+              // )
 
             ],
           ),

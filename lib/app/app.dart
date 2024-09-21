@@ -5,9 +5,12 @@ import 'package:analogue_shifts_mobile/core/navigators/navigation_service.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/navigators/router.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
+import 'package:analogue_shifts_mobile/core/utils/logger.dart';
+import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
 import 'package:analogue_shifts_mobile/firebase_handler.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/providers.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -33,9 +36,15 @@ void updateState(bool value){
 
   @override
   void initState() {
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
    if(!mounted)return;
   
-    messagingService.initialize();
+    messagingService.initialize(context);
+   _firebaseMessaging.requestPermission();
+   print(messagingService.getToken().then((value) => logger.d(value)));
+
+   // Listen for foreground messages
+
     super.initState();
   }
   // static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

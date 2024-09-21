@@ -120,13 +120,14 @@ class _SingleEventState extends State<SingleEvent> {
                   ],
                 ),
                 const Gap(6),
-                TextSemiBold(Functions.money(double.parse(event.price!), "\$"), fontSize: 13, fontWeight: FontWeight.w400, color: const Color(0xffA3A3A3),),
+                TextSemiBold(Functions.money(double.parse(event.price ?? "0"), "\$"), fontSize: 13, fontWeight: FontWeight.w400, color: const Color(0xffA3A3A3),),
               ],
             ),
             const Gap(50),
             BusyButton(
                 title: "Copy Link",
                 onTap: (){
+                  logger.d(event.location);
 
             })
           ],

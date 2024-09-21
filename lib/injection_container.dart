@@ -22,6 +22,7 @@ import 'package:analogue_shifts_mobile/modules/notification/domain/usecases/get_
 import 'package:analogue_shifts_mobile/modules/uploads/data/repositories/file_repository_impl.dart';
 import 'package:analogue_shifts_mobile/modules/uploads/domain/repositories/file_repository.dart';
 import 'package:analogue_shifts_mobile/modules/uploads/domain/usecases/file_upload_usecase.dart';
+import 'package:analogue_shifts_mobile/modules/vetting/data/repositories/vetting_form.repository.dart';
 import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
@@ -122,6 +123,11 @@ Future<void> setupDependencies() async{
 
   getIt.registerLazySingleton<DeleteAccountUseCase>(
         () => DeleteAccountUseCase()
+  );
+
+
+  getIt.registerLazySingleton<VettingRepositoryImpl>(
+        () => VettingRepositoryImpl(getIt<DioManager>()),
   );
 
   getIt.registerSingleton<DBService>(DBService());

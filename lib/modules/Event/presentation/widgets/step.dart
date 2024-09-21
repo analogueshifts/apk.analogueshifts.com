@@ -41,9 +41,9 @@ class StepIndicator extends StatelessWidget {
           ),
           child: Center(
             child: isCompleted
-                ? Icon(Icons.check, color: Colors.white, size: 20)
+                ? Icon(Icons.check, color: Colors.white, size: 15)
                 : CircleAvatar(
-              radius: 5,
+              radius: 4,
               backgroundColor: AppColors.white,
             )
           ),

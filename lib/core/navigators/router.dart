@@ -33,7 +33,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case Routes.homeNavigation:
       return _getPageRoute(
         routeName: settings.name,
-        viewToShow: const HomeNavigation(),
+        viewToShow: HomeNavigation(),
       );
        case Routes.jobsApplied:
       return _getPageRoute(

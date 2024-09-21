@@ -5,6 +5,7 @@ import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -38,7 +39,7 @@ class FirebaseHandler {
 class PushNotificationService {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
-  Future initialize() async {
+  Future initialize(BuildContext context) async {
     FirebaseMessaging.instance.requestPermission();
     FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
 
@@ -53,6 +54,25 @@ class PushNotificationService {
       }
     });
     FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //     if (message.notification != null) {
+  //       // Display an alert when notification is received in foreground
+  //       showDialog(
+  //         context: context,
+  //         builder: (context) => AlertDialog(
+  //           title: Text(message.notification!.title ?? 'Notification'),
+  //           content: Text(message.notification!.body ?? 'No content'),
+  //           actions: [
+  //             TextButton(
+  //               onPressed: () => Navigator.pop(context),
+  //               child: Text('OK'),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     }
+  //   });
   }
 
   Future<String?> getToken() async {

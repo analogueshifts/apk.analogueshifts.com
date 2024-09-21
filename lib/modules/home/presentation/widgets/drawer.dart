@@ -45,7 +45,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   Widget build(BuildContext context) {
     return Consumer<UserViewModel>(
       builder: (context, UserViewModel user, child) {
-        final name = Functions.capitalize(user.authState.user?.firstName ?? "");
+        final name = Functions.capitalize(user.authState.user?.user?.userProfile?.firstName ?? "");
         final splitName = name.split(' ');
         final firstName = splitName[0];
       return AbsorbPointer(
@@ -81,12 +81,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    user.authState.user?.profile == null ? SvgPicture.asset("assets/images/user-avatar.svg"):
+                    user.authState.user?.user?.userProfile?.avatar == null ? SvgPicture.asset("assets/images/user-avatar.svg"):
                     CircleAvatar(
                       radius: 30.w,
                       child: ClipOval(
                         child: CachedNetworkImage(
-                          imageUrl: user.authState.user?.profile ?? "",
+                          imageUrl: user.authState.user?.user?.userProfile?.avatar ?? "",
                           width: 60.w,
                           height: 60.h,
                           fit: BoxFit.cover,
@@ -105,7 +105,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         fontWeight: FontWeight.w600
                     )),
                     const Gap(3),
-                    TextSemiBold("@${user.authState.user?.username ?? ""}", style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    TextSemiBold("@${user.authState.user?.user?.username ?? ""}", style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontSize: 9
                     ),),
                     // Gap(10)
@@ -222,7 +222,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   showDialog(
                     barrierColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.transparent .withOpacity(0.6) : const Color(0xff110C00).withOpacity(0.8),
                     context: _scaffoldkey.currentContext!, builder:(context) {
-                 return dialog(context);
+                    return dialog(context);
                },);
                 },
               ),
@@ -240,8 +240,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     return Dialog(
       insetPadding: const EdgeInsets.all(10),
       child: AbsorbPointer(
-       absorbing: _isProcessing,
-        child: Container(
+     absorbing: _isProcessing,
+     child: Container(
           width: double.infinity,
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(

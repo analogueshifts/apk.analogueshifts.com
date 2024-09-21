@@ -30,7 +30,7 @@ class UploadRepositoryImpl implements UploadRepository {
     logger.d(data);
     final db = getIt<DBService>();
       final response = await dioManager.dio.post(
-        'https://api.analogueshifts.com/api/upload',
+        'https://storage.analogueshifts.com/api/upload',
          data: data,
           options: Options(
             headers: {

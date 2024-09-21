@@ -1,6 +1,7 @@
 
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
+import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/data/data/job_role.dart';
@@ -104,9 +105,14 @@ class _CountriesBottomSheetState extends State<CountriesBottomSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:
                       filteredCountries.map((e) =>
-                          Container(
-                              margin: EdgeInsets.symmetric(vertical: 8),
-                              child: TextSemiBold(e.name.toString(), fontWeight: FontWeight.w400, fontSize: 15, color: Color(0xff7B7B7B),)),).toList(),
+                          TouchableOpacity(
+                            onTap: (){
+                              Navigator.pop(context, e.name);
+                            },
+                            child: Container(
+                                margin: EdgeInsets.symmetric(vertical: 8),
+                                child: TextSemiBold(e.name.toString(), fontWeight: FontWeight.w400, fontSize: 15, color: Color(0xff7B7B7B),)),
+                          ),).toList(),
                     ),
 
                     Gap(15),

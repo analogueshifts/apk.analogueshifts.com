@@ -5,6 +5,7 @@ import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
+import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -39,25 +40,27 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
       _timer!.cancel();
     }
     _start = 60;
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 2), (timer) {
       setState(() {
         if (_start == 0) {
           timer.cancel();
         } else {
           _start--;
+          logger.d('Timer: $_start'); // Add this line
         }
       });
     });
   }
 
 
-
   
   @override
   void initState() {  
     super.initState();
+    startTimer();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<UserViewModel>().initateUserVerification(context);
+
     });
   }
 
@@ -71,6 +74,7 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    logger.w(_start);
     return Scaffold(
       appBar: const PaylonyAppBarTwo(
         title: "OTP Verification",
@@ -133,15 +137,18 @@ class _UserVerificationOtpScreenState extends State<UserVerificationOtpScreen> {
                   children: [
                     TextSemiBold("Didn’t received code?",color: AppColors.textPrimaryColor2,),
                     const Gap(5),
-                    TouchableOpacity(
-                      onTap: () {
-                         FocusScopeNode currentFocus = FocusScope.of(context);
-                        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-                          currentFocus.focusedChild?.unfocus();
-                        }
-                        auth.initateUserVerification(context);
-                      },
-                      child: TextSemiBold("Resend in ${_start}s", fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.brightness == Brightness.light ?  AppColors.background : AppColors.white,))
+                    _start == 0 ?
+                    InkWell(
+                        onTap: () {
+                          FocusScopeNode currentFocus = FocusScope.of(context);
+                          if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+                            currentFocus.focusedChild?.unfocus();
+                          }
+                          auth.initateUserVerification(context);
+                          startTimer();
+                        },
+                        child: TextSemiBold("Resend", fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.brightness == Brightness.light ?  AppColors.background : AppColors.white,)) :
+                    TextSemiBold("Resend in ${_start}s", fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.brightness == Brightness.light ?  AppColors.background : AppColors.white,)
                   ],
                 )
               ],
