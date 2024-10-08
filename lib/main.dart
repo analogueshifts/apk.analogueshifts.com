@@ -17,7 +17,7 @@ void main() async{
   await dotenv.load(fileName: ".env");
   await setupDependencies();
   SystemUtil.overrideNavColors();
-  // SystemUtil.disableLandscapeMode();
+  SystemUtil.disableLandscapeMode();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   await LocalNtificationService().setup();
   await ScreenUtil.ensureScreenSize();

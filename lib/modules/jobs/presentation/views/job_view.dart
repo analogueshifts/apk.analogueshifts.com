@@ -218,113 +218,124 @@ class _JobViewState extends State<JobView> {
             child: ShimmerLoadingList(),
           ))
               :
-          SingleChildScrollView(
-            controller: _scrollController,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                const Gap(17),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: SizedBox(
-                        height: 60,
-                        child: TextFormField(
-                          controller: _search,
-                          decoration: textInputDecoration.copyWith(
-                              fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.18)
-                                  )
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.18)
-                                  )
-                              ),
-                              hintStyle: TextStyle(
-                                  color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.1) : const Color(0xffFFFFFF).withOpacity(0.4)
-                              ),
-                              hintText: "Search",
-                              prefixIcon: _isLoading ? Container(margin: const EdgeInsets.only(left:
-                              5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: const CircularProgressIndicator(color: AppColors.primaryColor,),)  : Icon(Icons.search, color: Theme.of(context).iconTheme.color,)
+          RefreshIndicator(
+            onRefresh: () async{
+              await context.read<JobProvider>().getJobs(context);
+              await context.read<JobProvider>().get_reconmended_jobs(context);
+            },
+            backgroundColor: AppColors.primaryColor,
+            color: Colors.white,
+            strokeWidth: 3,
+            displacement: 50,
+            edgeOffset: 20,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  const Gap(17),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 5,
+                        child: SizedBox(
+                          height: 60,
+                          child: TextFormField(
+                            controller: _search,
+                            decoration: textInputDecoration.copyWith(
+                                fillColor: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.white : AppColors.background,
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.18)
+                                    )
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.18)
+                                    )
+                                ),
+                                hintStyle: TextStyle(
+                                    color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.1) : const Color(0xffFFFFFF).withOpacity(0.4)
+                                ),
+                                hintText: "Search",
+                                prefixIcon: _isLoading ? Container(margin: const EdgeInsets.only(left:
+                                5), height: screenHeight(context) * 0.01, width: screenWidth(context) * 0.01, child: const CircularProgressIndicator(color: AppColors.primaryColor,),)  : Icon(Icons.search, color: Theme.of(context).iconTheme.color,)
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const Gap(10),
-                    Expanded(
-                      flex: 1,
-                      child: TouchableOpacity(
-                        onTap: (){
-                          setSearchLoader();
+                      const Gap(10),
+                      Expanded(
+                        flex: 1,
+                        child: TouchableOpacity(
+                          onTap: (){
+                            setSearchLoader();
 
-                        },
-                        child: Container(
-                            height: 60,
-                            decoration: BoxDecoration(
-                                color: AppColors.primaryColor,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            child:
-                            Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
-                                child:Image.asset("assets/icons/Settings-adjust.png", width: 30, height: 30,))
+                          },
+                          child: Container(
+                              height: 60,
+                              decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                              child:
+                              Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  child:Image.asset("assets/icons/Settings-adjust.png", width: 30, height: 30,))
+                          ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
-                const Gap(30),
-                Row(
-                  children: [
-                    TextSemiBold("All Jobs", fontSize: 16, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white, textAlign: TextAlign.start,),
-                  ],
-                ),
-                const Gap(5),
-                job.job.isEmpty
-                    ? Center(
-                  child: Column(
-                    children: [
-                      TextSemiBold("No job available")
+                      )
                     ],
                   ),
-                ) :
-                 ListView.builder(
-                  
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: job.job.length,
-                    itemBuilder:(context, index) {
-                      final e = job.job[index];
-                      // logger.d(e);
-                      return Column(
-                        children: [
-                          _recentJobCard(e),
-                          const Gap(10),
-                          Divider(color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xffE4E4E4) : const Color(0xffFFFFF).withOpacity(0.24),)
-                        ],
-                      );
-                    }
-                ),
-                const Gap(20),
-                _isPaginateButton ?
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: InkWell(
-                    onTap: (){
-                        final updateCurrentPage = job.currentPage + 1;
-                        job.getJobs(context, updateCurrentPage);
-                    },
-                    child: job.job.isNotEmpty && job.jobhState.isGenerating ? Center(child: CircularProgressIndicator()) : TextSemiBold("View All Jobs", color: AppColors.primaryColor, fontWeight: FontWeight.w700,) ,
+                  const Gap(30),
+                  Row(
+                    children: [
+                      TextSemiBold("All Jobs", fontSize: 16, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white, textAlign: TextAlign.start,),
+                    ],
                   ),
-                )
-                    :
-                const Text(""),
-              ],
+                  const Gap(5),
+                  job.job.isEmpty
+                      ? Center(
+                    child: Column(
+                      children: [
+                        TextSemiBold("No job available")
+                      ],
+                    ),
+                  ) :
+                   ListView.builder(
+
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: job.job.length,
+                      itemBuilder:(context, index) {
+                        final e = job.job[index];
+                        // logger.d(e);
+                        return Column(
+                          children: [
+                            _recentJobCard(e),
+                            const Gap(10),
+                            Divider(color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xffE4E4E4) : const Color(0xffFFFFF).withOpacity(0.24),)
+                          ],
+                        );
+                      }
+                  ),
+                  const Gap(20),
+                  _isPaginateButton ?
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: InkWell(
+                      onTap: (){
+                          final updateCurrentPage = job.currentPage + 1;
+                          job.getJobs(context, updateCurrentPage);
+                      },
+                      child: job.job.isNotEmpty && job.jobhState.isGenerating ? Center(child: CircularProgressIndicator(color: AppColors.primaryColor,)) : TextSemiBold("View All Jobs", color: AppColors.primaryColor, fontWeight: FontWeight.w700,) ,
+                    ),
+                  )
+                      :
+                  const Text(""),
+                ],
+              ),
             ),
           );
           // return TextSemiBold("No Jobs available");

@@ -72,4 +72,25 @@ class EventRepositoryImpl implements EventRepository  {
       return Left(Exception(e));
     }
   }
+
+
+  @override
+  Future<Either<Exception, List<Event>>> getUpcomingEvents([int? page]) async {
+    try {
+      final response = await dioManager.dio.get('event');
+      // logger.d(response.data);
+
+      if (response.statusCode == 200) {
+        logger.d(response.data['data']['events']['data']);
+        final List<dynamic> data = response.data['data']['events']['data'];
+        final List<Event> results = data.map((json) => Event.fromJson(json)).toList();
+        return Right(results);
+      } else {
+        return Left(Exception('Unable to fetch events'));
+      }
+    } catch (e) {
+      logger.e(e);
+      return Left(Exception(e));
+    }
+  }
 }
