@@ -58,7 +58,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
           setState(() {
           });
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const HomeNavigation()),
+              MaterialPageRoute(builder: (context) => HomeNavigation()),
                   (Route<dynamic> route) => true);
         }
 
@@ -104,26 +104,26 @@ class _CreateAccountViewState extends State<CreateAccountView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Gap(20),
-                  TextSemiBold("Sign up with one of the following", color: AppColors.grey,),
-                  const Gap(15),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CustomWebView(authorizationUrl: "https://accounts.google.com/o/oauth2/auth?client_id=40068646233-353skg8bdn8nhuqsaq0o1ner51thqr0e.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fapi.analogueshifts.com%2Fauth%2Fgoogle%2Fcallback&scope=openid+profile+email&response_type=code")
-                        ),
-                      );
-                       },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.4), width: 1)
-                        ),
-                        child: Center(child: SvgPicture.asset(AppAsset.google))),
-                  ),
+                  // const Gap(20),
+                  // TextSemiBold("Sign up with one of the following", color: AppColors.grey,),
+                  // const Gap(15),
+                  // InkWell(
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const CustomWebView(authorizationUrl: "https://accounts.google.com/o/oauth2/auth?client_id=40068646233-353skg8bdn8nhuqsaq0o1ner51thqr0e.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fapi.analogueshifts.com%2Fauth%2Fgoogle%2Fcallback&scope=openid+profile+email&response_type=code")
+                  //       ),
+                  //     );
+                  //      },
+                  //   child: Container(
+                  //     padding: const EdgeInsets.symmetric(vertical: 15),
+                  //       decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(15),
+                  //           border: Border.all(color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.08) : const Color(0xffFFFFFF).withOpacity(0.4), width: 1)
+                  //       ),
+                  //       child: Center(child: SvgPicture.asset(AppAsset.google))),
+                  // ),
                   const Gap(20),
                   TextSemiBold("First Name", color: AppColors.background,fontWeight: FontWeight.w700,),
                   const Gap(6),

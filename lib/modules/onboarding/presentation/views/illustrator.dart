@@ -5,8 +5,10 @@ class IllustrationIndicator extends StatelessWidget {
   const IllustrationIndicator({
     super.key,
     required this.activeCard,
+    this.length
   });
   final int activeCard;
+  final int? length;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -14,7 +16,7 @@ class IllustrationIndicator extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(
-          3,
+          length ?? 3,
               (index) => AnimatedContainer(
             width: index == activeCard ? 25 : 8,
             margin: const EdgeInsets.symmetric(horizontal: 2),

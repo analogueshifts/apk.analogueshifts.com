@@ -20,6 +20,9 @@ class EventProvider extends ChangeNotifier {
   final List<Event> _events = [];
   List<Event> get events => _events;
 
+  final List<Event> _upcomingEvents = [];
+  List<Event> get upcomingEvents => _upcomingEvents;
+
   final EventsState _eventState = EventsState();
 
   EventsState get eventState => _eventState;
@@ -75,6 +78,30 @@ class EventProvider extends ChangeNotifier {
           (result) async{
         events.clear();
         events.addAll(result);
+        notifyListeners();
+
+      },
+    );
+    notifyListeners();
+  }
+
+  Future<void> getUpcomingEvents(BuildContext context, [int? page]) async {
+    logger.d(page);
+    toggleGenerating(true);
+    notifyListeners();
+    final result = await _eventRepository.getUpcomingEvents();
+    toggleGenerating(false);
+    result.fold(
+          (exception) {
+        var error = _errorHandler.handleError(exception);
+        if(context.mounted){
+          AppSnackbar.error(context, message: error);
+        }
+
+      },
+          (result) async{
+        upcomingEvents.clear();
+        upcomingEvents.addAll(result);
         notifyListeners();
 
       },
