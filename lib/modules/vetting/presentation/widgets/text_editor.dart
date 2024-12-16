@@ -1,9 +1,9 @@
-import 'dart:math';
-
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 
 class TextEditor extends StatefulWidget {
+   String? html;
+  TextEditor({this.html});
   @override
   _TextEditorState createState() => _TextEditorState();
 }
@@ -83,6 +83,7 @@ class _TextEditorState extends State<TextEditor> {
       }
 
       html += currentText[i];
+
     }
 
     // Close any remaining inline tags
@@ -96,7 +97,7 @@ class _TextEditorState extends State<TextEditor> {
     }
 
     logger.d(html);
-
+    // widget.textController.text = html;
     return html;
   }
 
@@ -120,7 +121,7 @@ class _TextEditorState extends State<TextEditor> {
         border: Border.all(color: Color(0xff000000).withOpacity(0.1)),
         borderRadius: BorderRadius.circular(8),
       ),
-      margin: EdgeInsets.all(8),
+      // margin: EdgeInsets.all(8),
       child: Column(
         children: [
           SizedBox(
@@ -170,7 +171,14 @@ class _TextEditorState extends State<TextEditor> {
             child: TextField(
               controller: _controller,
               onChanged: (value) {
-                getHtml();
+                final html = getHtml();
+                logger.d(html);
+                widget.html = html;
+                setState(() {
+                  widget.html = html;
+
+                });
+
               },
               maxLines: 5,
               decoration: InputDecoration(

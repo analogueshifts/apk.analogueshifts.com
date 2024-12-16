@@ -112,7 +112,7 @@ class _CustomWebViewState extends State<CustomWebView> {
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      const HomeNavigation()),
+                      HomeNavigation()),
              (Route<dynamic> route) => false);
         }
       

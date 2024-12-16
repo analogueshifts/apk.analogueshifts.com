@@ -13,4 +13,5 @@ import 'package:dartz/dartz.dart';
 abstract class EventRepository {
   Future<Either<Exception, NoDataResponse>> createEvent(CreateEventDto payload);
   Future<Either<Exception, List<Event>>> getEvents();
+  Future<Either<Exception, List<Event>>> getUpcomingEvents();
 }

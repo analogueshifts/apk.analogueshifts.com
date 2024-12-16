@@ -6,6 +6,7 @@ import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/nodata_model.dart';
+import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/verify_password_otp.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/forgetpaasswordcreate.entity.dart';
@@ -18,6 +19,7 @@ import 'package:analogue_shifts_mobile/modules/auth/domain/repositories/auth.rep
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class UserRepositoryImpl implements UserRepository {
   late DioManager dioManager;
@@ -27,8 +29,11 @@ final _db = getIt<DBService>();
   UserRepositoryImpl(this.dioManager);
 
   @override
-  Future<Either<Exception, LoginResponse>> loginUser(LoginUser user) async {
+  Future<Either<Exception, String>> loginUser(LoginUser user) async {
     logger.d(user.email);
+    logger.d(dotenv.env['ENV']);
+  logger.d(dotenv.env['BASE_URL']);
+  logger.d(dotenv.env['SECRET_KEY']);
     try {
       await _db.removeAuthToken();
       if (await _deviceNetwork.isConnected() == false) {
@@ -46,10 +51,9 @@ final _db = getIt<DBService>();
       logger.d(response.statusCode);
 
       if (response.statusCode == 200) {
-        logger.d(response.data);
-        logger.d(response.data[0]);
-        final userModel = LoginResponse.fromJson(response.data);
-        return Right(userModel);
+        final userModel = response.data;
+        logger.d(userModel['data']['token']);
+        return Right(userModel['data']['token']);
       } else {
         throw Exception('Login failed');
       }
@@ -210,8 +214,8 @@ final _db = getIt<DBService>();
   }
 
    @override
-  Future<Either<Exception, User>> updateUser(User user) async {
-    logger.d(user.email);
+  Future<Either<Exception, UserClass>> updateUser(UpdateUserDto user) async {
+    // logger.d(user.email);
     try {
       if (await _deviceNetwork.isConnected() == false) {
         throw const SocketException('Network Error');
@@ -219,7 +223,7 @@ final _db = getIt<DBService>();
       
       final response = await dioManager.dio.post(
         'update/profile',
-         data: json.encode(UpdateUser(firstName: user.firstName, lastName: user.lastName, username: user.username,  profile: user.profile)),
+         data: user.toJson()
       );
       logger.d(response.data);
       logger.d(response.statusCode);
@@ -227,7 +231,8 @@ final _db = getIt<DBService>();
       if (response.statusCode == 200) {
         logger.d(response.data);
         logger.d(response.data[0]);
-        final userModel = User.fromJson(response.data['data']['user']);
+        final userModel = UserClass.fromJson(response.data['data']['user']);
+        logger.wtf(userModel);
         return Right(userModel);
       } else {
         throw Exception('User update failed');

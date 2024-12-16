@@ -1,6 +1,7 @@
 
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
+import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -60,9 +61,14 @@ class _CompaniesBottomSheetState extends State<CompaniesBottomSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:
                       job.companies.map((e) =>
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 6),
-                              child: TextSemiBold(e.name.toString(), fontWeight: FontWeight.w400, fontSize: 15, color: isLight ? Color(0xff7B7B7B) : Color(0xff7B7B7B).withOpacity(0.8),)),).toList(),
+                          TouchableOpacity(
+                            onTap: (){
+                              Navigator.pop(context, e.name.toString());
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 6),
+                                child: TextSemiBold(e.name.toString(), fontWeight: FontWeight.w400, fontSize: 15, color: isLight ? Color(0xff7B7B7B) : Color(0xff7B7B7B).withOpacity(0.8),)),
+                          ),).toList(),
                     ),
 
                     Gap(15),

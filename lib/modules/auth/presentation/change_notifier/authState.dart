@@ -23,10 +23,6 @@ class AuthState {
     _deviceToken = token;
   }
 
-
-
-
-
   void toggleGenerating() {
     _isGenerating = !_isGenerating;
   }

@@ -50,13 +50,13 @@ class _DeactivateAccountScreenState extends State<DeactivateAccountScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Gap(15),
-                    user.authState.user?.profile == null  ? const Center(child: Icon(Icons.verified_user)) : Center(
+                    user.authState.user?.user?.userProfile?.avatar == null  ? const Center(child: Icon(Icons.verified_user)) : Center(
                       child: CircleAvatar(
                           radius: 30.w,
                           child: Center(
                             child: ClipOval(
                               child: CachedNetworkImage(
-                                imageUrl: user.authState.user?.profile ?? "",
+                                imageUrl: user.authState.user?.user?.userProfile?.avatar ?? "",
                                 width: 60.w,
                                 height: 60.h,
                                 fit: BoxFit.cover,
@@ -73,7 +73,7 @@ class _DeactivateAccountScreenState extends State<DeactivateAccountScreen> {
                     const Gap(5),
                     Center(
                       child: Text(
-                        Functions.capitalize(user.authState.user?.firstName.toString() ?? "", ),
+                        Functions.capitalize(user.authState.user?.user?.userProfile?.firstName.toString() ?? "", ),
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),

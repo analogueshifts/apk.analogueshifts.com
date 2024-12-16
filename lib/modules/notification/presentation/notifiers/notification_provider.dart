@@ -17,6 +17,10 @@ class NotificationProvider extends ChangeNotifier {
 
   NotificationState get notificationState => _notificationState;
 
+  int get unviewedNotificationCount {
+    return _notifications.where((notification) => notification.viewed != "true").length;
+  }
+
   final List<Datum> _notifications = [];
   List<Datum> get notifications => _notifications;
 

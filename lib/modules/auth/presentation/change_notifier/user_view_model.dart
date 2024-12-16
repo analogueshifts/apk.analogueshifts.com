@@ -6,6 +6,7 @@ import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
+import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/forgetpaasswordcreate.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
@@ -18,6 +19,7 @@ import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authentic
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/change_password.screen.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/user_verification.view.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/verify_user_otp_view.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/widgets/prompt_to_verify_bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -50,16 +52,20 @@ class UserViewModel extends ChangeNotifier {
 
   AuthState get authState => _authState;
 
-  init(){
-    final user = _db.getUser(0);
-    logger.d('fetch from cache ${user?.email}');
-    logger.e("running PP FUNXTION");
-    if (user == null) return;
-    final dbUser = user;
-    saveUser(User(phoneNoCode: dbUser.phoneNoCode, phoneNo: dbUser.phoneNo, status: dbUser.status, id: dbUser.id, deviceType: dbUser.deviceType, deviceToken: dbUser.deviceToken, uuid: dbUser.uuid, firstName: dbUser.firstName,lastName: dbUser.lastName, username: dbUser.username, email: dbUser.email, tel: dbUser.tel, userType: dbUser.userType, profile: dbUser.profile, otp: dbUser.otp, isVerified: dbUser.isVerified,emailVerifiedAt: dbUser.emailVerifiedAt, createdAt: dbUser.createdAt, updatedAt: dbUser.updatedAt));
-    logger.i(_authState.user);
-    notifyListeners();
+  bool _isPromptToVerify = false;
 
+  bool get PromptToVerify => _isPromptToVerify;
+
+
+
+  init() async{
+    final savedUser = await _db.getUser();
+    logger.w(savedUser);
+    if(savedUser != null){
+      _authState.updateUser(savedUser);
+      notifyListeners();
+    }
+    notifyListeners();
   }
 
   void toggleGenerating(bool value) {
@@ -72,6 +78,7 @@ class UserViewModel extends ChangeNotifier {
   void saveUser(User value){
     logger.w(value);
     _authState.updateUser(value);
+    _db.saveUser(value);
     notifyListeners();
   }
 
@@ -185,38 +192,19 @@ class UserViewModel extends ChangeNotifier {
         }
 
       },
-          (user) async{
+          (token) async{
             toggleGenerating(false);
             logger.i('Login successful: $user');
-            if(user.data?.token == null) {
+            if(token == null) {
               AppSnackbar.error(context, message: "Login failed");
             }else{
-              if (user.data == null) {
-                AppSnackbar.error(context, message: "Login failed");
-              }else{
-                 await _db.saveToken(user.data!.token.toString());
-            if (user.data?.user != null) {
-              saveUser(user.data!.user!);
-              _db.saveUser(user.data!.user!);
-            }
-
-
-            
-            if(context.mounted){
-              // if(user.data?.user?.isVerified == null || user.data?.user?.isVerified == false){
-              //   await AppSnackbar.warning(context, message: "Verify your account!");
-              //   Navigator.of(context).push(
-              //       MaterialPageRoute(builder: (context) => UserVerificationOtpScreen(email: user.data?.user?.email)));
-              // }
-              // await AppSnackbar.success(context, message: "Login Successful✅");
-              Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      const HomeNavigation()),
-             (Route<dynamic> route) => false);
-            }
-              }
+              await _db.saveToken(token);
+                Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        HomeNavigation()),
+               (Route<dynamic> route) => false);
 
             }
       },
@@ -263,7 +251,6 @@ class UserViewModel extends ChangeNotifier {
       logger.d(r);
      
         _db.removeAuthToken();
-        _db.removeUser(0);
       return true;
     });
     return false;
@@ -297,7 +284,7 @@ class UserViewModel extends ChangeNotifier {
     });
   }
 
-   Future<void> updateUser(User user, BuildContext context) async {
+   Future<void> updateUser(UpdateUserDto user, BuildContext context) async {
     toggleGenerating(true);
     notifyListeners();
     final result = await _updateUserUseCase.call(user);
@@ -312,8 +299,7 @@ class UserViewModel extends ChangeNotifier {
       },
           (user) async{
             logger.i('Update successful: $user');
-            saveUser(user);
-            _db.saveUser(user);
+            await fetchUser(context);
             AppSnackbar.success(context, message: "Update Successful!");
             notifyListeners();
       },
@@ -339,11 +325,11 @@ class UserViewModel extends ChangeNotifier {
           (user) async{
             logger.i('Update successful: $user');
             await _db.saveUser(user);
-            if(user.isVerified == false){
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => UserVerificationOtpScreen(email: user.email)));
+            if(user.user?.emailVerifiedAt == null && _isPromptToVerify == false){
+              //TODO: add bootm sheeet
+              promptToVerify(context);
             }
-            saveUser(user);  
+            saveUser(user);
             notifyListeners();
       },
     );
@@ -428,7 +414,7 @@ class UserViewModel extends ChangeNotifier {
               context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      const HomeNavigation()),
+                      HomeNavigation()),
              (Route<dynamic> route) => false);
           
           AppSnackbar.error(context, message: error);
@@ -449,11 +435,23 @@ class UserViewModel extends ChangeNotifier {
                       const Authenticate()),
              (Route<dynamic> route) => false);
         _db.removeAuthToken();
-        _db.removeUser(0);
         
       return true;
     });
     return false;
+  }
+
+
+  void promptToVerify(BuildContext context){
+    showModalBottomSheet(
+        context: context,
+        builder:(context) {
+          return PromptVerifyBottomSheet();
+
+        }
+    );
+    _isPromptToVerify = true;
+    notifyListeners();
   }
 
 }
