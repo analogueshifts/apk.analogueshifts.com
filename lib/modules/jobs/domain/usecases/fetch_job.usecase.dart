@@ -21,3 +21,13 @@ class FetchReconmendedJobsUseCase {
     return await _jobRepository.fetchReconmendedJobs();
   }
 }
+
+
+class FetchSearchJobsUseCase {
+  final JobsRepository _jobRepository = GetIt.instance<JobsRepository>();
+
+
+  Future<Either<Exception, JobResponseEntity>> call(String search, [int? page]) async {
+    return await _jobRepository.fetchSearchJobs(search);
+  }
+}

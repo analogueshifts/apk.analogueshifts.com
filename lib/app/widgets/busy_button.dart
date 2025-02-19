@@ -11,6 +11,7 @@ class BusyButton extends StatelessWidget {
     this.isLoading = false,
     this.color = AppColors.primaryColor,
     this.textColor = AppColors.white,
+    this.borderColor = Colors.transparent,
     this.width,
     this.height,
     this.borderRadius,
@@ -19,6 +20,7 @@ class BusyButton extends StatelessWidget {
   final String title;
   final Color? color;
   final Color? textColor;
+  final Color? borderColor;
   final double? width;
   final double? height;
   final VoidCallback onTap;
@@ -33,8 +35,9 @@ class BusyButton extends StatelessWidget {
         height: height ?? 48,
         width: width ?? double.infinity,
         decoration: BoxDecoration(
-          borderRadius: borderRadius ?? BorderRadius.circular(5),
+          borderRadius: borderRadius ?? BorderRadius.circular(10),
           color: disabled ? AppColors.primaryColor.withOpacity(0.5) : color,
+          border: Border.all(color: borderColor!)
         ),
         child: Center(
           child: isLoading ? const CircularProgressIndicator(color: Colors.white) : Text(

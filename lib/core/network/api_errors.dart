@@ -51,7 +51,7 @@ class ErrorHandler  {
           }
           return (e.response?.data['message'] ?? "Session Expired!");
         }
-        return (e.response?.data['message'] ?? e.response?.data['data']['message'] ?? e.message);
+        return (e.response?.data['message'] ?? e.response?.data['data']?['message'] ?? e.message);
       }
       if (e.type == DioExceptionType.connectionError || e.type == DioExceptionType.connectionTimeout) {
         return ("Error occurred, please try again");

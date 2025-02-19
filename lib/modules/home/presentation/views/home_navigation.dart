@@ -4,18 +4,14 @@ import 'package:analogue_shifts_mobile/core/constants/app_widgets.dart';
 import 'package:analogue_shifts_mobile/core/constants/constants.dart';
 import 'package:analogue_shifts_mobile/core/navigators/navigation_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
-import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/views/events.dart';
-import 'package:analogue_shifts_mobile/modules/auth/data/models/login_response.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_view.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/drawer.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/job_view.dart';
-import 'package:analogue_shifts_mobile/modules/notification/presentation/notifiers/notification_provider.dart';
-import 'package:analogue_shifts_mobile/modules/profile/presentation/views/profile_view.dart';
 import 'package:analogue_shifts_mobile/modules/vetting/presentation/view/vetting_system.screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +20,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class HomeNavigation extends StatefulWidget {
   int selectedIndex;
   HomeNavigation({super.key, this.selectedIndex = 0});
@@ -34,7 +31,7 @@ class HomeNavigation extends StatefulWidget {
 
 class _HomeNavigationState extends State<HomeNavigation> {
   // int _selectedIndex = 0;
-  final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldkey =  GlobalKey<ScaffoldState>();
 
   void _onItemTapped(int index) {
     if (mounted) {

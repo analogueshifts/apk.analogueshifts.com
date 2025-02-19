@@ -8,6 +8,7 @@ import 'package:dartz/dartz.dart';
 
 abstract class JobsRepository {
   Future<Either<Exception, JobResponseEntity>> fetchJobs([int? page]);
+  Future<Either<Exception, JobResponseEntity>> fetchSearchJobs(String search, [int? page]);
   Future<Either<Exception, REconmendedJobs>> fetchReconmendedJobs();
   Future<Either<Exception, NoDataResponse>> addCompany(AddCompanyDto payload);
   Future<Either<Exception, List<Company>>> fetchSavedCompanies([int? page]);

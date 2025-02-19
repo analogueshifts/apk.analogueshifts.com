@@ -27,7 +27,7 @@ class _AddCompanyScreenState extends State<AddCompanyScreen> {
   final _companyEmail = TextEditingController();
   final _companyPhone = TextEditingController();
   final _companyWebsite = TextEditingController();
-  final _companyLogoImage = TextEditingController();
+  //final _companyLogoImage = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final isLight = Theme.of(context).colorScheme.brightness == Brightness.light;

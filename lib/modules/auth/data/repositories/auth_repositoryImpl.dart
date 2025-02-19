@@ -7,7 +7,6 @@ import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/nodata_model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.dart';
-import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/verify_password_otp.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/forgetpaasswordcreate.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';

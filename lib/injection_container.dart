@@ -76,6 +76,10 @@ Future<void> setupDependencies() async{
         () => FetchJobsUseCase(),
   );
 
+  getIt.registerLazySingleton<FetchSearchJobsUseCase>(
+        () => FetchSearchJobsUseCase(),
+  );
+
   getIt.registerLazySingleton<UpdateUserUseCase>(
         () => UpdateUserUseCase(),
   );

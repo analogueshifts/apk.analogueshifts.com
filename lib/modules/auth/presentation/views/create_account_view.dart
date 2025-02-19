@@ -129,6 +129,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                   const Gap(6),
                   TextFormField(
                     controller: _firstNameController,
+                    keyboardType: TextInputType.name,
                     validator: (value){
                       CustomValidator.isEmptyString(value!, "first name");
                       if(value.isEmpty){

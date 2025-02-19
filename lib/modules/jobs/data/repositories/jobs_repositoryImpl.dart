@@ -36,6 +36,30 @@ class JobsRepositoryImpl implements JobsRepository {
     }
   }
 
+
+  @override
+Future<Either<Exception, JobResponseEntity>> fetchSearchJobs(String search, [int? page]) async {
+  try {
+    final response = await dioManager.dio.get(
+      'job/search',
+      queryParameters: {
+        'search': search,
+        'page': page ?? 1,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jobModel = JobResponseEntity.fromJson(response.data);
+      return Right(jobModel);
+    } else {
+      return Left(Exception('Unable to fetch jobs'));
+    }
+  } catch (e) {
+    logger.e(e);
+    return Left(Exception(e.toString()));
+  }
+}
+
   @override
   Future<Either<Exception, REconmendedJobs>> fetchReconmendedJobs() async {
     try {

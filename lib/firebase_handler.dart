@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:analogue_shifts_mobile/core/notificaton/local_notification_service.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
@@ -39,48 +41,117 @@ class FirebaseHandler {
 class PushNotificationService {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
-  Future initialize(BuildContext context) async {
-    FirebaseMessaging.instance.requestPermission();
-    FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
+  /// Initializes Firebase Messaging, requests permissions, and sets up listeners.
+  Future<void> initialize(BuildContext context) async {
+    // Request notification permissions and await the result.
+    NotificationSettings settings = await _fcm.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    print('User granted permission: ${settings.authorizationStatus}');
 
-      if (message?.notification != null) {
-        LocalNtificationService().showLocalNotification(message!.notification!);
+    // If running on iOS, retrieve and log the APNS token.
+    if (Platform.isIOS) {
+      String? apnsToken = await _fcm.getAPNSToken();
+      if (apnsToken != null) {
+        print('APNS Token: $apnsToken');
+      } else {
+        print('APNS token is not available yet.');
       }
-    });
+    }
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-
+    // Set up foreground message listener.
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.notification != null) {
+        // Display a local notification or handle it as needed.
+        LocalNtificationService().showLocalNotification(message.notification!);
       }
     });
+
+    // Set up the listener for when a user taps on a notification.
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        // Handle navigation or other logic when notification is opened.
+      }
+    });
+
+    // Set the background message handler.
     FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-
-  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  //     if (message.notification != null) {
-  //       // Display an alert when notification is received in foreground
-  //       showDialog(
-  //         context: context,
-  //         builder: (context) => AlertDialog(
-  //           title: Text(message.notification!.title ?? 'Notification'),
-  //           content: Text(message.notification!.body ?? 'No content'),
-  //           actions: [
-  //             TextButton(
-  //               onPressed: () => Navigator.pop(context),
-  //               child: Text('OK'),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     }
-  //   });
   }
 
+  /// Retrieves the FCM token (after ensuring that notification permissions
+  /// and APNS token (on iOS) are set).
   Future<String?> getToken() async {
-    String? token = await _fcm.getToken();
+    // Optionally, you could retrieve and log the APNS token here again.
+    if (Platform.isIOS) {
+      String? apnsToken = await _fcm.getAPNSToken();
+      print('APNS Token before getting FCM token: $apnsToken');
+    }
+
+
+    if (Platform.isAndroid) {
+       String? token = await _fcm.getToken();
+        print('FCM Token: $token');
     return token;
+    }
+
+   
   }
 
-  Future<void> backgroundHandler(RemoteMessage message) async {
+  /// Background message handler must be a top-level or static function.
+  static Future<void> backgroundHandler(RemoteMessage message) async {
+  }
+}
+
+
+// class PushNotificationService {
+//   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+
+//   Future initialize(BuildContext context) async {
+//     FirebaseMessaging.instance.requestPermission();
+//     FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
+
+//       if (message?.notification != null) {
+//         LocalNtificationService().showLocalNotification(message!.notification!);
+//       }
+//     });
+
+//     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+
+//       if (message.notification != null) {
+//       }
+//     });
+//     FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+
+//   //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+//   //     if (message.notification != null) {
+//   //       // Display an alert when notification is received in foreground
+//   //       showDialog(
+//   //         context: context,
+//   //         builder: (context) => AlertDialog(
+//   //           title: Text(message.notification!.title ?? 'Notification'),
+//   //           content: Text(message.notification!.body ?? 'No content'),
+//   //           actions: [
+//   //             TextButton(
+//   //               onPressed: () => Navigator.pop(context),
+//   //               child: Text('OK'),
+//   //             ),
+//   //           ],
+//   //         ),
+//   //       );
+//   //     }
+//   //   });
+//   }
+
+//   Future<String?> getToken() async {
+
     
-}
-}
+//     String? token = await _fcm.getToken();
+//     return token;
+//   }
+
+//   Future<void> backgroundHandler(RemoteMessage message) async {
+    
+// }
+// }

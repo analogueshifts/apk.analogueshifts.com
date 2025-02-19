@@ -29,6 +29,8 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme.brightness;
+    String rawSalary = widget.data.baseSalary?.value?.value.toString() ?? "0";
+    double salaryValue = extractSalaryValue(rawSalary);
    
   htmlparser.parse(widget.data.description);
     return Scaffold(
@@ -44,23 +46,22 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
                    widget.data.hiringOrganization == null ? Hero(
                      tag: "assets/icons/company_placeholder.svg",
                        child: SvgPicture.asset("assets/icons/company_placeholder.svg", width: 50.w, height: 50.h,)) : widget.data.hiringOrganization?.logo == null ?  SvgPicture.asset("assets/icons/company_placeholder.svg",  width: 50.w, height: 50.h,) :
-                  Hero(
-                    tag: widget.data.hiringOrganization?.logo,
-                    child: CachedNetworkImage(
-                      imageUrl: widget.data.hiringOrganization?.logo,
-                      width: 50.w,
-                      height: 50.h,
-                      placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) => Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
-                    ),
+                  CachedNetworkImage(
+                    imageUrl: widget.data.hiringOrganization?.logo,
+                    width: 50.w,
+                    height: 50.h,
+                    placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>SvgPicture.asset("assets/icons/company_placeholder.svg", width: 40.w, height: 40.h,),//Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
                   ),
                   const Gap(20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextSemiBold(widget.data.title.toString(), fontSize: 14,fontWeight: FontWeight.w600,),
-                      TextSemiBold(widget.data.hiringOrganization?.name.toString() ?? "Unknown Company", fontSize: 11,color: AppColors.grey, fontWeight: FontWeight.w400,),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextSemiBold(widget.data.title.toString(), fontSize: 14,fontWeight: FontWeight.w600,),
+                        TextSemiBold(widget.data.hiringOrganization?.name.toString() ?? "Unknown Company", fontSize: 11,color: AppColors.grey, fontWeight: FontWeight.w400,),
+                      ],
+                    ),
                   )
                 ],
               ),
@@ -77,7 +78,7 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
                 children: [
                   const Icon(Icons.work_outline_outlined, color: Color(0xff7B7B7B),),
                   const Gap(6),
-                  Text(widget.data.baseSalary == null ? "N/A" : widget.data.baseSalary?.value == null && widget.data.baseSalary?.value?.value == null ? "N/A" : Functions.money(double.parse(widget.data.baseSalary?.value?.value.toString() ?? "0"), '\$'),  style: const TextStyle(
+                  Text(widget.data.baseSalary == null ? "N/A" : widget.data.baseSalary?.value == null && widget.data.baseSalary?.value?.value == null ? "N/A" : Functions.money(salaryValue,  '\$'),  style: const TextStyle(
                     fontSize: 14,fontWeight: FontWeight.w600,color: Color(0xff7B7B7B),
                   ),),
                 ],
@@ -132,19 +133,57 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
               // Text(widget.data.description.toString()),
               const Gap(35),
               const Spacer(),
-              BusyButton(title: "Apply", onTap:() async{
-                logger.d(widget.data.apply);
-                var url = widget.data.apply ?? "https://flutter.io";
-                final Uri _url = Uri.parse(url);
-
-                await launchUrl(_url,mode: LaunchMode.inAppBrowserView);
-                // launchUrl(Uri(path: widget.data.apply));
-              },),
-              const Gap(20)
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+              
+                  Expanded(
+                    child: BusyButton(title: "Save Job",
+                    width: double.infinity,
+                    borderColor: AppColors.primaryColor,
+                    textColor: AppColors.primaryColor,
+                    color:  theme == Brightness.light? Colors.white: Colors.black,
+                     onTap:() async{},),
+                  ),
+                        const Gap(15),          
+                  Expanded(
+                    child: BusyButton(title: "Apply", 
+                    width: double.infinity,
+                    onTap:() async{
+                      logger.d(widget.data.apply);
+                      var url = widget.data.apply ?? "https://flutter.io";
+                      final Uri _url = Uri.parse(url);
+                    
+                      await launchUrl(_url,mode: LaunchMode.inAppBrowserView);
+                      // launchUrl(Uri(path: widget.data.apply));
+                    },),
+                  ),
+                ],
+              ),
+              const Gap(50)
             ],
           ),
         ),
       ),
     );
   }
+
+  double extractSalaryValue(String salaryString) {
+  // Use a regular expression to extract a number (digits, commas, periods)
+  // This regex finds the first occurrence of a number-like sequence.
+  final RegExp regExp = RegExp(r'(\d[\d,\.]*)');
+  final Match? match = regExp.firstMatch(salaryString);
+
+  if (match != null) {
+    String numericString = match.group(0)!;
+    // Remove commas so that the string is in a plain numeric format.
+    numericString = numericString.replaceAll(',', '');
+    
+    // Try parsing the number. Use tryParse to avoid exceptions.
+    final double? value = double.tryParse(numericString);
+    return value ?? 0.0;
+  }
+  return 0.0;
+}
+
 }

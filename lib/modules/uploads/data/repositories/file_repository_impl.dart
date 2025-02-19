@@ -41,6 +41,7 @@ class UploadRepositoryImpl implements UploadRepository {
           ),
         );
 
+        // ignore: avoid_single_cascade_in_expression_statements
         dio..interceptors.add(
           AwesomeDioInterceptor(),
         );

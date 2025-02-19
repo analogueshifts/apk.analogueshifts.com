@@ -21,7 +21,7 @@ class DioManager {
           //DEVELOPMENT
           // baseUrl: 'https://developer.analogueshifts.com/api/',
           //PRODUCTION URL
-          baseUrl: 'https://api.analogueshifts.app/api/',
+          baseUrl: 'https://api.analogueshifts.com/api/',
           headers: {
             'Accept': 'application/json',
             'Authorization': 'Bearer $tokenProvider',

@@ -17,6 +17,7 @@ import 'package:get_it/get_it.dart';
 
 class JobProvider extends ChangeNotifier {
   final FetchJobsUseCase _fetchJobsUseCase = GetIt.instance<FetchJobsUseCase>();
+  final FetchSearchJobsUseCase _fetchSearchJobsUseCase = GetIt.instance<FetchSearchJobsUseCase>();
    final FetchReconmendedJobsUseCase _fetchReconmendedJobsUseCase = GetIt.instance<FetchReconmendedJobsUseCase>();
   final ErrorHandler _errorHandler = GetIt.instance<ErrorHandler>();
   final JobsRepository _jobRepository = GetIt.instance<JobsRepository>();
@@ -68,6 +69,36 @@ class JobProvider extends ChangeNotifier {
           (result) async{
             _lastPage = result.data?.jobs?.lastPage;
             final newJobs = result.data!.jobs!.data!.where((job) => !_jobs.contains(job)).toList();
+      _jobs.addAll(newJobs);
+      logger.d(_currentPage);
+      _currentPage++;
+      notifyListeners();
+
+      },
+    );
+    notifyListeners();
+  }
+
+
+
+  Future<void> getSearchJobs(BuildContext context, String search, [int? page]) async {
+    logger.d(page);
+    toggleGenerating(true);
+    notifyListeners();
+    final result = await _fetchSearchJobsUseCase.call(search, page);
+    toggleGenerating(false);
+    result.fold(
+          (exception) {
+        var error = _errorHandler.handleError(exception);
+        if(context.mounted){
+          AppSnackbar.error(context, message: error);
+        }
+
+      },
+          (result) async{
+            _lastPage = result.data?.jobs?.lastPage;
+            final newJobs = result.data!.jobs!.data!.where((job) => !_jobs.contains(job)).toList();
+      _jobs.clear();
       _jobs.addAll(newJobs);
       logger.d(_currentPage);
       _currentPage++;
