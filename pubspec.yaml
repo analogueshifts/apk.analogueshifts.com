@@ -53,7 +53,7 @@ dependencies:
   upgrader: ^11.3.1
   animated_icon: ^0.0.9
   iconsax: ^0.0.8
-  in_app_review: ^2.0.9
+  in_app_review: ^2.0.10 
   quill_html_editor: ^2.2.8
   shimmer: ^3.0.0
   firebase_crashlytics: ^4.3.2

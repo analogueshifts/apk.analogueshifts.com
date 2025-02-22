@@ -1,6 +1,5 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
-import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/constants.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
@@ -12,16 +11,12 @@ import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/post_job.screen.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/single_job.screen.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/filter_tap.dart';
-import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/jobListing_shimmer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:gap/gap.dart';
-import 'package:googleapis/admob/v1.dart';
 import 'package:provider/provider.dart';
 
 class JobScreen extends StatefulWidget {
@@ -249,6 +244,7 @@ String get headerTitle {
               : RefreshIndicator(
                   onRefresh: () async {
                     await context.read<JobProvider>().getJobs(context);
+                    // ignore: use_build_context_synchronously
                     await context
                         .read<JobProvider>()
                         .get_reconmended_jobs(context);
@@ -287,9 +283,9 @@ String get headerTitle {
                                                         .brightness ==
                                                     Brightness.light
                                                 ? const Color(0xff000000)
-                                                    .withOpacity(0.08)
+                                                    .withValues(alpha: .08)
                                                 : const Color(0xffFFFFFF)
-                                                    .withOpacity(0.18))),
+                                                    .withValues(alpha: .18))),
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
                                         borderSide: BorderSide(
@@ -298,18 +294,18 @@ String get headerTitle {
                                                         .brightness ==
                                                     Brightness.light
                                                 ? const Color(0xff000000)
-                                                    .withOpacity(0.08)
+                                                    .withValues(alpha: .08)
                                                 : const Color(0xffFFFFFF)
-                                                    .withOpacity(0.18))),
+                                                    .withValues(alpha: .18))),
                                     hintStyle: TextStyle(
                                         color: Theme.of(context)
                                                     .colorScheme
                                                     .brightness ==
                                                 Brightness.light
                                             ? const Color(0xff000000)
-                                                .withOpacity(0.1)
+                                                .withValues(alpha: .1)
                                             : const Color(0xffFFFFFF)
-                                                .withOpacity(0.4)),
+                                                .withValues(alpha: .4)),
                                     hintText: "Search",
                                     prefixIcon: _isLoading
                                         ? Container(
@@ -409,8 +405,8 @@ String get headerTitle {
                                                     .brightness ==
                                                 Brightness.light
                                             ? const Color(0xffE4E4E4)
-                                            : const Color(0xffFFFFF)
-                                                .withOpacity(0.24),
+                                            : const Color(0xffFFFFFF)
+                                                .withValues(alpha: .24),
                                       )
                                     ],
                                   );

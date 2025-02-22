@@ -188,8 +188,8 @@ class _JobCompanyButtons extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Container(
-                height: 105,
-                color: AppColors.primaryColor,
+                height: 100,
+                //color: AppColors.primaryColor,
                 alignment: Alignment.center,
                 child: SvgPicture.asset(
                   "assets/icons/add_job_card.svg",
@@ -215,8 +215,8 @@ class _JobCompanyButtons extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Container(
-                height: 105,
-                color: AppColors.primaryColor,
+                height: 100,
+                //color: AppColors.primaryColor,
                 alignment: Alignment.center,
                 child: SvgPicture.asset(
                   "assets/icons/add_company.svg",

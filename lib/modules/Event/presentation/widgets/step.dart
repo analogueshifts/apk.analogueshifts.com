@@ -8,32 +8,41 @@ class StepIndicator extends StatelessWidget {
   final int currentStep;
   final int totalSteps;
 
-  StepIndicator({required this.currentStep, required this.totalSteps});
+  const StepIndicator({
+    Key? key,
+    required this.currentStep,
+    required this.totalSteps,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(totalSteps, (index) {
-        return Row(
-          children: [
-            _buildStep(index + 1),
-            // if (index < totalSteps - 1) Expanded(child: _buildLine(index)),
-          ],
-        );
-      }),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: List.generate(totalSteps, (index) {
+          final stepNumber = index + 1;
+          return Row(
+            children: [
+              _buildStep(stepNumber),
+              // Show dotted line only if this isn't the last step
+              if (stepNumber < totalSteps) _buildDottedLine(true),
+            ],
+          );
+        }),
+      ),
     );
   }
 
   Widget _buildStep(int step) {
-    bool isCompleted = step < currentStep;
-    bool isCurrent = step == currentStep;
+    final isCompleted = step < currentStep;
+    final isCurrent = step == currentStep;
 
     return Row(
       children: [
         Container(
-          width: 20,
-          height: 20,
+          width: 20.w,
+          height: 20.w,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: isCompleted || isCurrent ? Colors.green : Colors.white,
@@ -41,39 +50,39 @@ class StepIndicator extends StatelessWidget {
           ),
           child: Center(
             child: isCompleted
-                ? Icon(Icons.check, color: Colors.white, size: 15)
+                ? Icon(Icons.check, color: Colors.white, size: 15.sp)
                 : CircleAvatar(
-              radius: 4,
-              backgroundColor: AppColors.white,
-            )
+                    radius: 4.r,
+                    backgroundColor: AppColors.white,
+                  ),
           ),
         ),
-        Gap(5),
+        Gap(5.w),
         Text(
           'Step $step',
           style: TextStyle(
-            fontSize: 14,
-            fontFamily: AppFonts.manRope
+            fontSize: 14.sp,
+            fontFamily: AppFonts.manRope,
           ),
         ),
-        _buildDottedLine(step != 3)
+        Gap(8.w),
       ],
     );
   }
 
   Widget _buildDottedLine(bool isActive) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4),
-      width: !isActive ? 0:  50,
+      margin: EdgeInsets.symmetric(horizontal: 4.w),
+      // If inactive, set width to 0 so no line appears.
+      width: isActive ? 36.w : 0,
       child: CustomPaint(
         painter: DottedLinePainter(
-          color: !isActive ? Colors.transparent : Colors.grey,
+          color: isActive ? Colors.grey : Colors.transparent,
         ),
       ),
     );
   }
 }
-
 
 class DottedLinePainter extends CustomPainter {
   final Color color;
@@ -84,15 +93,28 @@ class DottedLinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = color
-      ..strokeWidth = 2
+      ..strokeWidth = 2 // The thickness of each dash
       ..strokeCap = StrokeCap.round;
 
-    const dashWidth = 3;
-    const dashSpace = 5;
+    const numberOfDashes = 6;
+    const dashWidth = 3.0; // Longer dash
+
+    final totalDashWidth = dashWidth * numberOfDashes;
+    final totalSpacing = (size.width - totalDashWidth).clamp(0, double.infinity);
+    // With 6 dashes at 5 px each, if width is 30.w, there's no extra space:
+    final dashSpace = numberOfDashes > 1
+        ? totalSpacing / (numberOfDashes - 1)
+        : 0.0;
+
     double startX = 0;
 
-    while (startX < size.width) {
-      canvas.drawLine(Offset(startX, 0), Offset(startX + dashWidth, 0), paint);
+    for (int i = 0; i < numberOfDashes; i++) {
+      final endX = startX + dashWidth;
+      canvas.drawLine(
+        Offset(startX, 0),
+        Offset(endX, 0),
+        paint,
+      );
       startX += dashWidth + dashSpace;
     }
   }
