@@ -1,16 +1,15 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
-import 'package:analogue_shifts_mobile/core/constants/constants.dart';
 import 'package:analogue_shifts_mobile/modules/uploads/presentation/changeNotifiers/upload_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
 
-class CompanySavedSuccess extends StatelessWidget {
-  const CompanySavedSuccess({super.key});
+class SavedSuccess extends StatelessWidget {
+  final String message;
+  const SavedSuccess({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +39,8 @@ class CompanySavedSuccess extends StatelessWidget {
                     children: [
                       Image.asset("assets/images/Frame 482367.png", width: double.infinity,),
                       const Gap(20),
-                      const Text(
-                        "Success! Your company details have been saved, and your job posting has been successfully posted. ",
+                      Text(
+                        message,
                         textAlign: TextAlign.center,
                         softWrap: true,
                         style: TextStyle(

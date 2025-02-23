@@ -17,7 +17,7 @@ class FetchReconmendedJobsUseCase {
   final JobsRepository _jobRepository = GetIt.instance<JobsRepository>();
 
 
-  Future<Either<Exception, REconmendedJobs>> call() async {
+  Future<Either<Exception, REconmendedJobs>> call([int? page]) async {
     return await _jobRepository.fetchReconmendedJobs();
   }
 }

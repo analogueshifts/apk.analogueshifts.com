@@ -1,10 +1,10 @@
 // ignore: file_names
-import 'dart:convert';
 
 import 'package:analogue_shifts_mobile/core/network/api_client.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/no_data.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/data/model/addCompanyDto.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/data/model/addJobDto.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/company.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/reconmende_job.entity.dart';
@@ -61,7 +61,7 @@ Future<Either<Exception, JobResponseEntity>> fetchSearchJobs(String search, [int
 }
 
   @override
-  Future<Either<Exception, REconmendedJobs>> fetchReconmendedJobs() async {
+  Future<Either<Exception, REconmendedJobs>> fetchReconmendedJobs([int? page]) async {
     try {
       final response = await dioManager.dio.get('jobs/recommend');
       // logger.d(response.data);
@@ -101,6 +101,28 @@ Future<Either<Exception, JobResponseEntity>> fetchSearchJobs(String search, [int
     }
   }
 
+
+  @override
+  Future<Either<Exception, NoDataResponse>> addJob(AddJobDto payload) async {
+    try {
+      final response = await dioManager.dio.post('hire/store', data: payload.toJson()
+      );
+      // logger.d(response.data);
+
+      if (response.statusCode == 200) {
+        // logger.d(response.data);
+       final results = NoDataResponse.fromJson(response.data);
+        return Right(results);
+      } else {
+        return Left(Exception('Unable to Create job'));
+      }
+    } catch (e) {
+      logger.e(e);
+      // var error = _errorHandler.handleError(e);
+      return Left(e as Exception);
+    }
+  }
+
   @override
   Future<Either<Exception, List<Company>>> fetchSavedCompanies([int? page]) async {
     try {
@@ -119,6 +141,86 @@ Future<Either<Exception, JobResponseEntity>> fetchSearchJobs(String search, [int
       logger.e(e);
       // var error = _errorHandler.handleError(e);
       return Left(Exception(e));
+    }
+  }
+  
+  @override
+  Future<Either<Exception, NoDataResponse>> saveJob(String slug) async {
+    try {
+      final response = await dioManager.dio.post('job/apply/$slug');
+      // logger.d(response.data);
+
+      if (response.statusCode == 200) {
+        // logger.d(response.data);
+       final results = NoDataResponse.fromJson(response.data);
+        return Right(results);
+      } else {
+        return Left(Exception('Unable to save job'));
+      }
+    } catch (e) {
+      logger.e(e);
+      // var error = _errorHandler.handleError(e);
+      return Left(e as Exception);
+    }
+  }
+  
+  @override
+  Future<Either<Exception, REconmendedJobs>> fetchAppliedJob([int? page]) async {
+    try {
+      final response = await dioManager.dio.get('jobs/applied');
+      // logger.d(response.data);
+
+      if (response.statusCode == 200) {
+        // logger.d(response.data);
+        final jobModel = REconmendedJobs.fromJson(response.data);
+        return Right(jobModel);
+      } else {
+        return Left(Exception('Unable to fetch applied jobs'));
+      }
+    } catch (e) {
+      logger.e(e);
+      // var error = _errorHandler.handleError(e);
+      return Left(e as Exception);
+    }
+  }
+  
+  @override
+  Future<Either<Exception, JobResponseEntity>> fetchBookmarksJob([int? page]) async{
+      try {
+      final response = await dioManager.dio.get('jobs/bookmarks');
+      // logger.d(response.data);
+
+      if (response.statusCode == 200) {
+        // logger.d(response.data);
+        final jobModel = JobResponseEntity.fromJson(response.data);
+        return Right(jobModel);
+      } else {
+        return Left(Exception('Unable to fetch bookmarks jobs'));
+      }
+    } catch (e) {
+      logger.e(e);
+      // var error = _errorHandler.handleError(e);
+      return Left(e as Exception);
+    }
+  }
+  
+  @override
+  Future<Either<Exception, JobResponseEntity>> fetchSaveJob([int? page]) async{
+     try {
+      final response = await dioManager.dio.get('');
+      // logger.d(response.data);
+
+      if (response.statusCode == 200) {
+        // logger.d(response.data);
+        final jobModel = JobResponseEntity.fromJson(response.data);
+        return Right(jobModel);
+      } else {
+        return Left(Exception('Unable to fetch saved jobs'));
+      }
+    } catch (e) {
+      logger.e(e);
+      // var error = _errorHandler.handleError(e);
+      return Left(e as Exception);
     }
   }
 }

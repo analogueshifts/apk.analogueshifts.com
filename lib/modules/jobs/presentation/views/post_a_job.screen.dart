@@ -6,6 +6,7 @@ import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/step.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/data/model/addJobDto.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/application_deadline_bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/companies_bottom_sheet.dart';
@@ -55,7 +56,7 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
 
 
 
-  validateFirstForm(){
+   validateFirstForm(){
     if(_companyName.text.isEmpty || _location.text.isEmpty || _jobField.text.isEmpty || _qualifiication.text.isEmpty || _location.text.isEmpty || _city.text.isEmpty || _employmentType.text.isEmpty){
       setState(() {
         isFirstFormValid = false;
@@ -818,17 +819,14 @@ class _PostAJobScreenState extends State<PostAJobScreen> {
                     ),
                   ),
                   Gap(20),
+                                                                                 
+                  
                   BusyButton(
-                      title: "Next",
+                      title: "Save",
                       // disabled: isFirstFormValid == true ? false : true,
-                      onTap:(){
+                      onTap:() async {
                         logger.d(_jobDescription);
-                        // validateFirstForm();
-                        // if(isFirstFormValid){
-                        //   setState(() {
-                        //     _currentPage = 3;
-                        //   });
-                        // }
+                      await job.createJob(AddJobDto(title: _positionTitle.text, description: _description.text, identifier: _jobField.text, hiringOrganization: _companyName.text, applicantLocationRequirements: _qualifiication.text, baseSalary: "${_minAMount.text} - ${_maxAmount .text}", directApply: '', employmentType: _employmentType.text, jobLocation: _location.text, jobLocationType: '', validThrough: _applicationDeadline.text, status: '', apply: ''), context);
                       }),
                   Gap(30)
                 ],

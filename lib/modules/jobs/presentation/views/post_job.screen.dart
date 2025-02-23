@@ -1,94 +1,12 @@
-// import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
-// import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
-// import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/add_company.screen.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:gap/gap.dart';
-
-// class PostJobScreen extends StatefulWidget {
-//   const PostJobScreen({super.key});
-
-//   @override
-//   State<PostJobScreen> createState() => _PostJobScreenState();
-// }
-
-// class _PostJobScreenState extends State<PostJobScreen> {
-//   @override
-//   Widget build(BuildContext context) {
-//     final isLight = Theme.of(context).colorScheme.brightness == Brightness.light;
-//     return Scaffold(
-//       body: Padding(
-//           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-//         child: Center(
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               Gap(10),
-//               SvgPicture.asset("assets/images/Frame 482339.svg"),
-//               Gap(35),
-//               TextSemiBold("No jobs posted yet", fontSize: 18, fontWeight: FontWeight.w500, color: isLight ? AppColors.background : AppColors.white),
-//               Gap(10),
-//               TextSemiBold("Click the button at the bottom to post a job.", fontSize: 14, color: Color(0xff666666),),
-//               Gap(45),
-//               InkWell(
-//                 onTap: (){
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(
-//                         builder: (context) => AddCompanyScreen()
-//                     ),
-//                   );
-//                 },
-//                 child: Container(
-//                   padding: EdgeInsets.symmetric(vertical: 16),
-//                   width: double.infinity,
-//                   decoration: BoxDecoration(
-//                       color: AppColors.primaryColor,
-//                       borderRadius: BorderRadius.circular(10),
-//                       border: Border.all(
-//                           color: AppColors.primaryColor
-//                       )
-//                   ),
-//                   child: TextSemiBold("Add company", color: AppColors.white, fontWeight: FontWeight.w700, textAlign: TextAlign.center,),
-//                 ),
-//               ),
-//               Gap(20),
-//               // InkWell(
-//               //   onTap: (){
-//               //     Navigator.push(
-//               //       context,
-//               //       MaterialPageRoute(
-//               //           builder: (context) => PostAJobScreen()
-//               //       ),
-//               //     );
-//               //   },
-//               //   child: Container(
-//               //     padding: EdgeInsets.symmetric(vertical: 16),
-//               //     width: double.infinity,
-//               //     decoration: BoxDecoration(
-//               //       borderRadius: BorderRadius.circular(10),
-//               //       border: Border.all(
-//               //         color: AppColors.primaryColor
-//               //       )
-//               //     ),
-//               //     child: TextSemiBold("Post a job", color: AppColors.primaryColor, fontWeight: FontWeight.w700, textAlign: TextAlign.center,),
-//               //   ),
-//               // )
-
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
+import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/filter_tap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 
 import 'add_company.screen.dart';
 import 'post_a_job.screen.dart';
@@ -117,7 +35,7 @@ class _JobsContent extends StatefulWidget {
 }
 
 class _JobsContentState extends State<_JobsContent> {
-  final List<String> _filters = ["All", "Drafts", "Jobs posted", "Companies"];
+  final List<String> _filters = ["All", "Jobs posted", "Companies", "Draft"];
   int _selectedIndex = 0;
 
   @override
@@ -152,13 +70,55 @@ class _SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: "Search for posted jobs & companies added",
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+    return TextFormField(
+      //controller: _search,
+      decoration: textInputDecoration.copyWith(
+        fillColor: Theme.of(context).colorScheme.brightness == Brightness.light
+            ? AppColors.white
+            : AppColors.background,
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+                color:
+                    Theme.of(context).colorScheme.brightness == Brightness.light
+                        ? const Color(0xff000000).withValues(alpha: .08)
+                        : const Color(0xffFFFFFF).withValues(alpha: .18))),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+                color:
+                    Theme.of(context).colorScheme.brightness == Brightness.light
+                        ? const Color(0xff000000).withValues(alpha: .08)
+                        : const Color(0xffFFFFFF).withValues(alpha: .18))),
+        hintStyle: TextStyle(
+            color: Theme.of(context).colorScheme.brightness == Brightness.light
+                ? const Color(0xff000000).withValues(alpha: .1)
+                : const Color(0xffFFFFFF).withValues(alpha: .4)),
+        hintText: "Search companies & jobs posted",
+        prefixIcon: Icon(
+          Icons.search,
+          color: Theme.of(context).iconTheme.color,
         ),
-        prefixIcon: const Icon(Icons.search),
+
+        // _isLoading
+        //     ? Container(
+        //         alignment: Alignment.center,
+        //         margin:
+        //             const EdgeInsets.only(left: 5),
+        //         height:
+        //             screenHeight(context) * 0.05,
+        //         width: screenWidth(context) * 0.05,
+        //         child:
+        //             const CircularProgressIndicator(
+        //           color: AppColors.primaryColor,
+        //         ),
+        //       )
+        //     : Icon(
+        //         Icons.search,
+        //         color: Theme.of(context)
+        //             .iconTheme
+        //             .color,
+        //       ),
       ),
     );
   }
@@ -231,24 +191,35 @@ class _JobCompanyButtons extends StatelessWidget {
   }
 }
 
-
-
 /// A dynamically built list displaying individual job items with a header title.
-class _JobsList extends StatelessWidget {
+class _JobsList extends StatefulWidget {
   final String filter;
   const _JobsList({required this.filter});
 
+  @override
+  State<_JobsList> createState() => _JobsListState();
+}
+
+class _JobsListState extends State<_JobsList> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<JobProvider>().getSavedCompanies(context);
+    });
+    super.initState();
+  }
+
   /// Returns a header title based on the currently selected filter.
   String get headerTitle {
-    switch (filter) {
+    switch (widget.filter) {
       case "All":
         return "All activities";
-      case "Drafts":
-        return "Drafts";
       case "Jobs posted":
         return "Jobs posted";
       case "Companies":
         return "Companies";
+      case "Draft":
+        return "Draft";
       default:
         return "";
     }
@@ -280,28 +251,145 @@ class _JobsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      // +1 for the header.
-      itemCount: jobData.length + 1,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          // Header displaying the title based on the selected filter.
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(headerTitle,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                )),
-          );
+    if (widget.filter == 'All') {
+      return Builder(builder: (context) {
+        if (jobData.isEmpty) {
+          return Center(child: _noJobCard(context, 'No Activities'));
         }
-        final job = jobData[index - 1];
-        return _JobListItem(
-          title: job['title'] as String,
-          subtitle: job['subtitle'] as String,
-          isDraft: job['isDraft'] as bool,
+        return ListView.builder(
+          // +1 for the header.
+          itemCount: jobData.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              // Header displaying the title based on the selected filter.
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(headerTitle,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    )),
+              );
+            }
+            final job = jobData[index - 1];
+            return _JobListItem(
+              title: job['title'] as String,
+              subtitle: job['subtitle'] as String,
+              isDraft: job['isDraft'] as bool,
+            );
+          },
         );
-      },
+      });
+    } else if (widget.filter == 'Jobs posted') {
+      return Builder(builder: (context) {
+        if (jobData.isEmpty) {
+          return Center(child: _noJobCard(context, 'No Job posted'));
+        }
+        return ListView.builder(
+          // +1 for the header.
+          itemCount: jobData.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              // Header displaying the title based on the selected filter.
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(headerTitle,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    )),
+              );
+            }
+            final job = jobData[index - 1];
+            return _JobListItem(
+              title: job['title'] as String,
+              subtitle: job['subtitle'] as String,
+              isDraft: job['isDraft'] as bool,
+            );
+          },
+        );
+      });
+    } else if (widget.filter == 'Companies') {
+      return Consumer<JobProvider>(builder: (_, job, __) {
+        if (job.companies.isEmpty) {
+          return Center(child: _noJobCard(context, 'No Companies'));
+        }
+        return ListView.builder(
+          // +1 for the header.
+          itemCount: job.companies.length, //jobData.length +1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              // Header displaying the title based on the selected filter.
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(headerTitle,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    )),
+              );
+            }
+
+            final company = job.companies[index - 1];
+            return _JobListItem(
+              title: company.name ?? '',
+              subtitle: company.location ?? '',
+              isDraft: false,
+            );
+          },
+        );
+      });
+    } else if (widget.filter == 'Draft') {
+      return Builder(builder: (context) {
+        if (jobData.isEmpty) {
+          return Center(child: _noJobCard(context, 'No Draft'));
+        }
+        return ListView.builder(
+          // +1 for the header.
+          itemCount: jobData.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              // Header displaying the title based on the selected filter.
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(headerTitle,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    )),
+              );
+            }
+            final job = jobData[index - 1];
+            return _JobListItem(
+              title: job['title'] as String,
+              subtitle: job['subtitle'] as String,
+              isDraft: job['isDraft'] as bool,
+            );
+          },
+        );
+      });
+    } else {
+      return SizedBox();
+    }
+  }
+
+  Widget _noJobCard(BuildContext context, String message) {
+    return Column(
+      children: [
+        const Gap(40),
+        SvgPicture.asset(
+          "assets/images/Frame 482398.svg",
+        ),
+        const Gap(20),
+        TextBold(
+          message,
+          color: Theme.of(context).colorScheme.brightness == Brightness.light
+              ? AppColors.background.withValues(alpha: 0.8)
+              : AppColors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+        ),
+      ],
     );
   }
 }

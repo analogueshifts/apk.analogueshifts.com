@@ -9,7 +9,6 @@ import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
 import 'package:analogue_shifts_mobile/core/utils/validator.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.dart';
-import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/uploads/presentation/changeNotifiers/upload_notifier.dart';
 import 'package:cached_network_image/cached_network_image.dart';

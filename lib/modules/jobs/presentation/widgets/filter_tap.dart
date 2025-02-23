@@ -18,14 +18,14 @@ class FilterChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
+      height:40,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: filters.length,
         itemBuilder: (context, index) {
           final isSelected = index == selectedIndex;
           return Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+            padding: const EdgeInsets.only(right: 10.0),
             child: ChoiceChip(
               showCheckmark: false,
               shape: RoundedRectangleBorder(
@@ -40,7 +40,7 @@ class FilterChips extends StatelessWidget {
                   color: AppColors.primaryColor,
                 );
               }),
-              visualDensity: VisualDensity.compact,
+                visualDensity: VisualDensity.compact,
               label: Text(
                 filters[index],
                 style: TextStyle(

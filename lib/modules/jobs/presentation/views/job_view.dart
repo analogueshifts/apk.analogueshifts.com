@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
@@ -19,8 +21,11 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
+import '../../domain/entities/reconmende_job.entity.dart';
+
 class JobScreen extends StatefulWidget {
-  const JobScreen({super.key});
+  final int? selectedIndex;
+  const JobScreen({super.key, this.selectedIndex = 0});
 
   @override
   State<JobScreen> createState() => _JobScreenState();
@@ -28,10 +33,6 @@ class JobScreen extends StatefulWidget {
 
 class _JobScreenState extends State<JobScreen> {
   bool showMyPlans = true;
-
-  bool _isLoading = false;
-
-  final TextEditingController _search = TextEditingController();
 
   @override
   void initState() {
@@ -135,7 +136,9 @@ class _JobScreenState extends State<JobScreen> {
             ),
           ),
           Expanded(
-              child: showMyPlans ? const JobView() : const PostJobScreen()),
+              child: showMyPlans
+                  ? JobView(selectedIndex: widget.selectedIndex)
+                  : const PostJobScreen()),
         ],
       ),
     );
@@ -143,7 +146,8 @@ class _JobScreenState extends State<JobScreen> {
 }
 
 class JobView extends StatefulWidget {
-  const JobView({super.key});
+  final int? selectedIndex;
+  const JobView({super.key, this.selectedIndex = 0});
 
   @override
   State<JobView> createState() => _JobViewState();
@@ -157,7 +161,11 @@ class _JobViewState extends State<JobView> {
   final _scrollController = ScrollController();
   bool _isPaginateButton = false;
 
-  final List<String> _filters = ["All", "Saved jobs", "Applied jobs","Reviewed jobs" ];
+  final List<String> _filters = [
+    "All",
+    "Reconmended jobs",
+    "Applied jobs",
+  ];
   int _selectedIndex = 0;
 
   void setSearchLoader() async {
@@ -166,8 +174,9 @@ class _JobViewState extends State<JobView> {
     });
 
     await context
-        .read<JobProvider>()
-        .getSearchJobs(context, _search.text.trim());
+        .read<JobProvider>().getSearchJobs(context, _search.text.trim());
+    await context
+        .read<JobProvider>().searchReconmendedJobs(context, _search.text.trim());
     setState(() {
       if (mounted) {
         setState(() {
@@ -180,6 +189,7 @@ class _JobViewState extends State<JobView> {
 
   @override
   void initState() {
+    _selectedIndex = widget.selectedIndex ?? 0;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<JobProvider>().getJobs(context);
     });
@@ -212,26 +222,22 @@ class _JobViewState extends State<JobView> {
     }
   }
 
-  
-String get headerTitle {
+  String get headerTitle {
     switch (_filters[_selectedIndex]) {
       case "All":
         return "All Jobs";
-      case "Saved jobs":
-        return "Saved Jobs";
+      case "Reconmended jobs":
+        return "Reconmended Jobs";
       case "Applied jobs":
         return "Applied Jobs";
-      case "Reviewed jobs":
-        return "Reviewed jobs";
       default:
         return "";
     }
   }
-  
 
   @override
   Widget build(BuildContext context) {
-    
+    var size = MediaQuery.sizeOf(context);
     return Scaffold(
       body: Consumer<JobProvider>(
         builder: (context, job, child) {
@@ -244,10 +250,10 @@ String get headerTitle {
               : RefreshIndicator(
                   onRefresh: () async {
                     await context.read<JobProvider>().getJobs(context);
-                    // ignore: use_build_context_synchronously
                     await context
                         .read<JobProvider>()
                         .get_reconmended_jobs(context);
+                    await context.read<JobProvider>().fetchAppliedjobs(context);
                   },
                   backgroundColor: AppColors.primaryColor,
                   color: Colors.white,
@@ -338,19 +344,20 @@ String get headerTitle {
                                   setSearchLoader();
                                 },
                                 child: Container(
-                                    height: 60,
-                                    decoration: BoxDecoration(
-                                        color: AppColors.primaryColor,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 12),
-                                        child: Image.asset(
-                                          "assets/icons/Settings-adjust.png",
-                                          width: 30,
-                                          height: 30,
-                                        ))),
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.primaryColor,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: Image.asset(
+                                      "assets/icons/Settings-adjust.png",
+                                      width: 30,
+                                      height: 30,
+                                    ),
+                                  ),
+                                ),
                               ),
                             )
                           ],
@@ -382,35 +389,115 @@ String get headerTitle {
                           ],
                         ),
                         const Gap(5),
-                        job.job.isEmpty
-                            ? Center(
-                                child: Column(
-                                  children: [TextSemiBold("No job available")],
+                        Builder(builder: (context) {
+                          if (_selectedIndex == 0) {
+                            if (job.job.isEmpty) {
+                              return Container(
+                                margin: EdgeInsets.only(top: size.height * 0.1),
+                                child: Center(
+                                  child: _noJobCard(context),
                                 ),
-                              )
-                            : ListView.builder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: job.job.length,
-                                itemBuilder: (context, index) {
-                                  final e = job.job[index];
-                                  // logger.d(e);
-                                  return Column(
-                                    children: [
-                                      _recentJobCard(e),
-                                      const Gap(10),
-                                      Divider(
-                                        color: Theme.of(context)
-                                                    .colorScheme
-                                                    .brightness ==
-                                                Brightness.light
-                                            ? const Color(0xffE4E4E4)
-                                            : const Color(0xffFFFFFF)
-                                                .withValues(alpha: .24),
-                                      )
-                                    ],
-                                  );
-                                }),
+                              );
+                            }
+                            return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: job.job.length,
+                              itemBuilder: (context, index) {
+                                final e = job.job[index];
+
+                                // logger.d(e);
+                                return Column(
+                                  children: [
+                                    _recentJobCard(data: e),
+                                    const Gap(10),
+                                    Divider(
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .brightness ==
+                                              Brightness.light
+                                          ? const Color(0xffE4E4E4)
+                                          : const Color(0xffFFFFFF)
+                                              .withValues(alpha: .24),
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                          } else if (_selectedIndex == 1) {
+                            if (job.reconmendedjobs.isEmpty) {
+                              return Container(
+                                margin: EdgeInsets.only(top: size.height * 0.1),
+                                child: Center(
+                                  child: _noJobCard(context),
+                                ),
+                              );
+                            }
+                            return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: job.reconmendedjobs.length,
+                              itemBuilder: (context, index) {
+                                final e = job.reconmendedjobs[index];
+
+                                // logger.d(e);
+                                return Column(
+                                  children: [
+                                    _recentJobCard(
+                                        reData: e, isrecomended: true),
+                                    const Gap(10),
+                                    Divider(
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .brightness ==
+                                              Brightness.light
+                                          ? const Color(0xffE4E4E4)
+                                          : const Color(0xffFFFFFF)
+                                              .withValues(alpha: .24),
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                          } else if (_selectedIndex == 2) {
+                            if (job.appliedJobs.isEmpty) {
+                              return Container(
+                                margin: EdgeInsets.only(top: size.height * 0.1),
+                                child: Center(
+                                  child: _noJobCard(context),
+                                ),
+                              );
+                            }
+                            return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: job.appliedJobs.length,
+                              itemBuilder: (context, index) {
+                                final applied = job.appliedJobs[index];
+
+                                // logger.d(e);
+                                return Column(
+                                  children: [
+                                    _recentJobCard(
+                                        reData: applied, isrecomended: true),
+                                    const Gap(10),
+                                    Divider(
+                                      color: Theme.of(context)
+                                                  .colorScheme
+                                                  .brightness ==
+                                              Brightness.light
+                                          ? const Color(0xffE4E4E4)
+                                          : const Color(0xffFFFFFF)
+                                              .withValues(alpha: .24),
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            return SizedBox();
+                          }
+                        }),
                         const Gap(20),
                         _isPaginateButton
                             ? Padding(
@@ -445,16 +532,34 @@ String get headerTitle {
     );
   }
 
-  
+  Widget _noJobCard(BuildContext context) {
+    return Column(
+      children: [
+        const Gap(40),
+        SvgPicture.asset(
+          "assets/images/Frame 482398.svg",
+        ),
+        const Gap(20),
+        TextBold(
+          "No job available",
+          color: Theme.of(context).colorScheme.brightness == Brightness.light
+              ? AppColors.background.withValues(alpha: 0.8)
+              : AppColors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+        ),
+      ],
+    );
+  }
 
-  Widget _recentJobCard(Datum data) {
-    final image = data.hiringOrganization;
-    //final desc = Text(data.description.toString(), maxLines: 1,);
+  Widget _recentJobCard(
+      {bool isrecomended = false, Datum? data, Recommendation? reData}) {
+    final image = data?.hiringOrganization;
     return TouchableOpacity(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => SingleJobScreen(data: data)),
+          MaterialPageRoute(builder: (context) => SingleJobScreen(data: isrecomended?reData: data)),
         );
       },
       child: Container(
@@ -482,7 +587,9 @@ String get headerTitle {
                           height: 40.h,
                         )
                       : CachedNetworkImage(
-                          imageUrl: image.logo!,
+                          imageUrl: isrecomended
+                              ? reData!.hiringOrganization!.logo
+                              : image.logo!,
                           width: 40.w,
                           height: 40.w,
                           placeholder: (context, url) => const SizedBox(
@@ -497,12 +604,17 @@ String get headerTitle {
                           ), //Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
                         ),
               title: TextSemiBold(
-                data.title.toString(),
+                isrecomended
+                    ? reData!.title.toString()
+                    : data!.title.toString(),
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
               ),
               subtitle: TextSemiBold(
-                data.hiringOrganization?.name.toString() ?? "Unknown Company",
+                isrecomended
+                    ? reData?.hiringOrganization!.name ?? 'Unknown Company'
+                    : data?.hiringOrganization?.name.toString() ??
+                        "Unknown Company",
                 fontSize: 11,
                 color: AppColors.grey,
                 fontWeight: FontWeight.w400,
@@ -513,9 +625,13 @@ String get headerTitle {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  chip(data.employmentType),
+                  isrecomended
+                      ? chip(reData!.employmentType)
+                      : chip(data?.employmentType),
                   const Gap(5),
-                  chip(data.jobLocationType),
+                  isrecomended
+                      ? chip(reData!.jobLocationType)
+                      : chip(data?.jobLocationType),
                   // Gap(5),
                   // chip(data.employmentType),
                 ],
@@ -524,11 +640,17 @@ String get headerTitle {
             const Gap(20),
             HtmlWidget(
               enableCaching: true,
-              data.description == null
-                  ? ""
-                  : data.description!.length < 90
-                      ? data.description.toString()
-                      : '${data.description!.substring(0, 90)}..',
+              isrecomended
+                  ? reData!.description == null
+                      ? ""
+                      : reData.description!.length < 90
+                          ? reData.description.toString()
+                          : '${reData.description!.substring(0, 90)}..'
+                  : data?.description == null
+                      ? ""
+                      : data!.description!.length < 90
+                          ? data.description.toString()
+                          : '${data.description!.substring(0, 90)}..',
               textStyle: const TextStyle(
                 fontSize: 12,
                 color: Color(0xff7B7B7B),

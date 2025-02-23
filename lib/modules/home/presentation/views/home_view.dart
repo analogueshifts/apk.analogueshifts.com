@@ -1,4 +1,6 @@
 
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
@@ -97,7 +99,7 @@ class _HomeViewState extends State<HomeView> {
               padding: EdgeInsets.zero,
               child: const Icon(Icons.menu)),
         ),
-        title: Text('Hi, ${firstName}',
+        title: Text('Hi, $firstName',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontSize: 16,
                 fontFamily: AppFonts.manRope,
@@ -264,7 +266,7 @@ class _HomeViewState extends State<HomeView> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        HomeNavigation(selectedIndex: 1),
+                                        HomeNavigation(selectedIndex: 1, fromHome: true),
                                   ),
                                   (Route<dynamic> route) => false,
                                 );

@@ -23,7 +23,8 @@ import 'package:provider/provider.dart';
 // ignore: must_be_immutable
 class HomeNavigation extends StatefulWidget {
   int selectedIndex;
-  HomeNavigation({super.key, this.selectedIndex = 0});
+  bool fromHome;
+  HomeNavigation({super.key, this.selectedIndex = 0, this.fromHome = false});
 
   @override
   State<HomeNavigation> createState() => _HomeNavigationState();
@@ -31,7 +32,7 @@ class HomeNavigation extends StatefulWidget {
 
 class _HomeNavigationState extends State<HomeNavigation> {
   // int _selectedIndex = 0;
-  final GlobalKey<ScaffoldState> _scaffoldkey =  GlobalKey<ScaffoldState>();
+  //final GlobalKey<ScaffoldState> _scaffoldkey =  GlobalKey<ScaffoldState>();
 
   void _onItemTapped(int index) {
     if (mounted) {
@@ -45,13 +46,14 @@ class _HomeNavigationState extends State<HomeNavigation> {
   @override
   void initState() {
     super.initState();
-    _onItemTapped(widget.selectedIndex!);
+    _onItemTapped(widget.selectedIndex);
     context.read<UserViewModel>().init();
      WidgetsBinding.instance.addPostFrameCallback((_){
       if(mounted){
         context.read<UserViewModel>().fetchUser(context);
         context.read<JobProvider>().getJobs(context);
         context.read<JobProvider>().get_reconmended_jobs(context);
+        context.read<JobProvider>().fetchAppliedjobs(context);
       }
     });
 
@@ -66,7 +68,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
         logger.d(message.notification?.title);
 
         final nav = getIt<NavigationService>();
-        final navigatorState = nav.navigatorKey.currentState;
+        //final navigatorState = nav.navigatorKey.currentState;
         // if(_scaffoldkey.currentContext == null)return;
         showDialog(
             barrierColor: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.transparent .withOpacity(0.6) : const Color(0xff110C00).withOpacity(0.8),
@@ -194,7 +196,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
     bool isLightMode = Theme.of(context).colorScheme.brightness == Brightness.light;
     final tabs = [
       const HomeView(),
-      const JobScreen(),
+       JobScreen(selectedIndex: widget.fromHome? 1: 0),
       const EventsView(),
       const VettingSystemScreen()
     ];

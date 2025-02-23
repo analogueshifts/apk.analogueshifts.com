@@ -6,19 +6,21 @@ import 'package:analogue_shifts_mobile/app/widgets/custom_single_chile_scroll_vi
 import 'package:analogue_shifts_mobile/core/constants/fonts.dart';
 import 'package:analogue_shifts_mobile/core/utils/functions.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
-import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:gap/gap.dart';
- // ignore: depend_on_referenced_packages
- import 'package:html/parser.dart' as htmlparser;
+// ignore: depend_on_referenced_packages
+import 'package:html/parser.dart' as htmlparser;
+import 'package:provider/provider.dart' as provider;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../change_notifier/job_provider.dart';
+
 class SingleJobScreen extends StatefulWidget {
-final Datum data;
+  final dynamic data;
   const SingleJobScreen({super.key, required this.data});
 
   @override
@@ -31,8 +33,7 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
     final theme = Theme.of(context).colorScheme.brightness;
     String rawSalary = widget.data.baseSalary?.value?.value.toString() ?? "0";
     double salaryValue = extractSalaryValue(rawSalary);
-   
-  htmlparser.parse(widget.data.description);
+    htmlparser.parse(widget.data.description);
     return Scaffold(
       appBar: const PaylonyAppBarTwo(title: "Job Details"),
       body: CustomSingleChildScrollView(
@@ -43,23 +44,52 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
             children: [
               Row(
                 children: [
-                   widget.data.hiringOrganization == null ? Hero(
-                     tag: "assets/icons/company_placeholder.svg",
-                       child: SvgPicture.asset("assets/icons/company_placeholder.svg", width: 50.w, height: 50.h,)) : widget.data.hiringOrganization?.logo == null ?  SvgPicture.asset("assets/icons/company_placeholder.svg",  width: 50.w, height: 50.h,) :
-                  CachedNetworkImage(
-                    imageUrl: widget.data.hiringOrganization?.logo,
-                    width: 50.w,
-                    height: 50.h,
-                    placeholder: (context, url) => const SizedBox(width: 30, height:30, child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) =>SvgPicture.asset("assets/icons/company_placeholder.svg", width: 40.w, height: 40.h,),//Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
-                  ),
+                  widget.data.hiringOrganization == null
+                      ? Hero(
+                          tag: "assets/icons/company_placeholder.svg",
+                          child: SvgPicture.asset(
+                            "assets/icons/company_placeholder.svg",
+                            width: 50.w,
+                            height: 50.h,
+                          ))
+                      : widget.data.hiringOrganization?.logo == null
+                          ? SvgPicture.asset(
+                              "assets/icons/company_placeholder.svg",
+                              width: 50.w,
+                              height: 50.h,
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: widget.data.hiringOrganization?.logo,
+                              width: 50.w,
+                              height: 50.h,
+                              placeholder: (context, url) => const SizedBox(
+                                  width: 30,
+                                  height: 30,
+                                  child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) =>
+                                  SvgPicture.asset(
+                                "assets/icons/company_placeholder.svg",
+                                width: 40.w,
+                                height: 40.h,
+                              ), //Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
+                            ),
                   const Gap(20),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextSemiBold(widget.data.title.toString(), fontSize: 14,fontWeight: FontWeight.w600,),
-                        TextSemiBold(widget.data.hiringOrganization?.name.toString() ?? "Unknown Company", fontSize: 11,color: AppColors.grey, fontWeight: FontWeight.w400,),
+                        TextSemiBold(
+                          widget.data.title.toString(),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        TextSemiBold(
+                          widget.data.hiringOrganization?.name.toString() ??
+                              "Unknown Company",
+                          fontSize: 11,
+                          color: AppColors.grey,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ],
                     ),
                   )
@@ -68,19 +98,50 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
               const Gap(15),
               Row(
                 children: [
-                  const Icon(Icons.location_on_outlined, color: Color(0xff7B7B7B),),
+                  const Icon(
+                    Icons.location_on_outlined,
+                    color: Color(0xff7B7B7B),
+                  ),
                   const Gap(6),
-                  TextSemiBold(widget.data.jobLocation?.address == null ? "N/A" : widget.data.jobLocation?.address?.addressRegion == null && widget.data.jobLocation?.address?.addressCountry == null ? "N/A" : "${widget.data.jobLocation?.address?.addressRegion}, ${widget.data.jobLocation?.address?.addressCountry}",  fontSize: 14,fontWeight: FontWeight.w600,color: const Color(0xff7B7B7B),),
+                  Flexible(
+                    child: TextSemiBold(
+                      widget.data.jobLocation?.address == null
+                          ? "N/A"
+                          : widget.data.jobLocation?.address?.addressRegion ==
+                                      null &&
+                                  widget.data.jobLocation?.address
+                                          ?.addressCountry ==
+                                      null
+                              ? "N/A"
+                              : "${widget.data.jobLocation?.address?.addressRegion}, ${widget.data.jobLocation?.address?.addressCountry}",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xff7B7B7B),
+                    ),
+                  ),
                 ],
               ),
               const Gap(7),
               Row(
                 children: [
-                  const Icon(Icons.work_outline_outlined, color: Color(0xff7B7B7B),),
+                  const Icon(
+                    Icons.work_outline_outlined,
+                    color: Color(0xff7B7B7B),
+                  ),
                   const Gap(6),
-                  Text(widget.data.baseSalary == null ? "N/A" : widget.data.baseSalary?.value == null && widget.data.baseSalary?.value?.value == null ? "N/A" : Functions.money(salaryValue,  '\$'),  style: const TextStyle(
-                    fontSize: 14,fontWeight: FontWeight.w600,color: Color(0xff7B7B7B),
-                  ),),
+                  Text(
+                    widget.data.baseSalary == null
+                        ? "N/A"
+                        : widget.data.baseSalary?.value == null &&
+                                widget.data.baseSalary?.value?.value == null
+                            ? "N/A"
+                            : Functions.money(salaryValue, '\$'),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xff7B7B7B),
+                    ),
+                  ),
                 ],
               ),
               const Gap(20),
@@ -90,35 +151,51 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 13),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 13),
                         decoration: BoxDecoration(
-                          color: const Color(0xffB0B0B0).withOpacity(0.17),
-                          borderRadius: BorderRadius.circular(25)
+                            color: const Color(0xffB0B0B0).withOpacity(0.17),
+                            borderRadius: BorderRadius.circular(25)),
+                        child: TextSemiBold(
+                          widget.data.employmentType.toString().toLowerCase(),
+                          fontSize: 12,
                         ),
-                        child: TextSemiBold(widget.data.employmentType.toString().toLowerCase(), fontSize: 12,),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 13),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 13),
                         decoration: BoxDecoration(
-                          color: const Color(0xffB0B0B0).withOpacity(0.17),
-                          borderRadius: BorderRadius.circular(25)
+                            color: const Color(0xffB0B0B0).withOpacity(0.17),
+                            borderRadius: BorderRadius.circular(25)),
+                        child: TextSemiBold(
+                          widget.data.jobLocationType.toString().toLowerCase(),
+                          fontSize: 12,
                         ),
-                        child: TextSemiBold(widget.data.jobLocationType.toString().toLowerCase(), fontSize: 12,),
                       )
                     ],
                   ),
-                  widget.data.createdAt == null ? const Text("") : TextSemiBold(Functions.getFormattedDate(widget.data.createdAt!), color: theme == Brightness.light ? const Color(0xff7B7B7B) : const Color(
-                  0xff7B7B7B
-                  ), fontSize: 12,)
+                  widget.data.createdAt == null
+                      ? const Text("")
+                      : TextSemiBold(
+                          Functions.getFormattedDate(widget.data.createdAt!),
+                          color: theme == Brightness.light
+                              ? const Color(0xff7B7B7B)
+                              : const Color(0xff7B7B7B),
+                          fontSize: 12,
+                        )
                 ],
               ),
               const Gap(20),
-              TextSemiBold("Job description", fontSize: 15, fontWeight:FontWeight.w500, color: theme == Brightness.light ? AppColors.background : AppColors.white,),
-              const Gap(
-                12
+              TextSemiBold(
+                "Job description",
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: theme == Brightness.light
+                    ? AppColors.background
+                    : AppColors.white,
               ),
+              const Gap(12),
               HtmlWidget(
-
                 widget.data.description.toString(),
                 renderMode: RenderMode.column,
                 customStylesBuilder: (element) {
@@ -126,8 +203,10 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
                     'line-height': '1.8em',
                   };
                 },
-                textStyle: const TextStyle(fontSize: 14, color: Color(0xff7B7B7B), fontFamily: AppFonts.manRope),
-              
+                textStyle: const TextStyle(
+                    fontSize: 14,
+                    color: Color(0xff7B7B7B),
+                    fontFamily: AppFonts.manRope),
               ),
 
               // Text(widget.data.description.toString()),
@@ -136,27 +215,37 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-              
                   Expanded(
-                    child: BusyButton(title: "Save Job",
-                    width: double.infinity,
-                    borderColor: AppColors.primaryColor,
-                    textColor: AppColors.primaryColor,
-                    color:  theme == Brightness.light? Colors.white: Colors.black,
-                     onTap:() async{},),
+                    child: BusyButton(
+                      title: "Save Job",
+                      width: double.infinity,
+                      borderColor: AppColors.primaryColor,
+                      textColor: AppColors.primaryColor,
+                      color: theme == Brightness.light
+                          ? Colors.white
+                          : Colors.black,
+                      onTap: () async {
+                        context
+                            .read<JobProvider>()
+                            .saveJob(widget.data.slug!, context);
+                      },
+                    ),
                   ),
-                        const Gap(15),          
+                  const Gap(15),
                   Expanded(
-                    child: BusyButton(title: "Apply", 
-                    width: double.infinity,
-                    onTap:() async{
-                      logger.d(widget.data.apply);
-                      var url = widget.data.apply ?? "https://flutter.io";
-                      final Uri _url = Uri.parse(url);
-                    
-                      await launchUrl(_url,mode: LaunchMode.inAppBrowserView);
-                      // launchUrl(Uri(path: widget.data.apply));
-                    },),
+                    child: BusyButton(
+                      title: "Apply",
+                      width: double.infinity,
+                      onTap: () async {
+                        logger.d(widget.data.apply);
+                        var url = widget.data.apply ?? "https://flutter.io";
+                        final Uri _url = Uri.parse(url);
+
+                        await launchUrl(_url,
+                            mode: LaunchMode.inAppBrowserView);
+                        // launchUrl(Uri(path: widget.data.apply));
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -169,21 +258,20 @@ class _SingleJobScreenState extends State<SingleJobScreen> {
   }
 
   double extractSalaryValue(String salaryString) {
-  // Use a regular expression to extract a number (digits, commas, periods)
-  // This regex finds the first occurrence of a number-like sequence.
-  final RegExp regExp = RegExp(r'(\d[\d,\.]*)');
-  final Match? match = regExp.firstMatch(salaryString);
+    // Use a regular expression to extract a number (digits, commas, periods)
+    // This regex finds the first occurrence of a number-like sequence.
+    final RegExp regExp = RegExp(r'(\d[\d,\.]*)');
+    final Match? match = regExp.firstMatch(salaryString);
 
-  if (match != null) {
-    String numericString = match.group(0)!;
-    // Remove commas so that the string is in a plain numeric format.
-    numericString = numericString.replaceAll(',', '');
-    
-    // Try parsing the number. Use tryParse to avoid exceptions.
-    final double? value = double.tryParse(numericString);
-    return value ?? 0.0;
+    if (match != null) {
+      String numericString = match.group(0)!;
+      // Remove commas so that the string is in a plain numeric format.
+      numericString = numericString.replaceAll(',', '');
+
+      // Try parsing the number. Use tryParse to avoid exceptions.
+      final double? value = double.tryParse(numericString);
+      return value ?? 0.0;
+    }
+    return 0.0;
   }
-  return 0.0;
-}
-
 }
