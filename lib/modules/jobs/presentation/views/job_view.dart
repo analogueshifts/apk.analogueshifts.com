@@ -174,9 +174,11 @@ class _JobViewState extends State<JobView> {
     });
 
     await context
-        .read<JobProvider>().getSearchJobs(context, _search.text.trim());
+        .read<JobProvider>()
+        .getSearchJobs(context, _search.text.trim());
     await context
-        .read<JobProvider>().searchReconmendedJobs(context, _search.text.trim());
+        .read<JobProvider>()
+        .searchReconmendedJobs(context, _search.text.trim());
     setState(() {
       if (mounted) {
         setState(() {
@@ -192,6 +194,7 @@ class _JobViewState extends State<JobView> {
     _selectedIndex = widget.selectedIndex ?? 0;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<JobProvider>().getJobs(context);
+      context.read<JobProvider>().get_reconmended_jobs(context);
     });
     _scrollController.addListener(_onScroll);
     super.initState();
@@ -559,7 +562,9 @@ class _JobViewState extends State<JobView> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => SingleJobScreen(data: isrecomended?reData: data)),
+          MaterialPageRoute(
+              builder: (context) =>
+                  SingleJobScreen(data: isrecomended ? reData : data)),
         );
       },
       child: Container(

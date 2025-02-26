@@ -4,13 +4,9 @@ import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/custom_single_chile_scroll_view.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
-import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/vetting/presentation/change_notifiers/vetting.notifier.dart';
-import 'package:analogue_shifts_mobile/modules/vetting/presentation/widgets/text_editor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:googleapis/streetviewpublish/v1.dart';
 import 'package:provider/provider.dart';
 
 class CreateVettingScreen extends StatefulWidget {

@@ -20,7 +20,6 @@ import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/qualifi
 import 'package:analogue_shifts_mobile/modules/vetting/presentation/widgets/text_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:googleapis/admob/v1.dart';
 import 'package:provider/provider.dart';
 
 class PostAJobScreen extends StatefulWidget {

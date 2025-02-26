@@ -1,6 +1,5 @@
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
-import 'package:analogue_shifts_mobile/app/widgets/app_bar_two.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
@@ -8,7 +7,6 @@ import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/shimme
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
 import 'package:analogue_shifts_mobile/modules/vetting/presentation/change_notifiers/vetting.notifier.dart';
 import 'package:analogue_shifts_mobile/modules/vetting/presentation/view/create_vetting_system.screen.dart';
-import 'package:analogue_shifts_mobile/modules/vetting/presentation/widgets/no_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
