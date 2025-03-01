@@ -594,7 +594,7 @@ class _JobViewState extends State<JobView> {
                           borderRadius: BorderRadius.circular(6),
                         child: CachedNetworkImage(
                             imageUrl: isrecomended
-                                ? reData!.hiringOrganization!.logo
+                                ? reData?.hiringOrganization?.logo!
                                 : image.logo!,
                             width: 45.w,
                             height: 40.w,
