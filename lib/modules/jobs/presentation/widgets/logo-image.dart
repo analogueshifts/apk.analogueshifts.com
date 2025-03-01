@@ -1,6 +1,4 @@
-import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
-import 'package:analogue_shifts_mobile/app/widgets/loading_dailog.dart';
 import 'package:analogue_shifts_mobile/modules/uploads/presentation/changeNotifiers/upload_notifier.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +9,15 @@ import 'dart:io';
 import 'package:provider/provider.dart';
 
 class LogoUploadWidget extends StatefulWidget {
+  const LogoUploadWidget({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _LogoUploadWidgetState createState() => _LogoUploadWidgetState();
 }
 
 class _LogoUploadWidgetState extends State<LogoUploadWidget> {
-  File? _image;
+  File? image;
   final picker = ImagePicker();
 
   Future getImage() async {
@@ -24,7 +25,7 @@ class _LogoUploadWidgetState extends State<LogoUploadWidget> {
 
     setState(() {
       if (pickedFile != null) {
-        _image = File(pickedFile.path);
+        image = File(pickedFile.path);
         context.read<FileUploadNotifier>().openImagePicker(context);
       }
     });

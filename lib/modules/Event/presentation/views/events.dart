@@ -4,13 +4,11 @@ import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
-import 'package:analogue_shifts_mobile/core/constants/app_asset.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/change_notifier/event.notifier.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/views/create_event.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/views/single-event.dart';
-import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/event_card.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/shimmer-loading-list.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/social_event_card.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
@@ -20,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:googleapis/admob/v1.dart';
 import 'package:provider/provider.dart';
 
 class EventsView extends StatefulWidget {
@@ -140,8 +137,8 @@ class _EventsViewState extends State<EventsView> {
                            locationType: e.locationType ?? "",
                            location: e.location ?? null,
                            title: e.title ?? "",
-                           userImageUrl: e.thumbnail.toString() ?? "",
-                           backgroundImageUrl: e.thumbnail.toString() ?? "",
+                           userImageUrl: e.thumbnail.toString(),
+                           backgroundImageUrl: e.thumbnail.toString() ,
                          ),
                    ).toList()
           

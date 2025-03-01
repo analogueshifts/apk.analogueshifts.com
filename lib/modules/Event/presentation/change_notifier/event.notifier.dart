@@ -8,8 +8,6 @@ import 'package:analogue_shifts_mobile/modules/Event/domain/entities/event.entit
 import 'package:analogue_shifts_mobile/modules/Event/domain/repositories/event-repository.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/change_notifier/event.state.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/create-event.sucess.dart';
-import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/company_saved_success.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 

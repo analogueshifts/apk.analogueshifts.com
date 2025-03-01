@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:analogue_shifts_mobile/core/network/api_client.dart';
 import 'package:analogue_shifts_mobile/core/network/network_info.dart';
@@ -8,8 +7,6 @@ import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/Event/data/models/create-event.dto.dart';
 import 'package:analogue_shifts_mobile/modules/Event/domain/entities/event.entity.dart';
 import 'package:analogue_shifts_mobile/modules/Event/domain/repositories/event-repository.dart';
-import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
-import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/no_data.entity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -19,6 +16,7 @@ class EventRepositoryImpl implements EventRepository  {
   late DioManager dioManager;
   final DeviceNetwork _deviceNetwork = GetIt.instance<DeviceNetwork>();
 
+  // ignore: unused_field
   final _db = getIt<DBService>();
   EventRepositoryImpl(this.dioManager);
 

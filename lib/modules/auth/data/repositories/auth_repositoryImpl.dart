@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:analogue_shifts_mobile/core/network/api_client.dart';
 import 'package:analogue_shifts_mobile/core/network/network_info.dart';
@@ -7,7 +6,6 @@ import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/nodata_model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/data/models/update_user_request.dart';
-import 'package:analogue_shifts_mobile/modules/auth/data/models/verify_password_otp.model.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/forgetpaasswordcreate.entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_user.entity.dart';
@@ -145,7 +143,12 @@ final _db = getIt<DBService>();
 
       final response = await dioManager.dio.post(
         'check-otp',
-        data: json.encode(VerifyPasswordOtpRequestModel(otp: payload.otp, email: payload.email)),
+        data:  {
+          "OTP":payload.otp?? '',
+          'email': payload.email??'',
+        }
+        
+        //json.encode(VerifyPasswordOtpRequestModel(otp: payload.otp, email: payload.email)),
       );
       logger.d(response.data);
 

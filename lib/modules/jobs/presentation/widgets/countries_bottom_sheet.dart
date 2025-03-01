@@ -1,13 +1,10 @@
 
-import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
-import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/data/data/job_role.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/job_role.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,13 +20,13 @@ class CountriesBottomSheet extends StatefulWidget {
 
 class _CountriesBottomSheetState extends State<CountriesBottomSheet> {
 
-  final _search = TextEditingController();
+  //final _search = TextEditingController();
 
-  JobRole? _rolesList;
+  //JobRole? _rolesList;
 
   List<JobRole> filteredCountries = [];
 
-  TextEditingController _searchController = TextEditingController();
+  //TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {

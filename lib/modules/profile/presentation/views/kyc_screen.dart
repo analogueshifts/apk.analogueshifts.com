@@ -3,13 +3,11 @@ import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/busy_button.dart';
 import 'package:analogue_shifts_mobile/core/constants/constants.dart';
-import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/experience_level.bottom-sheet.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/job_roles.bottom_sheet.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/skills_bottom_field.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/years_of_experience_bottom_sheet.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -32,7 +30,7 @@ class _KycScreenState extends State<KycScreen> {
   String? _experienceError;
   String? _levelError;
 
-  bool _isValid = false;
+  bool isValid = false;
 
   void updateFormState(){
     setState(() {
@@ -62,11 +60,11 @@ class _KycScreenState extends State<KycScreen> {
         _skillError = null;
       }
       if(role != null && _level != null && _years != null && _skills.isNotEmpty){
-        _isValid = true;
+        isValid = true;
       }else if(role != null || _level != null || _years != null || _skills.isEmpty){
-        _isValid = false;
+        isValid = false;
       }
-      _isValid = false;
+      isValid = false;
     });
   }
 

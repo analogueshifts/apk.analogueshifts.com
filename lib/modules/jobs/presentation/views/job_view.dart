@@ -8,7 +8,6 @@ import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
 import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/Event/presentation/widgets/shimmer-loading-list.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
-import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/post_job.screen.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/single_job.screen.dart';
@@ -176,9 +175,6 @@ class _JobViewState extends State<JobView> {
     await context
         .read<JobProvider>()
         .getSearchJobs(context, _search.text.trim());
-    await context
-        .read<JobProvider>()
-        .searchReconmendedJobs(context, _search.text.trim());
     setState(() {
       if (mounted) {
         setState(() {
@@ -331,6 +327,7 @@ class _JobViewState extends State<JobView> {
                                           )
                                         : Icon(
                                             Icons.search,
+                                            size: 20,
                                             color: Theme.of(context)
                                                 .iconTheme
                                                 .color,
@@ -354,11 +351,13 @@ class _JobViewState extends State<JobView> {
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 12),
-                                    child: Image.asset(
-                                      "assets/icons/Settings-adjust.png",
-                                      width: 30,
-                                      height: 30,
-                                    ),
+                                    child: Icon(Icons.search, color: Colors.white),
+                                    
+                                    // Image.asset(
+                                    //   "assets/icons/Settings-adjust.png",
+                                    //   width: 30,
+                                    //   height: 30,
+                                    // ),
                                   ),
                                 ),
                               ),
@@ -476,13 +475,13 @@ class _JobViewState extends State<JobView> {
                               shrinkWrap: true,
                               itemCount: job.appliedJobs.length,
                               itemBuilder: (context, index) {
-                                final applied = job.appliedJobs[index];
+                                final applied = job.appliedJobs[index].job;
 
                                 // logger.d(e);
                                 return Column(
                                   children: [
                                     _recentJobCard(
-                                        reData: applied, isrecomended: true),
+                                        data: applied),
                                     const Gap(10),
                                     Divider(
                                       color: Theme.of(context)
@@ -556,7 +555,7 @@ class _JobViewState extends State<JobView> {
   }
 
   Widget _recentJobCard(
-      {bool isrecomended = false, Datum? data, Recommendation? reData}) {
+      {bool isrecomended = false, dynamic data, Recommendation? reData}) {
     final image = data?.hiringOrganization;
     return TouchableOpacity(
       onTap: () {
@@ -591,23 +590,27 @@ class _JobViewState extends State<JobView> {
                           width: 40.w,
                           height: 40.h,
                         )
-                      : CachedNetworkImage(
-                          imageUrl: isrecomended
-                              ? reData!.hiringOrganization!.logo
-                              : image.logo!,
-                          width: 40.w,
-                          height: 40.w,
-                          placeholder: (context, url) => const SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: CircularProgressIndicator()),
-                          errorWidget: (context, url, error) =>
-                              SvgPicture.asset(
-                            "assets/icons/company_placeholder.svg",
-                            width: 40.w,
-                            height: 40.h,
-                          ), //Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
-                        ),
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                        child: CachedNetworkImage(
+                            imageUrl: isrecomended
+                                ? reData!.hiringOrganization!.logo
+                                : image.logo!,
+                            width: 45.w,
+                            height: 40.w,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) =>
+                                SvgPicture.asset(
+                              "assets/icons/company_placeholder.svg",
+                              width: 40.w,
+                              height: 40.h,
+                            ), //Icon(Icons.error, color: Theme.of(context).colorScheme.brightness == Brightness.light ? AppColors.background : AppColors.white,),
+                          ),
+                      ),
               title: TextSemiBold(
                 isrecomended
                     ? reData!.title.toString()

@@ -1,4 +1,3 @@
-import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 
 class EventsState {
   bool _isGenerating = false;

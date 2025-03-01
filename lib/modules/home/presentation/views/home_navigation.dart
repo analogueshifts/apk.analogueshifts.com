@@ -53,7 +53,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
         context.read<UserViewModel>().fetchUser(context);
         context.read<JobProvider>().getJobs(context);
         context.read<JobProvider>().get_reconmended_jobs(context);
-        context.read<JobProvider>().fetchAppliedjobs(context);
+        context.read<JobProvider>().fetchCreatedjobs(context, 1);
       }
     });
 

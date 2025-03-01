@@ -1,15 +1,12 @@
-import 'dart:io';
 import 'package:analogue_shifts_mobile/app/widgets/loading_dailog.dart';
 import 'package:analogue_shifts_mobile/core/network/api_errors.dart';
 import 'package:analogue_shifts_mobile/core/utils/disposable_provider.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
-import 'package:analogue_shifts_mobile/modules/uploads/domain/usecases/file_upload_usecase.dart';
 import 'package:analogue_shifts_mobile/modules/vetting/data/models/form.model.dart';
 import 'package:analogue_shifts_mobile/modules/vetting/data/repositories/vetting_form.repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
-import 'package:image_picker/image_picker.dart';
 
 class VettingNotifier extends DisposableProvider {
   final VettingRepositoryImpl _vettingRepo = GetIt.instance<VettingRepositoryImpl>();
@@ -70,6 +67,7 @@ class VettingNotifier extends DisposableProvider {
           }
         },
             (result) async {
+              _forms.clear();
               _forms.addAll(result.toList());
           // _form = result;
           logger.d(result);

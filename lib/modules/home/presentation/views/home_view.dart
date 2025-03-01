@@ -1,4 +1,3 @@
-
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
@@ -15,9 +14,6 @@ import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navi
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/job_analytics_card.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/widgets/notification_icon.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
-// ignore: library_prefixes
-// import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/reconmende_job.entity.dart'
-//     as REconmendedJobs;
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/views/single_job.screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -135,45 +131,57 @@ class _HomeViewState extends State<HomeView> {
                         child: TextFormField(
                           controller: _search,
                           decoration: textInputDecoration.copyWith(
-                              fillColor:
-                                  Theme.of(context).colorScheme.brightness ==
-                                          Brightness.light
-                                      ? AppColors.white
-                                      : AppColors.background,
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color: Theme.of(context).colorScheme.brightness ==
-                                              Brightness.light
-                                          ? const Color(0xff000000)
-                                              .withOpacity(0.08)
-                                          : const Color(0xffFFFFFF)
-                                              .withOpacity(0.18))),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color: Theme.of(context)
-                                                  .colorScheme
-                                                  .brightness ==
-                                              Brightness.light
-                                          ? const Color(0xff000000).withOpacity(0.08)
-                                          : const Color(0xffFFFFFF).withOpacity(0.18))),
-                              hintStyle: TextStyle(color: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.1) : const Color(0xffFFFFFF).withOpacity(0.4)),
-                              hintText: "Search",
-                              prefixIcon: _isLoading
-                                  ? Container(
-                                      alignment: Alignment.center,
-                                      margin: const EdgeInsets.only(left: 5),
-                                      height: screenHeight(context) * 0.05,
-                                      width: screenWidth(context) * 0.05,
-                                      child: const CircularProgressIndicator(
-                                        color: AppColors.primaryColor,
-                                      ),
-                                    )
-                                  : Icon(
-                                      Icons.search,
-                                      color: Theme.of(context).iconTheme.color,
-                                    ),),
+                            fillColor:
+                                Theme.of(context).colorScheme.brightness ==
+                                        Brightness.light
+                                    ? AppColors.white
+                                    : AppColors.background,
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                                .colorScheme
+                                                .brightness ==
+                                            Brightness.light
+                                        ? const Color(0xff000000)
+                                            .withOpacity(0.08)
+                                        : const Color(0xffFFFFFF)
+                                            .withOpacity(0.18))),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                                .colorScheme
+                                                .brightness ==
+                                            Brightness.light
+                                        ? const Color(0xff000000)
+                                            .withOpacity(0.08)
+                                        : const Color(0xffFFFFFF)
+                                            .withOpacity(0.18))),
+                            hintStyle: TextStyle(
+                                color: Theme.of(context)
+                                            .colorScheme
+                                            .brightness ==
+                                        Brightness.light
+                                    ? const Color(0xff000000).withOpacity(0.1)
+                                    : const Color(0xffFFFFFF).withOpacity(0.4)),
+                            hintText: "Search",
+                            prefixIcon: _isLoading
+                                ? Container(
+                                    alignment: Alignment.center,
+                                    margin: const EdgeInsets.only(left: 5),
+                                    height: screenHeight(context) * 0.05,
+                                    width: screenWidth(context) * 0.05,
+                                    child: const CircularProgressIndicator(
+                                      color: AppColors.primaryColor,
+                                    ),
+                                  )
+                                : Icon(
+                                    Icons.search,
+                                    size: 20,
+                                    color: Theme.of(context).iconTheme.color,
+                                  ),
+                          ),
                         ),
                       ),
                     ),
@@ -184,17 +192,20 @@ class _HomeViewState extends State<HomeView> {
                           setSearchLoader();
                         },
                         child: Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                                color: AppColors.primaryColor,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 12),
-                                child: Image.asset(
-                                  "assets/icons/Settings-adjust.png",
-                                  width: 30,
-                                  height: 30,
-                                ))),
+                          height: 50,
+                          decoration: BoxDecoration(
+                              color: AppColors.primaryColor,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              child: Icon(Icons.search, color: Colors.white)
+                              // Image.asset(
+                              //   "assets/icons/Settings-adjust.png",
+                              //   width: 30,
+                              //   height: 30,
+                              // ),
+                              ),
+                        ),
                       ),
                     )
                   ],
@@ -266,7 +277,8 @@ class _HomeViewState extends State<HomeView> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        HomeNavigation(selectedIndex: 1, fromHome: true),
+                                        HomeNavigation(
+                                            selectedIndex: 1, fromHome: true),
                                   ),
                                   (Route<dynamic> route) => false,
                                 );
@@ -310,8 +322,8 @@ class _HomeViewState extends State<HomeView> {
                       return ShimmerLoadingList();
                     } else if (job.job.isEmpty) {
                       return Container(
-                        margin: EdgeInsets.only(top: size.height * 0.1),
-                        child: Center(child: _noJobCard(context)));
+                          margin: EdgeInsets.only(top: size.height * 0.1),
+                          child: Center(child: _noJobCard(context)));
                     } else {
                       return ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
@@ -380,7 +392,7 @@ class _HomeViewState extends State<HomeView> {
               contentPadding: EdgeInsets.zero,
               leading: SizedBox(
                 width: 50.w,
-                height: 50.h,
+                height: 40.h,
                 child: image == null
                     ? SvgPicture.asset(
                         "assets/icons/company_placeholder.svg",
@@ -388,21 +400,31 @@ class _HomeViewState extends State<HomeView> {
                     : image.logo == null
                         ? SvgPicture.asset(
                             "assets/icons/company_placeholder.svg")
-                        : CachedNetworkImage(
-                          imageUrl: image.logo!,
-                          placeholder: (context, url) => const SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: CircularProgressIndicator()),
-                          errorWidget: (context, url, error) => SvgPicture.asset("assets/icons/company_placeholder.svg", width: 40.w, height: 40.h,),
-                          // Icon(
-                          //   Icons.error,
-                          //   color:
-                          //       Theme.of(context).colorScheme.brightness ==
-                          //               Brightness.light
-                          //           ? AppColors.background
-                          //           : AppColors.white,
-                          // ),
+                        : ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: CachedNetworkImage(
+                              imageUrl: image.logo!,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const SizedBox(
+                                  width: 30,
+                                  height: 30,
+                                
+                                  child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) =>
+                                  SvgPicture.asset(
+                                "assets/icons/company_placeholder.svg",
+                                width: 40.w,
+                                height: 40.h,
+                              ),
+                              // Icon(
+                              //   Icons.error,
+                              //   color:
+                              //       Theme.of(context).colorScheme.brightness ==
+                              //               Brightness.light
+                              //           ? AppColors.background
+                              //           : AppColors.white,
+                              // ),
+                            ),
                         ),
               ),
               title: TextSemiBold(

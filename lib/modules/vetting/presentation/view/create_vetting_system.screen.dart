@@ -36,7 +36,7 @@ class _CreateVettingScreenState extends State<CreateVettingScreen> with SingleTi
 
   @override
   Widget build(BuildContext context) {
-    final _isLight = Theme.of(context).colorScheme.brightness == Brightness.light;
+    //final _isLight = Theme.of(context).colorScheme.brightness == Brightness.light;
     return Scaffold(
       appBar: PaylonyAppBarTwo(title: "Vetting System"),
       body: Consumer<VettingNotifier>(

@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class FirebaseHandler {
  Future<void> init() async{
@@ -27,6 +26,7 @@ class FirebaseHandler {
 
   }
 
+  // ignore: invalid_return_type_for_catch_error
   ).catchError((e) => logger.e(e));
    // debugPrint("FCMToken $fcmToken");
     await getIt<DBService>().saveFirebaseToken(fcmToken.toString());
@@ -95,6 +95,7 @@ class PushNotificationService {
         print('FCM Token: $token');
     return token;
     }
+    return null;
 
    
   }

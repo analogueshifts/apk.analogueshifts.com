@@ -31,7 +31,7 @@ class CreateEventDto {
 
   CreateEventDto copyWith({
     String? email,
-    dynamic? contact,
+    dynamic contact,
     String? title,
     String? thumbnail,
     String? description,
@@ -40,7 +40,7 @@ class CreateEventDto {
     String? endsDate,
     String? locationType,
     String? location,
-    dynamic? countriesPrices,
+    dynamic countriesPrices,
     int? maximum,
     String? urlLink,
   }) {

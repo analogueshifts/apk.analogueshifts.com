@@ -1,4 +1,3 @@
-import 'package:analogue_shifts_mobile/modules/auth/domain/entities/login_response_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 //

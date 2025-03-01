@@ -1,14 +1,11 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:analogue_shifts_mobile/app/app.dart';
-import 'package:analogue_shifts_mobile/core/navigators/go_router.dart';
 import 'package:analogue_shifts_mobile/core/navigators/navigation_service.dart';
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/core/services/db_service.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
 class ErrorHandler  {

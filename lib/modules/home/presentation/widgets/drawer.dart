@@ -13,7 +13,6 @@ import 'package:analogue_shifts_mobile/injection_container.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
 import 'package:analogue_shifts_mobile/modules/profile/presentation/views/edit_profile_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -161,7 +160,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   return Transform.scale(
                     scale: 0.7,
                     child: Switch(
-                      value: app.themeMode == ThemeMode.dark ? true : false,
+                      value: app.themeMode != ThemeMode.dark ? false : true,
                       activeColor: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xffEBEBEB).withOpacity(0.5) : AppColors
                       .primaryColor,
                       activeTrackColor: Theme.of(context).colorScheme.brightness == Brightness.light ? const Color(0xff000000).withOpacity(0.06) : const Color(0xffEBEBEB),

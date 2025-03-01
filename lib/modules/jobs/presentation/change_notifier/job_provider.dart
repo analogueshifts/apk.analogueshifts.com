@@ -6,6 +6,8 @@ import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/core/utils/snackbar.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/data/model/addCompanyDto.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/data/model/addJobDto.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/data/model/appliedjob.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/data/model/postjobresponse.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/company.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/reconmende_job.entity.dart';
@@ -13,7 +15,6 @@ import 'package:analogue_shifts_mobile/modules/jobs/domain/repositories/jobs_rep
 import 'package:analogue_shifts_mobile/modules/jobs/domain/usecases/fetch_job.usecase.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_state.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/company_saved_success.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -37,13 +38,21 @@ class JobProvider extends ChangeNotifier {
   int? _lastPage;
   int? get lastPage => _lastPage;
   final List<Company> _companies = [];
-  List<Company> get companies => _companies;
+  List<Company>? get companies => _companies;
 
   List<Recommendation> _reconmendation = [];
   List<Recommendation> get reconmendedjobs => _reconmendation;
 
-  List<Recommendation> _appliedJobs = [];
-  List<Recommendation> get appliedJobs => _appliedJobs;
+  List<AppliedDatum> _appliedJobs = [];
+  List<AppliedDatum> get appliedJobs => _appliedJobs;
+  int _totalAppliedJob = 0;
+  int get totalAppliedJob => _totalAppliedJob;
+
+
+  List<JobData> _createdJobs = [];
+  List<JobData> get createdJobs => _createdJobs;
+  int _totalcreatedJob = 0;
+  int get totalcreatedJob => _totalcreatedJob;
 
   void toggleGenerating(bool value) {
     if (jobhState.isGenerating == value) return;
@@ -61,12 +70,14 @@ class JobProvider extends ChangeNotifier {
     toggleGenerating(false);
     result.fold(
       (exception) {
+        // ignore: unused_local_variable
         var error = _errorHandler.handleError(exception);
         if (context.mounted) {
           AppSnackbar.error(context, message: error);
         }
       },
       (result) async {
+      
         _lastPage = result.data?.jobs?.lastPage;
         final newJobs = result.data!.jobs!.data!
             .where((job) => !_jobs.contains(job))
@@ -77,7 +88,10 @@ class JobProvider extends ChangeNotifier {
         notifyListeners();
       },
     );
-    notifyListeners();
+    
+     await fetchAppliedjobs(context);
+     notifyListeners();
+    
   }
 
   Future<void> getSearchJobs(BuildContext context, String search,
@@ -89,9 +103,10 @@ class JobProvider extends ChangeNotifier {
     toggleGenerating(false);
     result.fold(
       (exception) {
+        // ignore: unused_local_variable
         var error = _errorHandler.handleError(exception);
         if (context.mounted) {
-          AppSnackbar.error(context, message: error);
+          //AppSnackbar.error(context, message: error);
         }
       },
       (result) async {
@@ -106,6 +121,8 @@ class JobProvider extends ChangeNotifier {
         notifyListeners();
       },
     );
+    fetchAppliedjobs(context, search:  search);
+    searchReconmendedJobs(context, search);
     notifyListeners();
   }
 
@@ -116,9 +133,10 @@ class JobProvider extends ChangeNotifier {
     toggleGenerating(false);
     result.fold(
       (exception) {
+        // ignore: unused_local_variable
         var error = _errorHandler.handleError(exception);
         if (context.mounted) {
-          AppSnackbar.error(context, message: error);
+          //AppSnackbar.error(context, message: error);
         }
       },
       (result) async {
@@ -139,9 +157,10 @@ class JobProvider extends ChangeNotifier {
     toggleGenerating(false);
     result.fold(
       (exception) {
+        // ignore: unused_local_variable
         var error = _errorHandler.handleError(exception);
         if (context.mounted) {
-          AppSnackbar.error(context, message: error);
+         // AppSnackbar.error(context, message: error);
         }
       },
       (result) async {
@@ -154,7 +173,7 @@ class JobProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchAppliedjobs(BuildContext context) async {
+  Future<void> fetchAppliedjobs(BuildContext context, {String? search = ''}) async {
     toggleGenerating(true);
     notifyListeners();
     final result = await _jobRepository.fetchAppliedJob();
@@ -168,7 +187,32 @@ class JobProvider extends ChangeNotifier {
       },
       (result) async {
         if (result.data == null) return;
-        _appliedJobs = result.data!.recommendation;
+        _appliedJobs = result.data!.applied!.data!.where((e) => e.job!.title!.toLowerCase().contains(search!.toLowerCase()) ).toList();
+        _totalAppliedJob =result.data!.applied!.total?? 0;
+        notifyListeners();
+      },
+    );
+    notifyListeners();
+  }
+
+
+  Future<void> fetchCreatedjobs(BuildContext context, int? page, {String? search = ''}) async {
+    toggleGenerating(true);
+    notifyListeners();
+    final result = await _jobRepository.fetchCreatedJobs(page);
+    toggleGenerating(false);
+    result.fold(
+      (exception) {
+        // ignore: unused_local_variable
+        var error = _errorHandler.handleError(exception);
+        if (context.mounted) {
+          //AppSnackbar.error(context, message: error);
+        }
+      },
+      (result) async {
+        if (result.data == null) return;
+        _createdJobs = result.data!.hires!.data!.where((e) => e.title!.toLowerCase().contains(search!.toLowerCase()) ).toList();
+        _totalcreatedJob =result.data!.hires?.total?? 0;
         notifyListeners();
       },
     );
@@ -240,10 +284,12 @@ class JobProvider extends ChangeNotifier {
         }
       },
     );
+    fetchCreatedjobs(context, 1);
+    getJobs(context);
     notifyListeners();
   }
 
-  Future<void> getSavedCompanies(BuildContext context, [int? page]) async {
+  Future<void> getSavedCompanies(BuildContext context, int? page, {String? search = ''}) async {
     logger.d(page);
 
     toggleGenerating(true);
@@ -258,8 +304,9 @@ class JobProvider extends ChangeNotifier {
         }
       },
       (result) async {
-        companies.clear();
-        companies.addAll(result);
+        companies?.clear();
+       var allcompanies = result.where((e) =>e.name!.toLowerCase().contains(search!.toLowerCase()) ,).toList();
+        companies?.addAll(allcompanies);
         notifyListeners();
       },
     );

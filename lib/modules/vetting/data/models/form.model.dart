@@ -15,7 +15,7 @@ class FormEntity extends Equatable {
   });
 
   final String? title;
-  final dynamic? multiResponse;
+  final dynamic multiResponse;
   final String? description;
   final String? userUuid;
   final String? uuid;

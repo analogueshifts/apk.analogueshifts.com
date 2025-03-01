@@ -1,6 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
+import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
+import 'package:analogue_shifts_mobile/core/utils/ui_helpers.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/change_notifier/job_provider.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/presentation/widgets/filter_tap.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +39,7 @@ class _JobsContent extends StatefulWidget {
 }
 
 class _JobsContentState extends State<_JobsContent> {
-  final List<String> _filters = ["All", "Jobs posted", "Companies", "Draft"];
+  final List<String> _filters = ["Jobs posted", "Companies"];
   int _selectedIndex = 0;
 
   @override
@@ -43,7 +47,7 @@ class _JobsContentState extends State<_JobsContent> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _SearchField(),
+        _SearchField(),
         const SizedBox(height: 25),
         const _JobCompanyButtons(),
         const SizedBox(height: 25),
@@ -65,61 +69,105 @@ class _JobsContentState extends State<_JobsContent> {
 }
 
 /// Search field for jobs and companies.
-class _SearchField extends StatelessWidget {
+class _SearchField extends StatefulWidget {
   const _SearchField();
 
   @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      //controller: _search,
-      decoration: textInputDecoration.copyWith(
-        fillColor: Theme.of(context).colorScheme.brightness == Brightness.light
-            ? AppColors.white
-            : AppColors.background,
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(
-                color:
-                    Theme.of(context).colorScheme.brightness == Brightness.light
-                        ? const Color(0xff000000).withValues(alpha: .08)
-                        : const Color(0xffFFFFFF).withValues(alpha: .18))),
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(
-                color:
-                    Theme.of(context).colorScheme.brightness == Brightness.light
-                        ? const Color(0xff000000).withValues(alpha: .08)
-                        : const Color(0xffFFFFFF).withValues(alpha: .18))),
-        hintStyle: TextStyle(
-            color: Theme.of(context).colorScheme.brightness == Brightness.light
-                ? const Color(0xff000000).withValues(alpha: .1)
-                : const Color(0xffFFFFFF).withValues(alpha: .4)),
-        hintText: "Search companies & jobs posted",
-        prefixIcon: Icon(
-          Icons.search,
-          color: Theme.of(context).iconTheme.color,
-        ),
+  State<_SearchField> createState() => _SearchFieldState();
+}
 
-        // _isLoading
-        //     ? Container(
-        //         alignment: Alignment.center,
-        //         margin:
-        //             const EdgeInsets.only(left: 5),
-        //         height:
-        //             screenHeight(context) * 0.05,
-        //         width: screenWidth(context) * 0.05,
-        //         child:
-        //             const CircularProgressIndicator(
-        //           color: AppColors.primaryColor,
-        //         ),
-        //       )
-        //     : Icon(
-        //         Icons.search,
-        //         color: Theme.of(context)
-        //             .iconTheme
-        //             .color,
-        //       ),
-      ),
+class _SearchFieldState extends State<_SearchField> {
+  bool _isLoading = false;
+  final TextEditingController _search = TextEditingController();
+
+  void setSearchLoader() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    await context.read<JobProvider>().fetchCreatedjobs(context, 1, search: _search.text.trim());
+    await context.read<JobProvider>().getSavedCompanies(context, 1, search:_search.text.trim() );
+    setState(() {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _search.clear();
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 5,
+          child: TextFormField(
+            controller: _search,
+            decoration: textInputDecoration.copyWith(
+              fillColor:
+                  Theme.of(context).colorScheme.brightness == Brightness.light
+                      ? AppColors.white
+                      : AppColors.background,
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.brightness ==
+                              Brightness.light
+                          ? const Color(0xff000000).withValues(alpha: .08)
+                          : const Color(0xffFFFFFF).withValues(alpha: .18))),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.brightness ==
+                              Brightness.light
+                          ? const Color(0xff000000).withValues(alpha: .08)
+                          : const Color(0xffFFFFFF).withValues(alpha: .18))),
+              hintStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.brightness ==
+                          Brightness.light
+                      ? const Color(0xff000000).withValues(alpha: .1)
+                      : const Color(0xffFFFFFF).withValues(alpha: .4)),
+              hintText: "Search companies & jobs posted",
+              prefixIcon: _isLoading
+                  ? Container(
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.only(left: 5),
+                      height: screenHeight(context) * 0.05,
+                      width: screenWidth(context) * 0.05,
+                      child: const CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                      ),
+                    )
+                  : Icon(
+                      Icons.search,
+                      size: 20,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
+            ),
+          ),
+        ),
+        const Gap(10),
+        Expanded(
+          flex: 1,
+          child: TouchableOpacity(
+            onTap: () {
+              setSearchLoader();
+            },
+            child: Container(
+              height: 60,
+              decoration: BoxDecoration(
+                  color: AppColors.primaryColor,
+                  borderRadius: BorderRadius.circular(10)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Icon(Icons.search, color: Colors.white),
+              ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
@@ -204,7 +252,7 @@ class _JobsListState extends State<_JobsList> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<JobProvider>().getSavedCompanies(context);
+      context.read<JobProvider>().getSavedCompanies(context, 1);
     });
     super.initState();
   }
@@ -212,14 +260,14 @@ class _JobsListState extends State<_JobsList> {
   /// Returns a header title based on the currently selected filter.
   String get headerTitle {
     switch (widget.filter) {
-      case "All":
-        return "All activities";
+      // case "All":
+      //   return "All activities";
       case "Jobs posted":
         return "Jobs posted";
       case "Companies":
         return "Companies";
-      case "Draft":
-        return "Draft";
+      // case "Draft":
+      //   return "Draft";
       default:
         return "";
     }
@@ -251,126 +299,64 @@ class _JobsListState extends State<_JobsList> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.filter == 'All') {
-      return Builder(builder: (context) {
-        if (jobData.isEmpty) {
-          return Center(child: _noJobCard(context, 'No Activities'));
-        }
-        return ListView.builder(
-          // +1 for the header.
-          itemCount: jobData.length + 1,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              // Header displaying the title based on the selected filter.
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(headerTitle,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    )),
-              );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header displaying the title based on the selected filter.
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            headerTitle,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Consumer<JobProvider>(builder: (_, job, __) {
+            if (widget.filter == 'Jobs posted') {
+              return Builder(builder: (context) {
+                if (job.createdJobs.isEmpty) {
+                  return Center(child: _noJobCard(context, 'No Job posted'));
+                }
+                return ListView.builder(
+                  // +1 for the header.
+                  itemCount: job.createdJobs.length,
+                  itemBuilder: (context, index) {
+                    final createdjob = job.createdJobs[index];
+                    return _JobListItem(
+                      title: createdjob.title ?? '',
+                      subtitle: createdjob.hiringOrganization?.name ?? '',
+                      isDraft: false,
+                    );
+                  },
+                );
+              });
+            } else if (widget.filter == 'Companies') {
+              return Builder(builder: (context) {
+                if (job.companies!.isEmpty) {
+                  return Center(child: _noJobCard(context, 'No Companies'));
+                }
+                return ListView.builder(
+                  itemCount: job.companies!.length,
+                  itemBuilder: (context, index) {
+                    final company = job.companies![index];
+                    return _JobListItem(
+                      title: company.name ?? '',
+                      subtitle: company.location ?? '',
+                      isDraft: false,
+                    );
+                  },
+                );
+              });
+            } else {
+              return SizedBox();
             }
-            final job = jobData[index - 1];
-            return _JobListItem(
-              title: job['title'] as String,
-              subtitle: job['subtitle'] as String,
-              isDraft: job['isDraft'] as bool,
-            );
-          },
-        );
-      });
-    } else if (widget.filter == 'Jobs posted') {
-      return Builder(builder: (context) {
-        if (jobData.isEmpty) {
-          return Center(child: _noJobCard(context, 'No Job posted'));
-        }
-        return ListView.builder(
-          // +1 for the header.
-          itemCount: jobData.length + 1,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              // Header displaying the title based on the selected filter.
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(headerTitle,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    )),
-              );
-            }
-            final job = jobData[index - 1];
-            return _JobListItem(
-              title: job['title'] as String,
-              subtitle: job['subtitle'] as String,
-              isDraft: job['isDraft'] as bool,
-            );
-          },
-        );
-      });
-    } else if (widget.filter == 'Companies') {
-      return Consumer<JobProvider>(builder: (_, job, __) {
-        if (job.companies.isEmpty) {
-          return Center(child: _noJobCard(context, 'No Companies'));
-        }
-        return ListView.builder(
-          // +1 for the header.
-          itemCount: job.companies.length, //jobData.length +1,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              // Header displaying the title based on the selected filter.
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(headerTitle,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    )),
-              );
-            }
-
-            final company = job.companies[index - 1];
-            return _JobListItem(
-              title: company.name ?? '',
-              subtitle: company.location ?? '',
-              isDraft: false,
-            );
-          },
-        );
-      });
-    } else if (widget.filter == 'Draft') {
-      return Builder(builder: (context) {
-        if (jobData.isEmpty) {
-          return Center(child: _noJobCard(context, 'No Draft'));
-        }
-        return ListView.builder(
-          // +1 for the header.
-          itemCount: jobData.length + 1,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              // Header displaying the title based on the selected filter.
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(headerTitle,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    )),
-              );
-            }
-            final job = jobData[index - 1];
-            return _JobListItem(
-              title: job['title'] as String,
-              subtitle: job['subtitle'] as String,
-              isDraft: job['isDraft'] as bool,
-            );
-          },
-        );
-      });
-    } else {
-      return SizedBox();
-    }
+          }),
+        ),
+      ],
+    );
   }
 
   Widget _noJobCard(BuildContext context, String message) {

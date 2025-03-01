@@ -29,7 +29,7 @@ class Event extends Equatable {
 
   Event copyWith({
     String? email,
-    dynamic? contact,
+    dynamic contact,
     String? title,
     String? thumbnail,
     String? description,
@@ -38,7 +38,7 @@ class Event extends Equatable {
     DateTime? endsDate,
     String? locationType,
     String? location,
-    dynamic? countriesPrices,
+    dynamic countriesPrices,
   }) {
     return Event(
       email: email ?? this.email,

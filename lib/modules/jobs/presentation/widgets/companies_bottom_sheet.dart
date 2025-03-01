@@ -56,14 +56,14 @@ class _CompaniesBottomSheetState extends State<CompaniesBottomSheet> {
                       ],
                     ),
                     Gap(30),
-                    job.companies.isEmpty && job.jobhState.isGenerating ? const Center(child: CircularProgressIndicator(color: AppColors.primaryColor,)) : job.companies.isEmpty ? Center(child: TextSemiBold("No Companies!"),) :
+                    job.companies!.isEmpty && job.jobhState.isGenerating ? const Center(child: CircularProgressIndicator(color: AppColors.primaryColor,)) : job.companies!.isEmpty ? Center(child: TextSemiBold("No Companies!"),) :
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:
-                      job.companies.map((e) =>
+                      job.companies!.map((e) =>
                           TouchableOpacity(
                             onTap: (){
-                              Navigator.pop(context, e.name.toString());
+                              Navigator.pop(context, e);
                             },
                             child: Container(
                               margin: EdgeInsets.symmetric(vertical: 6),

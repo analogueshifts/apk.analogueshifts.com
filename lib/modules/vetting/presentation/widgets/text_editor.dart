@@ -2,15 +2,18 @@ import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 
 class TextEditor extends StatefulWidget {
-   String? html;
-  TextEditor({this.html});
+  final ValueChanged<String>? onChanged; // Callback for returning text
+
+  const TextEditor({super.key, this.onChanged});
+
   @override
+  // ignore: library_private_types_in_public_api
   _TextEditorState createState() => _TextEditorState();
 }
 
 class _TextEditorState extends State<TextEditor> {
   final TextEditingController _controller = TextEditingController();
-  List<Map<String, dynamic>> _formatTracker = [];
+  final List<Map<String, dynamic>> _formatTracker = [];
   bool _isBold = false;
   bool _isItalic = false;
   bool _isUnderline = false;
@@ -19,7 +22,13 @@ class _TextEditorState extends State<TextEditor> {
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_onTextChanged);
+    _controller.addListener(() {
+      _onTextChanged();
+      final htmlOutput = getHtml();
+      if (widget.onChanged != null) {
+        widget.onChanged!(htmlOutput);
+      }
+    });
   }
 
   @override
@@ -52,9 +61,8 @@ class _TextEditorState extends State<TextEditor> {
         var format = _formatTracker[i];
 
         // Handle block-level elements
-        String blockType = format['block'] as String? ?? 'p';  // Default to 'p' if null
+        String blockType = format['block'] as String? ?? 'p';
         if (currentBlock != blockType) {
-          logger.w(blockType);
           if (currentBlock.isNotEmpty) {
             html += '</$currentBlock>';
           }
@@ -67,7 +75,7 @@ class _TextEditorState extends State<TextEditor> {
           html += '</${openTags.removeLast()}>';
         }
 
-        // Open new inline tags
+        // Open new inline tags as needed
         if (format['bold'] == true && !openTags.contains('strong')) {
           html += '<strong>';
           openTags.add('strong');
@@ -81,34 +89,28 @@ class _TextEditorState extends State<TextEditor> {
           openTags.add('u');
         }
       }
-
       html += currentText[i];
-
     }
 
     // Close any remaining inline tags
     while (openTags.isNotEmpty) {
       html += '</${openTags.removeLast()}>';
     }
-
-    // Close the final block tag
     if (currentBlock.isNotEmpty) {
       html += '</$currentBlock>';
     }
-
     logger.d(html);
-    // widget.textController.text = html;
     return html;
   }
 
   bool _isFormatActive(String tag, Map<String, dynamic> format) {
     switch (tag) {
       case 'strong':
-        return format['bold'];
+        return format['bold'] == true;
       case 'em':
-        return format['italic'];
+        return format['italic'] == true;
       case 'u':
-        return format['underline'];
+        return format['underline'] == true;
       default:
         return false;
     }
@@ -118,30 +120,28 @@ class _TextEditorState extends State<TextEditor> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Color(0xff000000).withOpacity(0.1)),
+        border: Border.all(color: Colors.black.withOpacity(0.1)),
         borderRadius: BorderRadius.circular(8),
       ),
-      // margin: EdgeInsets.all(8),
       child: Column(
         children: [
           SizedBox(
             height: 50,
             child: ListView(
-              padding: EdgeInsets.zero,
               scrollDirection: Axis.horizontal,
               children: [
                 IconButton(
-                  icon: Icon(Icons.format_bold),
+                  icon: const Icon(Icons.format_bold),
                   onPressed: () => setState(() => _isBold = !_isBold),
                   color: _isBold ? Colors.blue : Colors.black,
                 ),
                 IconButton(
-                  icon: Icon(Icons.format_italic),
+                  icon: const Icon(Icons.format_italic),
                   onPressed: () => setState(() => _isItalic = !_isItalic),
                   color: _isItalic ? Colors.blue : Colors.black,
                 ),
                 IconButton(
-                  icon: Icon(Icons.format_underline),
+                  icon: const Icon(Icons.format_underline),
                   onPressed: () => setState(() => _isUnderline = !_isUnderline),
                   color: _isUnderline ? Colors.blue : Colors.black,
                 ),
@@ -155,40 +155,31 @@ class _TextEditorState extends State<TextEditor> {
                     }
                   },
                   items: <String>['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
+                      .map((String value) => DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          ))
+                      .toList(),
                 ),
               ],
             ),
           ),
-          Divider(),
+          const Divider(),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: _controller,
-              onChanged: (value) {
-                final html = getHtml();
-                logger.d(html);
-                widget.html = html;
-                setState(() {
-                  widget.html = html;
-
-                });
-
-              },
               maxLines: 5,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
-                hintText: 'Untitled question',
+                hintText: 'Enter text...',
               ),
               style: TextStyle(
                 fontWeight: _isBold ? FontWeight.bold : FontWeight.normal,
                 fontStyle: _isItalic ? FontStyle.italic : FontStyle.normal,
-                decoration: _isUnderline ? TextDecoration.underline : TextDecoration.none,
+                decoration: _isUnderline
+                    ? TextDecoration.underline
+                    : TextDecoration.none,
               ),
             ),
           ),

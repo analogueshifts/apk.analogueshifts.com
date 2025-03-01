@@ -1,10 +1,13 @@
 // ignore: file_names
 
+
 import 'package:analogue_shifts_mobile/core/network/api_client.dart';
 import 'package:analogue_shifts_mobile/core/utils/logger.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/entities/no_data.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/data/model/addCompanyDto.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/data/model/addJobDto.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/data/model/appliedjob.dart';
+import 'package:analogue_shifts_mobile/modules/jobs/data/model/postjobresponse.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/company.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/jobs_response.entity.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/entities/reconmende_job.entity.dart';
@@ -76,7 +79,7 @@ Future<Either<Exception, JobResponseEntity>> fetchSearchJobs(String search, [int
     } catch (e) {
       logger.e(e);
       // var error = _errorHandler.handleError(e);
-      return Left(e as Exception);
+      return Left(Exception(e) );
     }
   }
 
@@ -165,14 +168,14 @@ Future<Either<Exception, JobResponseEntity>> fetchSearchJobs(String search, [int
   }
   
   @override
-  Future<Either<Exception, REconmendedJobs>> fetchAppliedJob([int? page]) async {
+  Future<Either<Exception, JobAppliedResponse>> fetchAppliedJob([int? page]) async {
     try {
       final response = await dioManager.dio.get('jobs/applied');
       // logger.d(response.data);
 
       if (response.statusCode == 200) {
         // logger.d(response.data);
-        final jobModel = REconmendedJobs.fromJson(response.data);
+        final jobModel = JobAppliedResponse.fromJson(response.data); //REconmendedJobs.fromJson(response.data);
         return Right(jobModel);
       } else {
         return Left(Exception('Unable to fetch applied jobs'));
@@ -180,7 +183,7 @@ Future<Either<Exception, JobResponseEntity>> fetchSearchJobs(String search, [int
     } catch (e) {
       logger.e(e);
       // var error = _errorHandler.handleError(e);
-      return Left(e as Exception);
+      return Left(Exception(e));
     }
   }
   
@@ -205,22 +208,22 @@ Future<Either<Exception, JobResponseEntity>> fetchSearchJobs(String search, [int
   }
   
   @override
-  Future<Either<Exception, JobResponseEntity>> fetchSaveJob([int? page]) async{
+  Future<Either<Exception, HireDashboardResponse>> fetchCreatedJobs([int? page]) async{
      try {
-      final response = await dioManager.dio.get('');
+      final response = await dioManager.dio.get('hire/dashboard?page=${page ?? 1}');
       // logger.d(response.data);
 
       if (response.statusCode == 200) {
         // logger.d(response.data);
-        final jobModel = JobResponseEntity.fromJson(response.data);
+        final jobModel = HireDashboardResponse .fromJson(response.data);
         return Right(jobModel);
       } else {
-        return Left(Exception('Unable to fetch saved jobs'));
+        return Left(Exception('Unable to fetch Created jobs'));
       }
     } catch (e) {
       logger.e(e);
       // var error = _errorHandler.handleError(e);
-      return Left(e as Exception);
+      return Left(Exception(e));
     }
   }
 }
