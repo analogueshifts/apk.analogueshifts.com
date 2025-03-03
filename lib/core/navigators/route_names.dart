@@ -16,4 +16,5 @@ class Routes {
   static const String notification = '/notification';
   static const String resetChangePassword = '/change-reset-password';
    static const String vetting = '/vetting';
+   static const String message = 'home/message';
 }

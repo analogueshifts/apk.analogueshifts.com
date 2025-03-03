@@ -1,6 +1,7 @@
 import 'package:analogue_shifts_mobile/core/navigators/route_names.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authenticate_view.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
+import 'package:analogue_shifts_mobile/modules/message/message.dart';
 import 'package:analogue_shifts_mobile/modules/notification/presentation/views/notification_screen.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/introduction._screen.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/splash_screen.dart';
@@ -67,6 +68,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: const HelpCenterScreen()
+      );
+
+      case Routes.message:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: const MessagesPage()
       );
 
        case Routes.vetting:

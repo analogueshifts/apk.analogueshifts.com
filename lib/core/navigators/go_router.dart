@@ -3,6 +3,7 @@ import 'package:analogue_shifts_mobile/modules/auth/presentation/views/authentic
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/change_password.screen.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/views/verify_user_otp_view.dart';
 import 'package:analogue_shifts_mobile/modules/home/presentation/views/home_navigation.dart';
+import 'package:analogue_shifts_mobile/modules/message/message.dart';
 import 'package:analogue_shifts_mobile/modules/notification/presentation/views/notification_screen.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/introduction._screen.dart';
 import 'package:analogue_shifts_mobile/modules/onboarding/presentation/views/splash_screen.dart';
@@ -57,6 +58,12 @@ class AppRoutes {
             routes: const [
              
             ]
+          ),
+          GoRoute(
+                path: Routes.message,
+                name: 'message',
+                builder: (context, state) => const MessagesPage(),
+                
           ),
            GoRoute(
                 path: Routes.changePassword,

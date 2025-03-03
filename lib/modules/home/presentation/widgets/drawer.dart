@@ -139,6 +139,29 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   );
                 },
               ),
+              //message
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: Container(
+                  height: 40,
+                  width: 40,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color:  AppColors.primaryColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(20),),
+                    child:  SvgPicture.asset( "assets/icons/message.svg",
+                    //width: 32.w,height: 32.h
+                    ),
+                ),
+               
+                title: Text('Message', style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600
+                ),),
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.message);
+                },
+              ),
+
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: Image(image: AssetImage(Theme.of(context).colorScheme.brightness == Brightness.light ? "assets/images/write.png" : "assets/images/write-black.png"), width: 35.w,height: 35.h,),

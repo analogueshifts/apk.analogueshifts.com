@@ -416,14 +416,7 @@ class _HomeViewState extends State<HomeView> {
                                 width: 40.w,
                                 height: 40.h,
                               ),
-                              // Icon(
-                              //   Icons.error,
-                              //   color:
-                              //       Theme.of(context).colorScheme.brightness ==
-                              //               Brightness.light
-                              //           ? AppColors.background
-                              //           : AppColors.white,
-                              // ),
+                              
                             ),
                         ),
               ),
