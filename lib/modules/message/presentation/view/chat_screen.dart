@@ -1,90 +1,61 @@
-// ignore_for_file: unreachable_switch_default
+// ignore_for_file: unreachable_switch_default, depend_on_referenced_packages
 
 import 'package:analogue_shifts_mobile/app/styles/app_colors.dart';
 import 'package:analogue_shifts_mobile/app/styles/fonts.dart';
 import 'package:analogue_shifts_mobile/app/widgets/app_back_button.dart';
 import 'package:analogue_shifts_mobile/app/widgets/touch_opacirty.dart';
 import 'package:analogue_shifts_mobile/core/constants/text_field.dart';
+import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
+import 'package:analogue_shifts_mobile/modules/message/presentation/change_notifier/message_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
-// A model for each chat message.
-class ChatMessage {
-  final String content;
-  final bool isMe;
-  final DateTime time;
-  final MessageType type; // text, image, audio, link, etc.
-
-  ChatMessage({
-    required this.content,
-    required this.isMe,
-    required this.time,
-    this.type = MessageType.text,
-  });
-}
+import '../../data/model/single_chat_response .dart';
 
 enum MessageType { text, image, audio, link }
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  final String chatUuid;
+  final String userName;
+  final String userID;
+  const ChatScreen({
+    super.key,
+    required this.chatUuid,
+    required this.userName,
+    required this.userID,
+  });
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final List<ChatMessage> _messages = [
-    ChatMessage(
-      content: 'Can you develop a site like this?',
-      isMe: false,
-      time: DateTime.now().subtract(const Duration(minutes: 30)),
-    ),
-    ChatMessage(
-      content: 'Alright I will send you a meeting link for the interview',
-      isMe: true,
-      time: DateTime.now().subtract(const Duration(minutes: 28)),
-    ),
-    ChatMessage(
-      content: 'Ok, Thank you',
-      isMe: false,
-      time: DateTime.now().subtract(const Duration(minutes: 25)),
-    ),
-    ChatMessage(
-      content: 'assets/images/job-delete1.png', // Example local asset path
-      isMe: false,
-      time: DateTime.now().subtract(const Duration(minutes: 25)),
-      type: MessageType.image,
-    ),
-    ChatMessage(
-      content: 'My Resume',
-      isMe: false,
-      time: DateTime.now().subtract(const Duration(minutes: 25)),
-    ),
-    ChatMessage(
-      content: 'assets/audio_placeholder.png', // or a real audio file reference
-      isMe: true,
-      time: DateTime.now().subtract(const Duration(minutes: 20)),
-      type: MessageType.audio,
-    ),
-    ChatMessage(
-      content: 'Here: meet.google.com/fwc-bmq0-gsr',
-      isMe: true,
-      time: DateTime.now().subtract(const Duration(minutes: 20)),
-      type: MessageType.link,
-    ),
-    ChatMessage(
-      content: 'Alright',
-      isMe: false,
-      time: DateTime.now().subtract(const Duration(minutes: 1)),
-    ),
-  ];
-
   final TextEditingController _controller = TextEditingController();
+  // This holds the current chat id. It may be null or empty if no chat exists yet.
+  String? _currentChatUuid;
+
+  @override
+  void initState() {
+    super.initState();
+    // Use the passed chatUuid (could be empty when starting a new chat)
+    _currentChatUuid = widget.chatUuid;
+    _fetchChatDetail();
+  }
+
+  void _fetchChatDetail() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Only attempt to fetch details if a valid chat id exists.
+      if (_currentChatUuid != null && _currentChatUuid!.isNotEmpty) {
+        Provider.of<MessageProvider>(context, listen: false)
+            .showChatDetail(context, _currentChatUuid!);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Custom AppBar
       appBar: AppBar(
         leading: TouchableOpacity(
           onTap: () => Navigator.pop(context),
@@ -97,54 +68,75 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
-            "assets/images/user-avatar.svg",
-            width: 40,
-            height: 40,
-          ),
-            // CircleAvatar(
-            //   radius: 18,
-            //   backgroundColor: Colors.grey[300],
-            //   backgroundImage: NetworkImage(
-            //     'https://via.placeholder.com/150?text=John+U',
-            //   ),
-            // ),
+              "assets/images/user-avatar.svg",
+              width: 40,
+              height: 40,
+            ),
             const SizedBox(width: 8),
-            TextBold(
-              'John Uche',
-              style: Theme.of(context).textTheme.titleLarge,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
+            Flexible(
+              child: TextBold(
+                widget.userName,
+                color: Theme.of(context).colorScheme.brightness == Brightness.light
+                    ? AppColors.background
+                    : AppColors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),
       ),
-
-      // Chat messages + input bar
       body: Column(
         children: [
-          // List of messages
+          // Message list.
           Expanded(
-            child: ListView.builder(
-              reverse: true, // newest at the bottom
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                // Because we reversed, get item from the end
-                final msg = _messages[_messages.length - 1 - index];
-                return _buildMessageBubble(msg);
+            child: Consumer<MessageProvider>(
+              builder: (context, model, child) {
+                // If no valid chat id exists, show an empty message view.
+                if (_currentChatUuid == null || _currentChatUuid!.isEmpty) {
+                  return const SizedBox();
+                }
+                if (model.chatData == null) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                // If the provider returns a valid chat ID, update _currentChatUuid.
+                if (model.chatData?.chatDetails?.uuid != null &&
+                    model.chatData!.chatDetails!.uuid!.isNotEmpty &&
+                    _currentChatUuid != model.chatData!.chatDetails!.uuid) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    setState(() {
+                      _currentChatUuid = model.chatData!.chatDetails!.uuid;
+                    });
+                  });
+                }
+                final messages = model.chatData!.messages?.data ?? [];
+                // Sort messages descending by creation time (newest first).
+                final sortedMessages = List<ChatMessage>.from(messages)
+                  ..sort((a, b) {
+                    final DateTime aTime = a.createdAt?? DateTime.now();
+                    final DateTime bTime = b.createdAt ?? DateTime.now();
+                    return bTime.compareTo(aTime);
+                  });
+                return ListView.builder(
+                  reverse: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  itemCount: sortedMessages.length,
+                  itemBuilder: (context, index) {
+                    final msg = sortedMessages[index];
+                    return _buildMessageBubble(msg);
+                  },
+                );
               },
             ),
           ),
-          // Input bar
+          // Input field and send button.
           SafeArea(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Row(
                 children: [
-                  // Input field
                   Expanded(
                     child: SizedBox(
-                      height: 46,
                       child: TextFormField(
                         controller: _controller,
                         decoration: textInputDecoration.copyWith(
@@ -179,7 +171,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  // Send button
                   InkWell(
                     onTap: _handleSend,
                     child: CircleAvatar(
@@ -197,28 +188,33 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  /// Builds a single message bubble, with time displayed inside the bubble.
+  /// Builds a single message bubble.
   Widget _buildMessageBubble(ChatMessage msg) {
-    final bubbleColor = msg.isMe
-        ? AppColors.primaryColor
-        : AppColors.placeholderColor.withValues(alpha: 0.7);
-    final textColor = msg.isMe ? Colors.white : Colors.black87;
+    final userModel = Provider.of<UserViewModel>(context);
+    final currentUserId = userModel.authState.user?.user?.uuid?.trim();
+    final bool isMe = msg.userUuid == currentUserId;
+    final String content = msg.message ?? "";
+    final DateTime time = msg.createdAt ?? DateTime.now();
+    final MessageType type = MessageType.text;
 
-    // Render the main content based on message type.
+    final bubbleColor = isMe
+        ? AppColors.primaryColor
+        : AppColors.placeholderColor.withOpacity(0.7);
+    final textColor = isMe ? Colors.white : Colors.black87;
+
     Widget mainContent;
-    switch (msg.type) {
+    switch (type) {
       case MessageType.image:
         mainContent = ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: Image.asset(
-            msg.content,
+          child: Image.network(
+            content,
             width: 200,
             fit: BoxFit.cover,
           ),
         );
         break;
       case MessageType.audio:
-        // Placeholder for audio UI
         mainContent = Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -230,7 +226,7 @@ class _ChatScreenState extends State<ChatScreen> {
         break;
       case MessageType.link:
         mainContent = Text(
-          msg.content,
+          content,
           style: TextStyle(
             color: AppColors.primaryBlue,
             decoration: TextDecoration.underline,
@@ -240,7 +236,7 @@ class _ChatScreenState extends State<ChatScreen> {
       case MessageType.text:
       default:
         mainContent = TextSemiBold(
-          msg.content,
+          content,
           style: TextStyle(
             color: textColor,
             fontWeight: FontWeight.w500,
@@ -249,10 +245,9 @@ class _ChatScreenState extends State<ChatScreen> {
         break;
     }
 
-    // Stack to position the timestamp at the bottom-right inside the bubble.
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
-      alignment: msg.isMe ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         padding: const EdgeInsets.all(8),
         constraints: const BoxConstraints(maxWidth: 300),
@@ -261,28 +256,22 @@ class _ChatScreenState extends State<ChatScreen> {
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
             topRight: const Radius.circular(16),
-            bottomLeft: msg.isMe ? const Radius.circular(16) : Radius.zero,
-            bottomRight: msg.isMe ? Radius.zero : const Radius.circular(16),
+            bottomLeft: isMe ? const Radius.circular(16) : Radius.zero,
+            bottomRight: isMe ? Radius.zero : const Radius.circular(16),
           ),
         ),
-        child: Stack(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            // Space for the time at the bottom
-            Padding(
-              padding: const EdgeInsets.only(bottom: 15),
-              child: mainContent,
-            ),
-            // Timestamp in the bottom-right corner
-            Positioned(
-              bottom: 0,
-              right: 0 ,
-              child: Text(
-                _formatTime(msg.time),
-                style: TextStyle(
-                  color: textColor.withValues(alpha:  msg.isMe? 0.9: 0.4),
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                ),
+            mainContent,
+            const SizedBox(height: 4),
+            Text(
+              _formatTime(time),
+              style: TextStyle(
+                color: textColor.withOpacity(isMe ? 0.9 : 0.4),
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -291,25 +280,18 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  /// Formats the time (e.g., "14:11").
+  /// Formats a DateTime into a time string.
   String _formatTime(DateTime time) {
     return TimeOfDay.fromDateTime(time).format(context);
   }
 
   /// Handles sending a message.
-  void _handleSend() {
+  void _handleSend() async {
+    final model = Provider.of<MessageProvider>(context, listen: false);
     final text = _controller.text.trim();
     if (text.isEmpty) return;
-
-    setState(() {
-      _messages.add(
-        ChatMessage(
-          content: text,
-          isMe: true,
-          time: DateTime.now(),
-        ),
-      );
-    });
+    // Pass the current chat ID (which may be null or empty if starting a new chat)
+    await model.creatChat(text, '', '', widget.userID, _currentChatUuid, context);
     _controller.clear();
   }
 }

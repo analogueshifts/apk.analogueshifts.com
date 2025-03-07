@@ -8,6 +8,8 @@ import 'package:analogue_shifts_mobile/modules/vetting/presentation/change_notif
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import 'modules/message/presentation/change_notifier/message_provider.dart';
+
 List<SingleChildWidget> providers = [
   ChangeNotifierProvider(
     create: (_) => UserViewModel(),
@@ -21,6 +23,12 @@ List<SingleChildWidget> providers = [
    ChangeNotifierProvider(
     create: (_) => FileUploadNotifier()
   ),
+
+  ChangeNotifierProvider(
+    create: (_) => MessageProvider()
+  ),
+
+  
 
   ChangeNotifierProvider(
     create: (_) => NotificationProvider()

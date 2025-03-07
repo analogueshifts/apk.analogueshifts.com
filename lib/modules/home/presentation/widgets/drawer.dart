@@ -143,8 +143,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: Container(
-                  height: 40,
-                  width: 40,
+                  height: 38,
+                  width:38,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color:  AppColors.primaryColor.withValues(alpha: 0.1),

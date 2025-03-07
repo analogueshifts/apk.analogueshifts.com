@@ -13,7 +13,6 @@ import 'package:analogue_shifts_mobile/modules/auth/data/repositories/auth_repos
 import 'package:analogue_shifts_mobile/modules/auth/domain/repositories/auth.repository.dart';
 import 'package:analogue_shifts_mobile/modules/auth/domain/usecases/register.usecase.dart';
 import 'package:analogue_shifts_mobile/modules/auth/presentation/change_notifier/user_view_model.dart';
-import 'package:analogue_shifts_mobile/modules/jobs/data/repositories/jobs_repositoryImpl.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/repositories/jobs_repository.dart';
 import 'package:analogue_shifts_mobile/modules/jobs/domain/usecases/fetch_job.usecase.dart';
 import 'package:analogue_shifts_mobile/modules/notification/data/repositories/notification_repositoryimpl.dart';
@@ -24,6 +23,10 @@ import 'package:analogue_shifts_mobile/modules/uploads/domain/repositories/file_
 import 'package:analogue_shifts_mobile/modules/uploads/domain/usecases/file_upload_usecase.dart';
 import 'package:analogue_shifts_mobile/modules/vetting/data/repositories/vetting_form.repository.dart';
 import 'package:get_it/get_it.dart';
+
+import 'modules/jobs/data/repositories/jobs_repositoryImpl.dart';
+import 'modules/message/data/repositories.dart/message_repositoryimpl.dart';
+import 'modules/message/domain/repositories/message_repositories.dart';
 final getIt = GetIt.instance;
 
 Future<void> setupDependencies() async{
@@ -38,6 +41,11 @@ Future<void> setupDependencies() async{
 
    getIt.registerLazySingleton<UploadRepository>(
         () => UploadRepositoryImpl(getIt<DioManager>()),
+  );
+
+
+  getIt.registerLazySingleton<MessagesRepository>(
+        () => MessagesRepositoryImpl(getIt<DioManager>()),
   );
 
 
